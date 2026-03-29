@@ -75,7 +75,7 @@ export default function Home() {
           left: `${mousePosition.x}px`,
           top: `${mousePosition.y}px`,
           transform: "translate(-50%, -50%)",
-          background: "radial-gradient(circle, rgba(95, 101, 94, 0.45) 0%, transparent 70%)"
+          background: "radial-gradient(circle, rgba(50, 223, 177, 0.75) 0%, transparent 70%)"
         }}
       />
 
