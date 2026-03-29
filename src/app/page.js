@@ -16,9 +16,7 @@ const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.2 
-    }
+    transition: { staggerChildren: 0.2 }
   }
 };
 
@@ -42,20 +40,31 @@ export default function Home() {
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
 
+  // --- NEW SIMULATION: Smooth Sine Waves ---
+  // This guarantees the numbers "breathe" smoothly from 0 to MAX, 
+  // hitting Black, Green, Yellow, and Red on every cycle!
   useEffect(() => {
+    let tick = 0;
     const interval = setInterval(() => {
+      tick += 0.2; // Speed of the cycle
+      
+      // Math.sin creates a smooth wave between -1 and 1. We shift it to 0 to 1.
+      const wave1 = (Math.sin(tick) + 1) / 2; 
+      const wave2 = (Math.sin(tick * 0.8 + 1) + 1) / 2; // Slightly different speeds
+      const wave3 = (Math.sin(tick * 0.6 + 2) + 1) / 2;
+
       setSensorData({
-        flexionAngle: Math.floor(Math.random() * 121),
-        gForce: (Math.random() * 3.0).toFixed(2),     
-        strainLevel: Math.floor(Math.random() * 101), 
+        flexionAngle: Math.floor(wave1 * 120),
+        gForce: (wave2 * 3.0).toFixed(2),
+        strainLevel: Math.floor(wave3 * 100),
       });
-    }, 800);
+    }, 400); // Updates smoothly every 400ms
     return () => clearInterval(interval);
   }, []);
 
   const getDynamicColor = (val, max) => {
     const ratio = val / max;
-    if (ratio < 0.30) return { text: "text-black", bg: "bg-black" };         
+    if (ratio < 0.30) return { text: "text-gray-800", bg: "bg-gray-800" };         
     if (ratio < 0.60) return { text: "text-green-500", bg: "bg-green-500" }; 
     if (ratio < 0.85) return { text: "text-yellow-500", bg: "bg-yellow-500" };
     return { text: "text-red-500", bg: "bg-red-500" };                       
@@ -70,11 +79,28 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       className="relative flex min-h-screen flex-col items-center bg-slate-50 text-gray-900 overflow-x-hidden"
     >
-      {/* --- FLOATING PRISM SEARCH BAR (The Goldilocks Glass Effect) --- */}
+      {/* --- INVISIBLE SVG FILTER FOR TRUE PRISM DISTORTION --- */}
+      <svg className="fixed w-0 h-0 pointer-events-none">
+        <defs>
+          <filter id="glass-prism">
+            {/* Creates the mathematical waves to bend pixels */}
+            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="1" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* --- FLOATING PRISM SEARCH BAR --- */}
       <div className="fixed top-32 left-1/2 -translate-x-1/2 z-[60] w-full max-w-2xl px-4 pointer-events-none">
         <div className="pointer-events-auto relative group">
-          {/* Custom 8px blur + high saturation + white/40 background creates the thick acrylic refraction */}
-          <div className="absolute inset-0 bg-white/40 backdrop-blur-[8px] backdrop-saturate-[2] border border-white/80 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-all group-hover:bg-white/50"></div>
+          {/* We apply the custom SVG filter here alongside a tiny blur to smooth the distortion */}
+          <div 
+            className="absolute inset-0 bg-white/10 border border-white/60 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-all group-hover:bg-white/20"
+            style={{ 
+              backdropFilter: 'url(#glass-prism) blur(3px) saturate(1.5)',
+              WebkitBackdropFilter: 'url(#glass-prism) blur(3px) saturate(1.5)'
+            }}
+          ></div>
           <input 
             type="text" 
             placeholder="Search telemetry, hardware..." 
@@ -202,13 +228,13 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Flexion Angle</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black transition-colors duration-500 ${flexColors.text}`}>
+              <span className={`text-6xl font-black transition-colors duration-[400ms] ${flexColors.text}`}>
                 {sensorData.flexionAngle}°
               </span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-3 rounded-full transition-all duration-700 ease-out ${flexColors.bg}`} 
+                className={`h-3 rounded-full transition-all duration-[400ms] ease-out ${flexColors.bg}`} 
                 style={{ width: `${(sensorData.flexionAngle / 120) * 100}%` }}
               ></div>
             </div>
@@ -218,14 +244,14 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Impact Force (IMU)</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black transition-colors duration-500 ${impactColors.text}`}>
+              <span className={`text-6xl font-black transition-colors duration-[400ms] ${impactColors.text}`}>
                 {sensorData.gForce}
               </span>
               <span className="text-xl font-bold text-gray-400 mb-1">G</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-3 rounded-full transition-all duration-700 ease-out ${impactColors.bg}`} 
+                className={`h-3 rounded-full transition-all duration-[400ms] ease-out ${impactColors.bg}`} 
                 style={{ width: `${(sensorData.gForce / 3) * 100}%` }}
               ></div>
             </div>
@@ -235,13 +261,13 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Material Strain</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black transition-colors duration-500 ${strainColors.text}`}>
+              <span className={`text-6xl font-black transition-colors duration-[400ms] ${strainColors.text}`}>
                 {sensorData.strainLevel}%
               </span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-3 rounded-full transition-all duration-700 ease-out ${strainColors.bg}`} 
+                className={`h-3 rounded-full transition-all duration-[400ms] ease-out ${strainColors.bg}`} 
                 style={{ width: `${sensorData.strainLevel}%` }}
               ></div>
             </div>
