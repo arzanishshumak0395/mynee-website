@@ -53,16 +53,30 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // --- NEW: DYNAMIC COLOR LOGIC ---
+  // Calculates percentage and returns the matching Tailwind text and background colors
+  const getDynamicColor = (val, max) => {
+    const ratio = val / max;
+    if (ratio < 0.30) return { text: "text-gray-800", bg: "bg-gray-800" };   // Black/Dark Gray
+    if (ratio < 0.60) return { text: "text-green-500", bg: "bg-green-500" }; // Green
+    if (ratio < 0.85) return { text: "text-yellow-500", bg: "bg-yellow-500" };// Yellow
+    return { text: "text-red-500", bg: "bg-red-500" };                       // Red
+  };
+
+  const flexColors = getDynamicColor(sensorData.flexionAngle, 120);
+  const impactColors = getDynamicColor(sensorData.gForce, 3.0);
+  const strainColors = getDynamicColor(sensorData.strainLevel, 100);
+
   return (
     <main 
       onMouseMove={handleMouseMove}
       className="relative flex min-h-screen flex-col items-center bg-slate-50 text-gray-900 overflow-x-hidden"
     >
-      {/* --- FLOATING PRISM SEARCH BAR (Fixed position, independent of scroll) --- */}
+      {/* --- FLOATING PRISM SEARCH BAR (Less blur, more transparency) --- */}
       <div className="fixed top-28 left-1/2 -translate-x-1/2 z-[60] w-full max-w-md px-4 pointer-events-none">
         <div className="pointer-events-auto relative group">
-          {/* Intense glassmorphism background layers for prism effect */}
-          <div className="absolute inset-0 bg-white/20 backdrop-blur-2xl saturate-[2.5] border border-white/60 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all group-hover:bg-white/30"></div>
+          {/* backdrop-blur-md and bg-white/10 allows you to see the text behind it, but warped! */}
+          <div className="absolute inset-0 bg-white/10 backdrop-blur-md saturate-[1.5] border border-white/50 rounded-full shadow-xl transition-all group-hover:bg-white/20"></div>
           <input 
             type="text" 
             placeholder="Search telemetry, hardware..." 
@@ -122,10 +136,10 @@ export default function Home() {
         variants={staggerContainer}
         className="z-10 min-h-screen w-full max-w-5xl flex flex-col items-center justify-center font-sans p-8 md:p-24 text-center"
       >
-        <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase">
+        <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase mt-10">
           Project In Development
         </motion.div>
-        <motion.h1 variants={fadeUpVariant} className="text-7xl md:text-9xl font-black mb-6 tracking-tighter mt-10">
+        <motion.h1 variants={fadeUpVariant} className="text-7xl md:text-9xl font-black mb-6 tracking-tighter">
           <span className="text-transparent bg-clip-text bg-gradient-to-b from-yellow-400 to-yellow-600">
             Mynee
           </span>
@@ -173,7 +187,7 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* --- LIVE TELEMETRY DASHBOARD --- */}
+      {/* --- LIVE TELEMETRY DASHBOARD (Dynamic Colors Applied) --- */}
       <motion.div 
         id="telemetry" 
         initial="hidden"
@@ -190,28 +204,30 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Flexion Angle</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className="text-6xl font-black text-yellow-500 transition-colors duration-300">{sensorData.flexionAngle}°</span>
+              <span className={`text-6xl font-black transition-colors duration-500 ${flexColors.text}`}>
+                {sensorData.flexionAngle}°
+              </span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className="bg-gradient-to-r from-yellow-300 to-yellow-500 h-3 rounded-full transition-all duration-700 ease-out" 
+                className={`h-3 rounded-full transition-all duration-700 ease-out ${flexColors.bg}`} 
                 style={{ width: `${(sensorData.flexionAngle / 120) * 100}%` }}
               ></div>
             </div>
           </motion.div>
 
-          {/* Impact Force - Numbers change color with the bar */}
+          {/* Impact Force */}
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Impact Force (IMU)</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black transition-colors duration-500 ${sensorData.gForce > 2.0 ? 'text-red-500' : 'text-green-400'}`}>
+              <span className={`text-6xl font-black transition-colors duration-500 ${impactColors.text}`}>
                 {sensorData.gForce}
               </span>
               <span className="text-xl font-bold text-gray-400 mb-1">G</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-3 rounded-full transition-all duration-700 ease-out ${sensorData.gForce > 2.0 ? 'bg-red-500' : 'bg-green-400'}`} 
+                className={`h-3 rounded-full transition-all duration-700 ease-out ${impactColors.bg}`} 
                 style={{ width: `${(sensorData.gForce / 3) * 100}%` }}
               ></div>
             </div>
@@ -221,11 +237,13 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Material Strain</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className="text-6xl font-black text-yellow-500 transition-colors duration-300">{sensorData.strainLevel}%</span>
+              <span className={`text-6xl font-black transition-colors duration-500 ${strainColors.text}`}>
+                {sensorData.strainLevel}%
+              </span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className="bg-yellow-400 h-3 rounded-full transition-all duration-700 ease-out" 
+                className={`h-3 rounded-full transition-all duration-700 ease-out ${strainColors.bg}`} 
                 style={{ width: `${sensorData.strainLevel}%` }}
               ></div>
             </div>
