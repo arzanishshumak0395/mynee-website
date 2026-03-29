@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-// Custom animation settings for that "Silky Smooth" Noryx feel
 const fadeUpVariant = {
   hidden: { opacity: 0, y: 40 },
   visible: { 
@@ -59,10 +58,28 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       className="relative flex min-h-screen flex-col items-center bg-slate-50 text-gray-900 overflow-x-hidden"
     >
-      {/* --- EXTREME GLASSMORPHISM NAVIGATION MENU (Separate) --- */}
+      {/* --- FLOATING PRISM SEARCH BAR (Fixed position, independent of scroll) --- */}
+      <div className="fixed top-28 left-1/2 -translate-x-1/2 z-[60] w-full max-w-md px-4 pointer-events-none">
+        <div className="pointer-events-auto relative group">
+          {/* Intense glassmorphism background layers for prism effect */}
+          <div className="absolute inset-0 bg-white/20 backdrop-blur-2xl saturate-[2.5] border border-white/60 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all group-hover:bg-white/30"></div>
+          <input 
+            type="text" 
+            placeholder="Search telemetry, hardware..." 
+            className="relative w-full py-3 pl-6 pr-12 bg-transparent rounded-full text-sm font-medium text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all"
+          />
+          <svg 
+            className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-hover:text-yellow-600 transition-colors" 
+            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </div>
+
+      {/* --- EXTREME GLASSMORPHISM NAVIGATION MENU --- */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/30 backdrop-blur-2xl border-b border-white/40 shadow-sm py-4 saturate-200" : "bg-transparent py-8"}`}>
         <div className="max-w-7xl mx-auto px-8 md:px-12 flex justify-between items-center gap-8">
-          
           <div className="text-2xl font-black text-yellow-600 tracking-tighter shrink-0">MYNEE</div>
           
           <div className="hidden md:flex gap-8 items-center text-xs font-bold text-gray-500 uppercase tracking-[0.2em] shrink-0">
@@ -98,38 +115,17 @@ export default function Home() {
         }}
       />
 
-      {/* --- HERO SECTION (Animated with Standalone Search) --- */}
+      {/* --- HERO SECTION --- */}
       <motion.div 
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
         className="z-10 min-h-screen w-full max-w-5xl flex flex-col items-center justify-center font-sans p-8 md:p-24 text-center"
       >
-        {/* --- STANDALONE GLASS SEARCH BAR (PULSING & DISTORTING) --- */}
-        <motion.div variants={fadeUpVariant} className="relative z-20 mx-auto w-full max-w-xl p-6 group mb-12">
-          {/* Soft pulsing glow behind the bar */}
-          <div className="absolute inset-0 bg-white/20 rounded-full blur-md group-hover:bg-white/30 transition-all duration-300"></div>
-          
-          {/* Aggressive Glassmorphism with prism effect */}
-          <input 
-            type="text" 
-            placeholder="Search telemetry, hardware..." 
-            className="relative w-full py-2.5 pl-6 pr-12 backdrop-blur-2xl bg-white/20 border border-white/40 rounded-full text-xs font-medium text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 shadow-xl shadow-yellow-500/10 transition-all saturate-200 group-hover:scale-[1.01]"
-          />
-          
-          {/* Search Icon */}
-          <svg 
-            className="absolute right-8 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-hover:text-yellow-600 transition-colors" 
-            fill="none" viewBox="0 0 24 24" stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </motion.div>
-
         <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase">
           Project In Development
         </motion.div>
-        <motion.h1 variants={fadeUpVariant} className="text-7xl md:text-9xl font-black mb-6 tracking-tighter">
+        <motion.h1 variants={fadeUpVariant} className="text-7xl md:text-9xl font-black mb-6 tracking-tighter mt-10">
           <span className="text-transparent bg-clip-text bg-gradient-to-b from-yellow-400 to-yellow-600">
             Mynee
           </span>
@@ -145,7 +141,7 @@ export default function Home() {
         </motion.button>
       </motion.div>
 
-      {/* --- VISION & PROTOTYPE SECTION (Animated) --- */}
+      {/* --- VISION & PROTOTYPE SECTION --- */}
       <motion.div 
         id="vision" 
         initial="hidden"
@@ -177,7 +173,7 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* --- LIVE TELEMETRY DASHBOARD (Animated & Original Colors/Colors Restored) --- */}
+      {/* --- LIVE TELEMETRY DASHBOARD --- */}
       <motion.div 
         id="telemetry" 
         initial="hidden"
@@ -190,10 +186,11 @@ export default function Home() {
         <motion.p variants={fadeUpVariant} className="text-gray-500 mb-8">Real-time data streaming capabilities from the on-board IMU and Flex sensors.</motion.p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Flexion Angle */}
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Flexion Angle</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className="text-6xl font-black text-yellow-500">{sensorData.flexionAngle}°</span>
+              <span className="text-6xl font-black text-yellow-500 transition-colors duration-300">{sensorData.flexionAngle}°</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
@@ -203,24 +200,28 @@ export default function Home() {
             </div>
           </motion.div>
 
+          {/* Impact Force - Numbers change color with the bar */}
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Impact Force (IMU)</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className="text-6xl font-black text-gray-800">{sensorData.gForce}</span>
+              <span className={`text-6xl font-black transition-colors duration-500 ${sensorData.gForce > 2.0 ? 'text-red-500' : 'text-green-400'}`}>
+                {sensorData.gForce}
+              </span>
               <span className="text-xl font-bold text-gray-400 mb-1">G</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-3 rounded-full transition-all duration-700 ease-out ${sensorData.gForce > 2.0 ? 'bg-red-400' : 'bg-green-400'}`} 
+                className={`h-3 rounded-full transition-all duration-700 ease-out ${sensorData.gForce > 2.0 ? 'bg-red-500' : 'bg-green-400'}`} 
                 style={{ width: `${(sensorData.gForce / 3) * 100}%` }}
               ></div>
             </div>
           </motion.div>
 
+          {/* Material Strain */}
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Material Strain</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className="text-6xl font-black text-yellow-600">{sensorData.strainLevel}%</span>
+              <span className="text-6xl font-black text-yellow-500 transition-colors duration-300">{sensorData.strainLevel}%</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
@@ -232,7 +233,7 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* --- CORE ENGINEERING (Animated) --- */}
+      {/* --- CORE ENGINEERING --- */}
       <motion.div 
         id="hardware" 
         initial="hidden"
