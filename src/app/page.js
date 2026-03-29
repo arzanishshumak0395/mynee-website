@@ -25,9 +25,9 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   
   const [sensorData, setSensorData] = useState({
-    flexionAngle: 45,
-    gForce: 1.0,
-    strainLevel: 20,
+    flexionAngle: 120, // Starts at max
+    gForce: "0.00",    // Starts at 0
+    strainLevel: 50,   // Starts at 50
   });
 
   useEffect(() => {
@@ -40,28 +40,34 @@ export default function Home() {
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
 
-  // --- NEW SIMULATION: Smooth Sine Waves ---
-  // This guarantees the numbers "breathe" smoothly from 0 to MAX, 
-  // hitting Black, Green, Yellow, and Red on every cycle!
+  // --- THE NEW HIGH-SPEED SINE WAVE ENGINE ---
   useEffect(() => {
-    let tick = 0;
+    let t = 0;
+    const speed = 0.04; // Adjust this to make the sweeping faster or slower
+    
+    // Runs every 50ms for buttery smooth, real-time animation
     const interval = setInterval(() => {
-      tick += 0.2; // Speed of the cycle
+      t += speed; 
       
-      // Math.sin creates a smooth wave between -1 and 1. We shift it to 0 to 1.
-      const wave1 = (Math.sin(tick) + 1) / 2; 
-      const wave2 = (Math.sin(tick * 0.8 + 1) + 1) / 2; // Slightly different speeds
-      const wave3 = (Math.sin(tick * 0.6 + 2) + 1) / 2;
+      // Flexion: Starts at 1, sweeps to -1. Map to 120 -> 0 -> 120
+      const flexVal = ((Math.cos(t) + 1) / 2) * 120; 
+      
+      // Impact: Starts at -1, sweeps to 1. Map to 0 -> 3.0 -> 0
+      const impactVal = ((-Math.cos(t) + 1) / 2) * 3.0; 
+      
+      // Strain: Starts at 0, sweeps to 1, to -1, to 0. Map to 50 -> 100 -> 0 -> 50
+      const strainVal = ((Math.sin(t) + 1) / 2) * 100;
 
       setSensorData({
-        flexionAngle: Math.floor(wave1 * 120),
-        gForce: (wave2 * 3.0).toFixed(2),
-        strainLevel: Math.floor(wave3 * 100),
+        flexionAngle: Math.floor(flexVal),
+        gForce: impactVal.toFixed(2),
+        strainLevel: Math.floor(strainVal),
       });
-    }, 400); // Updates smoothly every 400ms
+    }, 50); 
     return () => clearInterval(interval);
   }, []);
 
+  // --- DYNAMIC COLORS ---
   const getDynamicColor = (val, max) => {
     const ratio = val / max;
     if (ratio < 0.30) return { text: "text-gray-800", bg: "bg-gray-800" };         
@@ -79,38 +85,21 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       className="relative flex min-h-screen flex-col items-center bg-slate-50 text-gray-900 overflow-x-hidden"
     >
-      {/* --- INVISIBLE SVG FILTER FOR TRUE PRISM DISTORTION --- */}
-      <svg className="fixed w-0 h-0 pointer-events-none">
-        <defs>
-          <filter id="glass-prism">
-            {/* Creates the mathematical waves to bend pixels */}
-            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="1" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-      </svg>
-
-      {/* --- FLOATING PRISM SEARCH BAR --- */}
-      <div className="fixed top-32 left-1/2 -translate-x-1/2 z-[60] w-full max-w-2xl px-4 pointer-events-none">
+      {/* --- OVERSIZED PREMIUM SEARCH BAR --- */}
+      <div className="fixed top-32 left-1/2 -translate-x-1/2 z-[60] w-full max-w-3xl px-4 pointer-events-none">
         <div className="pointer-events-auto relative group">
-          {/* We apply the custom SVG filter here alongside a tiny blur to smooth the distortion */}
-          <div 
-            className="absolute inset-0 bg-white/10 border border-white/60 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-all group-hover:bg-white/20"
-            style={{ 
-              backdropFilter: 'url(#glass-prism) blur(3px) saturate(1.5)',
-              WebkitBackdropFilter: 'url(#glass-prism) blur(3px) saturate(1.5)'
-            }}
-          ></div>
+          {/* Clean, high-end Apple-style frosted glass */}
+          <div className="absolute inset-0 bg-white/40 backdrop-blur-xl border border-white/80 shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-full transition-all group-hover:bg-white/50 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]"></div>
           <input 
             type="text" 
             placeholder="Search telemetry, hardware..." 
-            className="relative w-full py-5 pl-8 pr-16 bg-transparent rounded-full text-lg font-medium text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all"
+            className="relative w-full py-5 pl-10 pr-20 bg-transparent rounded-full text-xl font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-yellow-400/30 transition-all"
           />
           <svg 
-            className="absolute right-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500 group-hover:text-yellow-600 transition-colors" 
+            className="absolute right-8 top-1/2 -translate-y-1/2 w-8 h-8 text-gray-400 group-hover:text-yellow-600 transition-colors" 
             fill="none" viewBox="0 0 24 24" stroke="currentColor"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
       </div>
@@ -160,7 +149,7 @@ export default function Home() {
         variants={staggerContainer}
         className="z-10 min-h-screen w-full max-w-5xl flex flex-col items-center justify-center font-sans p-8 md:p-24 text-center"
       >
-        <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase mt-20">
+        <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase mt-28">
           Project In Development
         </motion.div>
         <motion.h1 variants={fadeUpVariant} className="text-7xl md:text-9xl font-black mb-6 tracking-tighter">
@@ -228,13 +217,14 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Flexion Angle</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black transition-colors duration-[400ms] ${flexColors.text}`}>
+              {/* Note: Removed CSS transition durations here so it updates instantly with the 50ms tick */}
+              <span className={`text-6xl font-black ${flexColors.text}`}>
                 {sensorData.flexionAngle}°
               </span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-3 rounded-full transition-all duration-[400ms] ease-out ${flexColors.bg}`} 
+                className={`h-3 rounded-full ${flexColors.bg}`} 
                 style={{ width: `${(sensorData.flexionAngle / 120) * 100}%` }}
               ></div>
             </div>
@@ -244,14 +234,14 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Impact Force (IMU)</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black transition-colors duration-[400ms] ${impactColors.text}`}>
+              <span className={`text-6xl font-black ${impactColors.text}`}>
                 {sensorData.gForce}
               </span>
               <span className="text-xl font-bold text-gray-400 mb-1">G</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-3 rounded-full transition-all duration-[400ms] ease-out ${impactColors.bg}`} 
+                className={`h-3 rounded-full ${impactColors.bg}`} 
                 style={{ width: `${(sensorData.gForce / 3) * 100}%` }}
               ></div>
             </div>
@@ -261,13 +251,13 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Material Strain</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black transition-colors duration-[400ms] ${strainColors.text}`}>
+              <span className={`text-6xl font-black ${strainColors.text}`}>
                 {sensorData.strainLevel}%
               </span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-3 rounded-full transition-all duration-[400ms] ease-out ${strainColors.bg}`} 
+                className={`h-3 rounded-full ${strainColors.bg}`} 
                 style={{ width: `${sensorData.strainLevel}%` }}
               ></div>
             </div>
