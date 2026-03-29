@@ -6,7 +6,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshTransmissionMaterial, Float, Text, Environment, TorusKnot, Icosahedron, RoundedBox, Sparkles, Html } from "@react-three/drei";
 
 // ==========================================
-// 1. ISOLATED 60FPS TELEMETRY COMPONENT 
+// 1. ISOLATED 60FPS TELEMETRY COMPONENT
 // ==========================================
 function TelemetrySection() {
   const [sensorData, setSensorData] = useState({ flexionAngle: "120.0", gForce: "0.00", strainLevel: "50.0" });
@@ -88,57 +88,39 @@ function TelemetrySection() {
 // ==========================================
 // 2. HIGH-END 3D WEBGL SCENE
 // ==========================================
-function GlidingGlassSearchBar() {
+function GlassSearchBar() {
   const glassRef = useRef();
-  const isFocused = useRef(false);
 
   useFrame((state) => {
-    const t = state.clock.getElapsedTime();
-    
-    let targetX = 0;
-    let targetY = -0.5;
-
-    // If the user isn't typing in it, let it glide beautifully across the screen
-    if (!isFocused.current) {
-      targetX = Math.sin(t * 0.4) * 3.5; // Glides left and right
-      targetY = Math.sin(t * 0.7) * 1.5; // Glides up and down
-    }
-
-    // Smoothly animate the glass to its target position
-    glassRef.current.position.x += (targetX - glassRef.current.position.x) * 0.05;
-    glassRef.current.position.y += (targetY - glassRef.current.position.y) * 0.05;
-
-    // Give it a subtle, continuous 3D tilt
-    glassRef.current.rotation.x = Math.sin(t * 0.5) * 0.1;
-    glassRef.current.rotation.y = Math.cos(t * 0.5) * 0.1;
+    // The Fix: Removed the autonomous sine-wave floating. 
+    // Now it only subtly tilts and shifts precisely with your mouse movements.
+    glassRef.current.rotation.x = state.mouse.y * 0.15;
+    glassRef.current.rotation.y = state.mouse.x * 0.15;
+    glassRef.current.position.x = state.mouse.x * 0.2;
+    glassRef.current.position.y = (state.mouse.y * 0.2) - 0.5;
   });
 
   return (
-    <group ref={glassRef} position={[0, -0.5, 2.5]}>
-      {/* 3D Glass Pill */}
-      <RoundedBox args={[5.5, 0.85, 0.1]} radius={0.4} smoothness={16}>
+    <group position={[0, -0.5, 2.5]}>
+      {/* 3D Glass Prism */}
+      <RoundedBox ref={glassRef} args={[5.5, 0.85, 0.1]} radius={0.4} smoothness={16}>
         <MeshTransmissionMaterial 
           transmission={1} 
           roughness={0.02} 
-          thickness={1.5} // High thickness creates the heavy prism distortion
-          ior={1.3}       // Real-world glass refraction index
-          chromaticAberration={0.06} // Splits edges into RGB
+          thickness={1.5} 
+          ior={1.3}       
+          chromaticAberration={0.06} 
           clearcoat={1}
           color="#ffffff"
         />
       </RoundedBox>
 
-      {/* The Fix: Using `center` instead of `transform`. 
-        This perfectly syncs the HTML input to the 3D glass, but prevents 
-        it from resizing into a giant billboard! 
-      */}
+      {/* HTML Input safely constrained to the center of the 3D Glass */}
       <Html center zIndexRange={[100, 0]}>
         <div className="w-[450px] flex items-center pointer-events-auto group">
           <input 
             type="text" 
-            placeholder="" // Empty as requested!
-            onFocus={() => (isFocused.current = true)}
-            onBlur={() => (isFocused.current = false)}
+            placeholder="" 
             className="w-full py-3.5 pl-6 pr-14 bg-white/5 border border-white/20 rounded-full text-base font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all shadow-[0_10px_40px_rgba(0,0,0,0.1)] backdrop-blur-sm"
           />
           <svg className="absolute right-5 w-5 h-5 text-gray-400 group-hover:text-yellow-600 cursor-pointer transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -158,7 +140,6 @@ function TechScene() {
 
       <Sparkles count={100} scale={12} size={1.5} speed={0.4} opacity={0.2} color="#ca8a04" />
       
-      {/* Background Geometries for the glass to refract */}
       <Float speed={1.5} rotationIntensity={1.5} floatIntensity={2}>
         <TorusKnot position={[-4, 1.5, -3]} args={[1.2, 0.3, 128, 16]}>
           <meshStandardMaterial color="#fef08a" metalness={0.8} roughness={0.2} wireframe={true} opacity={0.3} transparent />
@@ -171,7 +152,6 @@ function TechScene() {
         </Icosahedron>
       </Float>
 
-      {/* The 3D Mynee Text */}
       <Float speed={1} rotationIntensity={0.02} floatIntensity={0.1}>
         <Text position={[0, 1.4, -1]} fontSize={2.5} color="#ca8a04" fontWeight="900" letterSpacing={-0.08}>
           Mynee
@@ -184,8 +164,8 @@ function TechScene() {
         </Text>
       </Float>
 
-      {/* The Gliding Glass component we built above */}
-      <GlidingGlassSearchBar />
+      {/* The elegantly locked Glass Component */}
+      <GlassSearchBar />
     </>
   );
 }
@@ -220,7 +200,7 @@ export default function Home() {
       </nav>
 
       {/* WEBGL HERO */}
-      <div className="relative w-full h-screen overflow-hidden">
+      <div className="relative w-full h-screen overflow-hidden cursor-crosshair">
         <Canvas camera={{ position: [0, 0, 7], fov: 45 }} className="w-full h-full">
           <TechScene />
         </Canvas>
