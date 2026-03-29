@@ -6,7 +6,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshTransmissionMaterial, Float, Text, Environment, TorusKnot, Icosahedron, RoundedBox, Sparkles, Html } from "@react-three/drei";
 
 // ==========================================
-// 1. ISOLATED 60FPS TELEMETRY COMPONENT (True Fluidity)
+// 1. ISOLATED 60FPS TELEMETRY COMPONENT 
 // ==========================================
 function TelemetrySection() {
   const [sensorData, setSensorData] = useState({ flexionAngle: "120.0", gForce: "0.00", strainLevel: "50.0" });
@@ -15,20 +15,15 @@ function TelemetrySection() {
     let animationFrameId;
     let tick = 0;
     
-    // requestAnimationFrame locks to your monitor's refresh rate (60Hz/120Hz)
     const renderLoop = () => {
-      tick += 0.015; // Smooth, manageable speed
+      tick += 0.05; 
       
-      // Using precise Trigonometry to create breathing waves
-      // Flexion: Starts high, breathes down to 0
       const flex = (Math.cos(tick) * 60 + 60); 
-      // Impact: Starts low, breathes up to 3.0
       const impact = (Math.sin(tick * 0.8) * 1.5 + 1.5);
-      // Strain: Starts mid, breathes up to 100, down to 0
       const strain = (Math.sin(tick * 1.2) * 50 + 50);
 
       setSensorData({
-        flexionAngle: flex.toFixed(1), // Added decimal for micro-stutter removal
+        flexionAngle: flex.toFixed(1),
         gForce: impact.toFixed(2),
         strainLevel: strain.toFixed(1),
       });
@@ -54,7 +49,6 @@ function TelemetrySection() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-      {/* Flexion Card */}
       <div className="bg-white p-8 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 hover:border-yellow-400 transition-colors duration-500 group">
         <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Flexion Angle</h4>
         <div className="flex items-baseline gap-2 mb-6">
@@ -66,7 +60,6 @@ function TelemetrySection() {
         </div>
       </div>
 
-      {/* Impact Force Card */}
       <div className="bg-white p-8 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 hover:border-yellow-400 transition-colors duration-500 group">
         <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Impact Force (IMU)</h4>
         <div className="flex items-baseline gap-2 mb-6">
@@ -78,7 +71,6 @@ function TelemetrySection() {
         </div>
       </div>
 
-      {/* Strain Card */}
       <div className="bg-white p-8 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-50 hover:border-yellow-400 transition-colors duration-500 group">
         <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Material Strain</h4>
         <div className="flex items-baseline gap-2 mb-6">
@@ -96,40 +88,58 @@ function TelemetrySection() {
 // ==========================================
 // 2. HIGH-END 3D WEBGL SCENE
 // ==========================================
-function GlassSearchNode() {
+function GlidingGlassSearchBar() {
   const glassRef = useRef();
+  const isFocused = useRef(false);
 
   useFrame((state) => {
-    // Parallax sway tied to mouse
-    glassRef.current.rotation.x = (state.mouse.y * 0.05);
-    glassRef.current.rotation.y = (state.mouse.x * 0.05);
+    const t = state.clock.getElapsedTime();
+    
+    let targetX = 0;
+    let targetY = -0.5;
+
+    // If the user isn't typing in it, let it glide beautifully across the screen
+    if (!isFocused.current) {
+      targetX = Math.sin(t * 0.4) * 3.5; // Glides left and right
+      targetY = Math.sin(t * 0.7) * 1.5; // Glides up and down
+    }
+
+    // Smoothly animate the glass to its target position
+    glassRef.current.position.x += (targetX - glassRef.current.position.x) * 0.05;
+    glassRef.current.position.y += (targetY - glassRef.current.position.y) * 0.05;
+
+    // Give it a subtle, continuous 3D tilt
+    glassRef.current.rotation.x = Math.sin(t * 0.5) * 0.1;
+    glassRef.current.rotation.y = Math.cos(t * 0.5) * 0.1;
   });
 
   return (
-    <group position={[0, -0.3, 2.5]}>
-      {/* The Fix: A flat, wide, ultra-thin RoundedBox. 
-        Args: [Width, Height, Depth]
-      */}
-      <RoundedBox ref={glassRef} args={[5.5, 0.9, 0.02]} radius={0.45} smoothness={8}>
+    <group ref={glassRef} position={[0, -0.5, 2.5]}>
+      {/* 3D Glass Pill */}
+      <RoundedBox args={[5.5, 0.85, 0.1]} radius={0.4} smoothness={16}>
         <MeshTransmissionMaterial 
           transmission={1} 
-          roughness={0.05} 
-          thickness={0.1} // Thin glass avoids the "black jellybean" void reflection
-          ior={1.2}       // Soft optical distortion
-          chromaticAberration={0.03} 
+          roughness={0.02} 
+          thickness={1.5} // High thickness creates the heavy prism distortion
+          ior={1.3}       // Real-world glass refraction index
+          chromaticAberration={0.06} // Splits edges into RGB
           clearcoat={1}
-          clearcoatRoughness={0.1}
           color="#ffffff"
         />
       </RoundedBox>
 
-      {/* Floating HTML Input synced perfectly to the 3D Glass */}
-      <Html transform center position={[0, 0, 0.05]} scale={0.9}>
-        <div className="w-[500px] flex items-center pointer-events-auto group">
+      {/* The Fix: Using `center` instead of `transform`. 
+        This perfectly syncs the HTML input to the 3D glass, but prevents 
+        it from resizing into a giant billboard! 
+      */}
+      <Html center zIndexRange={[100, 0]}>
+        <div className="w-[450px] flex items-center pointer-events-auto group">
           <input 
             type="text" 
-            placeholder="Search telemetry, hardware..." 
-            className="w-full py-3.5 pl-8 pr-14 bg-transparent rounded-full text-base font-bold text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all"
+            placeholder="" // Empty as requested!
+            onFocus={() => (isFocused.current = true)}
+            onBlur={() => (isFocused.current = false)}
+            className="w-full py-3.5 pl-6 pr-14 bg-white/5 border border-white/20 rounded-full text-base font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all shadow-[0_10px_40px_rgba(0,0,0,0.1)] backdrop-blur-sm"
           />
           <svg className="absolute right-5 w-5 h-5 text-gray-400 group-hover:text-yellow-600 cursor-pointer transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -146,10 +156,9 @@ function TechScene() {
       <color attach="background" args={['#fafafa']} />
       <Environment preset="city" /> 
 
-      {/* Ambient Smart Dust */}
       <Sparkles count={100} scale={12} size={1.5} speed={0.4} opacity={0.2} color="#ca8a04" />
       
-      {/* Abstract Tech Geometries (Replaces the boring spheres) */}
+      {/* Background Geometries for the glass to refract */}
       <Float speed={1.5} rotationIntensity={1.5} floatIntensity={2}>
         <TorusKnot position={[-4, 1.5, -3]} args={[1.2, 0.3, 128, 16]}>
           <meshStandardMaterial color="#fef08a" metalness={0.8} roughness={0.2} wireframe={true} opacity={0.3} transparent />
@@ -162,20 +171,21 @@ function TechScene() {
         </Icosahedron>
       </Float>
 
-      {/* Centerpiece Text */}
+      {/* The 3D Mynee Text */}
       <Float speed={1} rotationIntensity={0.02} floatIntensity={0.1}>
-        <Text position={[0, 1.3, -1]} fontSize={2.5} color="#ca8a04" fontWeight="900" letterSpacing={-0.08}>
+        <Text position={[0, 1.4, -1]} fontSize={2.5} color="#ca8a04" fontWeight="900" letterSpacing={-0.08}>
           Mynee
         </Text>
-        <Text position={[0, 0.2, -1]} fontSize={0.3} color="#6b7280" maxWidth={6} textAlign="center" fontWeight="500">
+        <Text position={[0, 0.3, -1]} fontSize={0.3} color="#6b7280" maxWidth={6} textAlign="center" fontWeight="500">
           Smart Knee Brace Technology & Intelligent Sensing
         </Text>
-        <Text position={[0, 2.5, -1]} fontSize={0.18} color="#a16207" letterSpacing={0.3} fontWeight="bold">
+        <Text position={[0, 2.6, -1]} fontSize={0.18} color="#a16207" letterSpacing={0.3} fontWeight="bold">
           PROJECT IN DEVELOPMENT
         </Text>
       </Float>
 
-      <GlassSearchNode />
+      {/* The Gliding Glass component we built above */}
+      <GlidingGlassSearchBar />
     </>
   );
 }
@@ -210,7 +220,7 @@ export default function Home() {
       </nav>
 
       {/* WEBGL HERO */}
-      <div className="relative w-full h-screen overflow-hidden cursor-crosshair">
+      <div className="relative w-full h-screen overflow-hidden">
         <Canvas camera={{ position: [0, 0, 7], fov: 45 }} className="w-full h-full">
           <TechScene />
         </Canvas>
@@ -221,7 +231,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* HTML CONTENT */}
+      {/* HTML CONTENT BELOW HERO */}
       <div className="relative w-full bg-slate-50 z-10 flex flex-col items-center">
         
         {/* VISION */}
