@@ -127,50 +127,98 @@ export default function Home() {
         </div>
       </div>
 
-      {/* --- TELEMETRY DASHBOARD (RESTORED COLORS) --- */}
-      <div id="telemetry" className="z-10 w-full max-w-5xl py-32 px-8">
-        <div className="text-center mb-16">
-            <h3 className="text-4xl font-black mb-4 text-gray-800">Live Telemetry</h3>
-            <p className="text-gray-400 font-light">Real-time data streaming from on-board sensors.</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Flexion Angle Card */}
-          <div className="bg-white p-10 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-50 hover:border-yellow-400 transition-all duration-500">
-            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">Flexion Angle</h4>
-            <div className="text-7xl font-black text-gray-800 mb-6">{sensorData.flexionAngle}<span className="text-xl text-gray-300 ml-1 font-light">°</span></div>
-            <div className="w-full bg-gray-50 rounded-full h-2 overflow-hidden">
-              <div 
-                className="bg-gradient-to-r from-yellow-300 to-yellow-500 h-full transition-all duration-700 ease-out" 
+        {/* --- LIVE TELEMETRY DASHBOARD --- */}
+
+      <div id="telemetry" className="z-10 w-full max-w-5xl py-20 px-8">
+
+        <h3 className="text-3xl font-bold mb-2 text-gray-800">Live Telemetry Simulation</h3>
+
+        <p className="text-gray-500 mb-8">Real-time data streaming capabilities from the on-board IMU and Flex sensors.</p>
+
+       
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <div className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
+
+            <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Flexion Angle</h4>
+
+            <div className="flex items-end gap-2 mb-4">
+
+              <span className="text-6xl font-black text-yellow-500">{sensorData.flexionAngle}°</span>
+
+            </div>
+
+            <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+
+              <div
+
+                className="bg-gradient-to-r from-yellow-300 to-yellow-500 h-3 rounded-full transition-all duration-700 ease-out"
+
                 style={{ width: `${(sensorData.flexionAngle / 120) * 100}%` }}
+
               ></div>
+
             </div>
+
           </div>
 
-          {/* Impact Force Card (With Red High-G Alert) */}
-          <div className="bg-white p-10 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-50 hover:border-yellow-400 transition-all duration-500">
-            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">Impact Force</h4>
-            <div className="text-7xl font-black text-gray-800 mb-6">{sensorData.gForce}<span className="text-xl text-gray-300 ml-1 font-light">G</span></div>
-            <div className="w-full bg-gray-50 rounded-full h-2 overflow-hidden">
-              <div 
-                className={`h-full transition-all duration-700 ease-out ${sensorData.gForce > 2.0 ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-green-400'}`} 
+
+
+          <div className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
+
+            <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Impact Force (IMU)</h4>
+
+            <div className="flex items-end gap-2 mb-4">
+
+              <span className="text-6xl font-black text-gray-800">{sensorData.gForce}</span>
+
+              <span className="text-xl font-bold text-gray-400 mb-1">G</span>
+
+            </div>
+
+            <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+
+              <div
+
+                className={`h-3 rounded-full transition-all duration-700 ease-out ${sensorData.gForce > 2.0 ? 'bg-red-400' : 'bg-green-400'}`}
+
                 style={{ width: `${(sensorData.gForce / 3) * 100}%` }}
+
               ></div>
+
             </div>
+
           </div>
 
-          {/* Material Strain Card */}
-          <div className="bg-white p-10 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 hover:border-yellow-400 transition-all duration-500">
-            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">Material Strain</h4>
-            <div className="text-7xl font-black text-gray-800 mb-6">{sensorData.strainLevel}<span className="text-xl text-gray-300 ml-1 font-light">%</span></div>
-            <div className="w-full bg-gray-50 rounded-full h-2 overflow-hidden">
-              <div 
-                className="bg-yellow-400 h-full transition-all duration-700 ease-out" 
-                style={{ width: `${sensorData.strainLevel}%` }}
-              ></div>
+
+
+          <div className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
+
+            <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Material Strain</h4>
+
+            <div className="flex items-end gap-2 mb-4">
+
+              <span className="text-6xl font-black text-yellow-600">{sensorData.strainLevel}%</span>
+
             </div>
+
+            <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+
+              <div
+
+                className="bg-yellow-400 h-3 rounded-full transition-all duration-700 ease-out"
+
+                style={{ width: `${sensorData.strainLevel}%` }}
+
+              ></div>
+
+            </div>
+
           </div>
+
         </div>
+
       </div>
 
       {/* --- CORE ENGINEERING --- */}
