@@ -59,28 +59,12 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       className="relative flex min-h-screen flex-col items-center bg-slate-50 text-gray-900 overflow-x-hidden"
     >
-      {/* --- EXTREME GLASSMORPHISM NAVIGATION MENU --- */}
+      {/* --- EXTREME GLASSMORPHISM NAVIGATION MENU (Separate) --- */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/30 backdrop-blur-2xl border-b border-white/40 shadow-sm py-4 saturate-200" : "bg-transparent py-8"}`}>
         <div className="max-w-7xl mx-auto px-8 md:px-12 flex justify-between items-center gap-8">
           
           <div className="text-2xl font-black text-yellow-600 tracking-tighter shrink-0">MYNEE</div>
           
-          {/* --- TRANSPARENT GLASS SEARCH BAR --- */}
-          <div className="hidden lg:block relative group flex-1 max-w-md">
-            <div className="absolute inset-0 bg-white/20 rounded-full blur-md group-hover:bg-white/30 transition-all duration-300"></div>
-            <input 
-              type="text" 
-              placeholder="Search telemetry, hardware..." 
-              className="relative w-full py-2.5 pl-6 pr-12 bg-white/30 border border-white/50 rounded-full text-xs font-medium text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 backdrop-blur-md shadow-[0_4px_15px_rgba(0,0,0,0.03)] transition-all"
-            />
-            <svg 
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-hover:text-yellow-600 transition-colors" 
-              fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-
           <div className="hidden md:flex gap-8 items-center text-xs font-bold text-gray-500 uppercase tracking-[0.2em] shrink-0">
             <a href="#" className="hover:text-yellow-600 transition-colors">Home</a>
             <a href="#vision" className="hover:text-yellow-600 transition-colors">Vision</a>
@@ -114,13 +98,34 @@ export default function Home() {
         }}
       />
 
-      {/* --- HERO SECTION --- */}
+      {/* --- HERO SECTION (Animated with Standalone Search) --- */}
       <motion.div 
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
         className="z-10 min-h-screen w-full max-w-5xl flex flex-col items-center justify-center font-sans p-8 md:p-24 text-center"
       >
+        {/* --- STANDALONE GLASS SEARCH BAR (PULSING & DISTORTING) --- */}
+        <motion.div variants={fadeUpVariant} className="relative z-20 mx-auto w-full max-w-xl p-6 group mb-12">
+          {/* Soft pulsing glow behind the bar */}
+          <div className="absolute inset-0 bg-white/20 rounded-full blur-md group-hover:bg-white/30 transition-all duration-300"></div>
+          
+          {/* Aggressive Glassmorphism with prism effect */}
+          <input 
+            type="text" 
+            placeholder="Search telemetry, hardware..." 
+            className="relative w-full py-2.5 pl-6 pr-12 backdrop-blur-2xl bg-white/20 border border-white/40 rounded-full text-xs font-medium text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 shadow-xl shadow-yellow-500/10 transition-all saturate-200 group-hover:scale-[1.01]"
+          />
+          
+          {/* Search Icon */}
+          <svg 
+            className="absolute right-8 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-hover:text-yellow-600 transition-colors" 
+            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </motion.div>
+
         <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase">
           Project In Development
         </motion.div>
@@ -140,7 +145,7 @@ export default function Home() {
         </motion.button>
       </motion.div>
 
-      {/* --- VISION & PROTOTYPE SECTION --- */}
+      {/* --- VISION & PROTOTYPE SECTION (Animated) --- */}
       <motion.div 
         id="vision" 
         initial="hidden"
@@ -172,7 +177,7 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* --- LIVE TELEMETRY DASHBOARD --- */}
+      {/* --- LIVE TELEMETRY DASHBOARD (Animated & Original Colors/Colors Restored) --- */}
       <motion.div 
         id="telemetry" 
         initial="hidden"
