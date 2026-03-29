@@ -3,28 +3,34 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { MeshTransmissionMaterial, Float, Text, Environment, Sphere, Html } from "@react-three/drei";
+import { MeshTransmissionMaterial, Float, Text, Environment, Sphere, RoundedBox } from "@react-three/drei";
 
 // ==========================================
-// 1. ISOLATED TELEMETRY COMPONENT 
-// (Prevents the 50ms interval from freezing the 3D Canvas)
+// 1. ISOLATED 60FPS TELEMETRY COMPONENT 
 // ==========================================
 function TelemetrySection() {
   const [sensorData, setSensorData] = useState({ flexionAngle: 120, gForce: "0.00", strainLevel: 50 });
 
   useEffect(() => {
+    let animationFrameId;
     let tick = 0;
-    const speed = 0.04; 
+    const speed = 0.02; // Slower, smoother wave speed
     
-    const interval = setInterval(() => {
+    // requestAnimationFrame forces the browser to update at 60FPS for maximum fluidity
+    const renderLoop = () => {
       tick += speed; 
+      
       setSensorData({
         flexionAngle: Math.floor(((Math.cos(tick) + 1) / 2) * 120),
         gForce: (((-Math.cos(tick) + 1) / 2) * 3.0).toFixed(2),
         strainLevel: Math.floor(((Math.sin(tick) + 1) / 2) * 100),
       });
-    }, 50); // Isolated 50ms update!
-    return () => clearInterval(interval);
+      
+      animationFrameId = requestAnimationFrame(renderLoop);
+    };
+    
+    renderLoop();
+    return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
   const getDynamicColor = (val, max) => {
@@ -76,48 +82,32 @@ function TelemetrySection() {
 }
 
 // ==========================================
-// 2. WEBGL 3D SCENE COMPONENTS
+// 2. REFINED WEBGL 3D SCENE
 // ==========================================
-function GlassSearchBar() {
+function GlassBackdrop() {
   const glassRef = useRef();
 
   useFrame((state) => {
-    // Smooth, subtle tilting of the glass
-    glassRef.current.rotation.x = state.mouse.y * 0.15;
-    glassRef.current.rotation.y = state.mouse.x * 0.15;
+    // Very subtle parallax tracking so the glass feels alive
+    glassRef.current.rotation.x = state.mouse.y * 0.05;
+    glassRef.current.rotation.y = state.mouse.x * 0.05;
   });
 
   return (
-    <group position={[0, -0.5, 2.5]}>
-      {/* 3D Glass Mesh */}
-      <mesh ref={glassRef} rotation={[0, 0, Math.PI / 2]}>
-        <capsuleGeometry args={[0.6, 6.5, 32, 64]} />
+    // Moved slightly down to align with the HTML search bar
+    <group position={[0, -0.2, 2.5]}> 
+      {/* Flat Rounded Box instead of a thick capsule prevents the black void effect */}
+      <RoundedBox ref={glassRef} args={[7, 1.2, 0.1]} radius={0.5} smoothness={4}>
         <MeshTransmissionMaterial 
-          backside
-          thickness={3.0} 
-          roughness={0.05} 
           transmission={1} 
-          ior={1.35} 
-          chromaticAberration={0.08} 
-          distortion={0.2}
-          distortionScale={0.3}
+          roughness={0.08} 
+          thickness={0.5} // Thinner = more realistic glass
+          ior={1.15}      // Lower IOR = subtle warping instead of extreme distortion
+          chromaticAberration={0.04} 
+          clearcoat={1}
           color="#ffffff"
         />
-      </mesh>
-      
-      {/* HTML Input floating exactly on the glass */}
-      <Html transform center position={[0, 0, 0.7]} scale={0.9}>
-        <div className="w-[650px] flex items-center pointer-events-auto">
-          <input 
-            type="text" 
-            placeholder="Search telemetry, hardware..." 
-            className="w-full py-4 pl-10 pr-16 bg-transparent rounded-full text-xl font-bold text-gray-900 placeholder-gray-800/50 focus:outline-none transition-all"
-          />
-          <svg className="absolute right-6 w-8 h-8 text-gray-800 hover:text-yellow-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
-      </Html>
+      </RoundedBox>
     </group>
   );
 }
@@ -125,26 +115,27 @@ function GlassSearchBar() {
 function Scene() {
   return (
     <>
+      {/* Set the canvas background to match the slate-50 color to prevent black refractions */}
+      <color attach="background" args={['#f8fafc']} />
       <Environment preset="city" /> 
       
-      <Float speed={2} rotationIntensity={1} floatIntensity={2}>
-        <Sphere position={[-5, 2, -3]} args={[1.5, 32, 32]}>
-          <meshStandardMaterial color="#fef08a" emissive="#ca8a04" emissiveIntensity={0.8} />
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+        <Sphere position={[-4, 2, -2]} args={[1.2, 32, 32]}>
+          <meshStandardMaterial color="#fef08a" emissive="#ca8a04" emissiveIntensity={0.6} />
         </Sphere>
       </Float>
       
-      <Float speed={1.5} rotationIntensity={1} floatIntensity={2}>
-        <Sphere position={[4, -2, -5]} args={[2.5, 32, 32]}>
-          <meshStandardMaterial color="#eab308" emissive="#a16207" emissiveIntensity={0.5} />
+      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
+        <Sphere position={[4, -1.5, -3]} args={[2, 32, 32]}>
+          <meshStandardMaterial color="#eab308" emissive="#a16207" emissiveIntensity={0.4} />
         </Sphere>
       </Float>
 
-      <Float speed={1} rotationIntensity={0.1} floatIntensity={0.3}>
-        {/* Removed external font URL to guarantee it renders safely */}
-        <Text position={[0, 1.2, -1]} fontSize={2.5} color="#d97706" fontWeight="bold" letterSpacing={-0.05}>
+      <Float speed={1} rotationIntensity={0.05} floatIntensity={0.2}>
+        <Text position={[0, 1.5, -1]} fontSize={2.2} color="#ca8a04" fontWeight="bold" letterSpacing={-0.05}>
           Mynee
         </Text>
-        <Text position={[0, -0.2, -1]} fontSize={0.4} color="#4b5563" maxWidth={7} textAlign="center">
+        <Text position={[0, 0.2, -1]} fontSize={0.35} color="#4b5563" maxWidth={7} textAlign="center">
           Smart Knee Brace Technology & Intelligent Sensing
         </Text>
         <Text position={[0, 2.8, -1]} fontSize={0.2} color="#ca8a04" letterSpacing={0.2}>
@@ -152,7 +143,7 @@ function Scene() {
         </Text>
       </Float>
 
-      <GlassSearchBar />
+      <GlassBackdrop />
     </>
   );
 }
@@ -173,7 +164,7 @@ export default function Home() {
     <main className="relative flex flex-col items-center bg-slate-50 text-gray-900 overflow-x-hidden min-h-screen">
       
       {/* NAVBAR */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/50 backdrop-blur-xl border-b border-white/40 shadow-sm py-4 saturate-200" : "bg-transparent py-8"}`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm py-4 saturate-200" : "bg-transparent py-8"}`}>
         <div className="max-w-7xl mx-auto px-8 md:px-12 flex justify-between items-center gap-8">
           <div className="text-2xl font-black text-yellow-600 tracking-tighter">MYNEE</div>
           <div className="hidden md:flex gap-8 items-center text-xs font-bold text-gray-500 uppercase tracking-[0.2em]">
@@ -186,8 +177,24 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 3D HERO CANVAS (Forced 100vh height so it doesn't swallow the page) */}
+      {/* 3D HERO CANVAS */}
       <div className="relative w-full h-screen overflow-hidden bg-slate-50">
+        
+        {/* --- DECOUPLED HTML SEARCH BAR --- */}
+        {/* This floats precisely over the 3D glass in the background so it never resizes strangely */}
+        <div className="absolute top-[52%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-full max-w-2xl px-4">
+          <div className="relative w-full flex items-center group">
+            <input 
+              type="text" 
+              placeholder="Search telemetry, hardware..." 
+              className="w-full py-4 pl-8 pr-16 bg-white/10 rounded-full text-lg font-bold text-gray-800 placeholder-gray-800/60 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all shadow-lg"
+            />
+            <svg className="absolute right-6 w-6 h-6 text-gray-800 group-hover:text-yellow-500 cursor-pointer transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+
         <Canvas camera={{ position: [0, 0, 8], fov: 45 }} className="w-full h-full z-0">
           <Scene />
         </Canvas>
@@ -225,7 +232,7 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* TELEMETRY DASHBOARD (Now perfectly isolated!) */}
+        {/* TELEMETRY DASHBOARD */}
         <motion.div id="telemetry" className="w-full max-w-5xl py-20 px-8 flex flex-col items-center" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h3 className="text-3xl font-bold mb-2 text-gray-800 text-center">Live Telemetry Simulation</h3>
           <p className="text-gray-500 mb-16 text-center">Real-time data streaming capabilities from the on-board IMU and Flex sensors.</p>
