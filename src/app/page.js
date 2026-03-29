@@ -42,25 +42,25 @@ export default function Home() {
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
 
+  // --- UPDATED SIMULATION: Full range to trigger all colors ---
   useEffect(() => {
     const interval = setInterval(() => {
       setSensorData({
-        flexionAngle: Math.floor(Math.random() * (120 - 10 + 1) + 10),
-        gForce: (Math.random() * (2.5 - 0.8) + 0.8).toFixed(2),
-        strainLevel: Math.floor(Math.random() * (80 - 10 + 1) + 10),
+        flexionAngle: Math.floor(Math.random() * 121), // 0 to 120
+        gForce: (Math.random() * 3.0).toFixed(2),      // 0.00 to 3.00
+        strainLevel: Math.floor(Math.random() * 101),  // 0 to 100
       });
     }, 800);
     return () => clearInterval(interval);
   }, []);
 
-  // --- NEW: DYNAMIC COLOR LOGIC ---
-  // Calculates percentage and returns the matching Tailwind text and background colors
+  // --- DYNAMIC COLOR LOGIC ---
   const getDynamicColor = (val, max) => {
     const ratio = val / max;
-    if (ratio < 0.30) return { text: "text-gray-800", bg: "bg-gray-800" };   // Black/Dark Gray
-    if (ratio < 0.60) return { text: "text-green-500", bg: "bg-green-500" }; // Green
-    if (ratio < 0.85) return { text: "text-yellow-500", bg: "bg-yellow-500" };// Yellow
-    return { text: "text-red-500", bg: "bg-red-500" };                       // Red
+    if (ratio < 0.30) return { text: "text-black", bg: "bg-black" };         // Black (Resting)
+    if (ratio < 0.60) return { text: "text-green-500", bg: "bg-green-500" }; // Green (Normal)
+    if (ratio < 0.85) return { text: "text-yellow-500", bg: "bg-yellow-500" };// Yellow (Warning)
+    return { text: "text-red-500", bg: "bg-red-500" };                       // Red (Critical)
   };
 
   const flexColors = getDynamicColor(sensorData.flexionAngle, 120);
@@ -72,18 +72,18 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       className="relative flex min-h-screen flex-col items-center bg-slate-50 text-gray-900 overflow-x-hidden"
     >
-      {/* --- FLOATING PRISM SEARCH BAR (Less blur, more transparency) --- */}
-      <div className="fixed top-28 left-1/2 -translate-x-1/2 z-[60] w-full max-w-md px-4 pointer-events-none">
+      {/* --- FLOATING PRISM SEARCH BAR (Zero Blur, High Distortion, Larger Size) --- */}
+      <div className="fixed top-32 left-1/2 -translate-x-1/2 z-[60] w-full max-w-2xl px-4 pointer-events-none">
         <div className="pointer-events-auto relative group">
-          {/* backdrop-blur-md and bg-white/10 allows you to see the text behind it, but warped! */}
-          <div className="absolute inset-0 bg-white/10 backdrop-blur-md saturate-[1.5] border border-white/50 rounded-full shadow-xl transition-all group-hover:bg-white/20"></div>
+          {/* backdrop-blur is removed. saturate and contrast are maxed out for pure color distortion */}
+          <div className="absolute inset-0 bg-white/5 backdrop-saturate-[3] backdrop-contrast-[1.2] border border-gray-200/50 rounded-full shadow-2xl transition-all group-hover:bg-white/10"></div>
           <input 
             type="text" 
             placeholder="Search telemetry, hardware..." 
-            className="relative w-full py-3 pl-6 pr-12 bg-transparent rounded-full text-sm font-medium text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all"
+            className="relative w-full py-5 pl-8 pr-16 bg-transparent rounded-full text-lg font-medium text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-all"
           />
           <svg 
-            className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-hover:text-yellow-600 transition-colors" 
+            className="absolute right-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500 group-hover:text-yellow-600 transition-colors" 
             fill="none" viewBox="0 0 24 24" stroke="currentColor"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -136,7 +136,7 @@ export default function Home() {
         variants={staggerContainer}
         className="z-10 min-h-screen w-full max-w-5xl flex flex-col items-center justify-center font-sans p-8 md:p-24 text-center"
       >
-        <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase mt-10">
+        <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase mt-20">
           Project In Development
         </motion.div>
         <motion.h1 variants={fadeUpVariant} className="text-7xl md:text-9xl font-black mb-6 tracking-tighter">
@@ -187,7 +187,7 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* --- LIVE TELEMETRY DASHBOARD (Dynamic Colors Applied) --- */}
+      {/* --- LIVE TELEMETRY DASHBOARD --- */}
       <motion.div 
         id="telemetry" 
         initial="hidden"
