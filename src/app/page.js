@@ -42,25 +42,23 @@ export default function Home() {
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
 
-  // --- UPDATED SIMULATION: Full range to trigger all colors ---
   useEffect(() => {
     const interval = setInterval(() => {
       setSensorData({
-        flexionAngle: Math.floor(Math.random() * 121), // 0 to 120
-        gForce: (Math.random() * 3.0).toFixed(2),      // 0.00 to 3.00
-        strainLevel: Math.floor(Math.random() * 101),  // 0 to 100
+        flexionAngle: Math.floor(Math.random() * 121),
+        gForce: (Math.random() * 3.0).toFixed(2),     
+        strainLevel: Math.floor(Math.random() * 101), 
       });
     }, 800);
     return () => clearInterval(interval);
   }, []);
 
-  // --- DYNAMIC COLOR LOGIC ---
   const getDynamicColor = (val, max) => {
     const ratio = val / max;
-    if (ratio < 0.30) return { text: "text-black", bg: "bg-black" };         // Black (Resting)
-    if (ratio < 0.60) return { text: "text-green-500", bg: "bg-green-500" }; // Green (Normal)
-    if (ratio < 0.85) return { text: "text-yellow-500", bg: "bg-yellow-500" };// Yellow (Warning)
-    return { text: "text-red-500", bg: "bg-red-500" };                       // Red (Critical)
+    if (ratio < 0.30) return { text: "text-black", bg: "bg-black" };         
+    if (ratio < 0.60) return { text: "text-green-500", bg: "bg-green-500" }; 
+    if (ratio < 0.85) return { text: "text-yellow-500", bg: "bg-yellow-500" };
+    return { text: "text-red-500", bg: "bg-red-500" };                       
   };
 
   const flexColors = getDynamicColor(sensorData.flexionAngle, 120);
@@ -72,11 +70,11 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       className="relative flex min-h-screen flex-col items-center bg-slate-50 text-gray-900 overflow-x-hidden"
     >
-      {/* --- FLOATING PRISM SEARCH BAR (Zero Blur, High Distortion, Larger Size) --- */}
+      {/* --- FLOATING PRISM SEARCH BAR (The Goldilocks Glass Effect) --- */}
       <div className="fixed top-32 left-1/2 -translate-x-1/2 z-[60] w-full max-w-2xl px-4 pointer-events-none">
         <div className="pointer-events-auto relative group">
-          {/* backdrop-blur is removed. saturate and contrast are maxed out for pure color distortion */}
-          <div className="absolute inset-0 bg-white/5 backdrop-saturate-[3] backdrop-contrast-[1.2] border border-gray-200/50 rounded-full shadow-2xl transition-all group-hover:bg-white/10"></div>
+          {/* Custom 8px blur + high saturation + white/40 background creates the thick acrylic refraction */}
+          <div className="absolute inset-0 bg-white/40 backdrop-blur-[8px] backdrop-saturate-[2] border border-white/80 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-all group-hover:bg-white/50"></div>
           <input 
             type="text" 
             placeholder="Search telemetry, hardware..." 
