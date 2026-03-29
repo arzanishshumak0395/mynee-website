@@ -127,7 +127,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* --- TELEMETRY DASHBOARD --- */}
+      {/* --- TELEMETRY DASHBOARD (RESTORED COLORS) --- */}
       <div id="telemetry" className="z-10 w-full max-w-5xl py-32 px-8">
         <div className="text-center mb-16">
             <h3 className="text-4xl font-black mb-4 text-gray-800">Live Telemetry</h3>
@@ -135,22 +135,41 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { label: 'Flexion Angle', val: sensorData.flexionAngle, unit: '°', max: 120 },
-            { label: 'Impact Force', val: sensorData.gForce, unit: 'G', max: 3 },
-            { label: 'Material Strain', val: sensorData.strainLevel, unit: '%', max: 100 }
-          ].map((item) => (
-            <div key={item.label} className="bg-white p-10 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-50 hover:border-yellow-400 transition-all duration-500">
-                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">{item.label}</h4>
-                <div className="text-7xl font-black text-gray-800 mb-6">{item.val}<span className="text-xl text-gray-300 ml-1 font-light">{item.unit}</span></div>
-                <div className="w-full bg-gray-50 rounded-full h-2 overflow-hidden">
-                    <div 
-                        className="bg-yellow-500 h-full transition-all duration-700 ease-out" 
-                        style={{ width: `${(item.val / item.max) * 100}%` }}
-                    ></div>
-                </div>
+          {/* Flexion Angle Card */}
+          <div className="bg-white p-10 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-50 hover:border-yellow-400 transition-all duration-500">
+            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">Flexion Angle</h4>
+            <div className="text-7xl font-black text-gray-800 mb-6">{sensorData.flexionAngle}<span className="text-xl text-gray-300 ml-1 font-light">°</span></div>
+            <div className="w-full bg-gray-50 rounded-full h-2 overflow-hidden">
+              <div 
+                className="bg-gradient-to-r from-yellow-300 to-yellow-500 h-full transition-all duration-700 ease-out" 
+                style={{ width: `${(sensorData.flexionAngle / 120) * 100}%` }}
+              ></div>
             </div>
-          ))}
+          </div>
+
+          {/* Impact Force Card (With Red High-G Alert) */}
+          <div className="bg-white p-10 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-50 hover:border-yellow-400 transition-all duration-500">
+            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">Impact Force</h4>
+            <div className="text-7xl font-black text-gray-800 mb-6">{sensorData.gForce}<span className="text-xl text-gray-300 ml-1 font-light">G</span></div>
+            <div className="w-full bg-gray-50 rounded-full h-2 overflow-hidden">
+              <div 
+                className={`h-full transition-all duration-700 ease-out ${sensorData.gForce > 2.0 ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-green-400'}`} 
+                style={{ width: `${(sensorData.gForce / 3) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Material Strain Card */}
+          <div className="bg-white p-10 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 hover:border-yellow-400 transition-all duration-500">
+            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-8">Material Strain</h4>
+            <div className="text-7xl font-black text-gray-800 mb-6">{sensorData.strainLevel}<span className="text-xl text-gray-300 ml-1 font-light">%</span></div>
+            <div className="w-full bg-gray-50 rounded-full h-2 overflow-hidden">
+              <div 
+                className="bg-yellow-400 h-full transition-all duration-700 ease-out" 
+                style={{ width: `${sensorData.strainLevel}%` }}
+              ></div>
+            </div>
+          </div>
         </div>
       </div>
 
