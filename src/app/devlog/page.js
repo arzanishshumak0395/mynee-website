@@ -33,7 +33,7 @@ export default function DevLog() {
           <Link href="/" className="text-2xl font-black text-yellow-600 tracking-tighter shrink-0">MYNEE</Link>
           <div className="hidden md:flex gap-8 items-center text-xs font-bold text-gray-500 uppercase tracking-[0.2em] shrink-0">
             <Link href="/" className="hover:text-yellow-600 transition-colors">Home</Link>
-            <Link href="/meetings" className="hover:text-yellow-600 transition-colors">Meetings</Link>
+            <Link href="/sessions" className="hover:text-yellow-600 transition-colors">Sessions</Link>
             <Link href="/devlog" className="text-yellow-600 transition-colors">Dev Log</Link>
           </div>
         </div>

@@ -114,7 +114,7 @@ export default function Home() {
             <Link href="/" className="hover:text-yellow-600 transition-colors">Home</Link>
             <a href="#vision" className="hover:text-yellow-600 transition-colors">Vision</a>
             <a href="#telemetry" className="hover:text-yellow-600 transition-colors">Telemetry</a>
-            <Link href="/meetings" className="hover:text-yellow-600 transition-colors">Meetings</Link>
+            <Link href="/sessions" className="hover:text-yellow-600 transition-colors">Sessions</Link>  
             <Link href="/devlog">
               <button className="ml-2 px-6 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition-all shadow-lg shadow-yellow-500/20">Dev Log</button>
             </Link>
