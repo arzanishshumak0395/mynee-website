@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -104,17 +105,19 @@ export default function Home() {
         </div>
       </div>
 
-      {/* --- EXTREME GLASSMORPHISM NAVIGATION MENU --- */}
+     {/* --- EXTREME GLASSMORPHISM NAVIGATION MENU --- */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/30 backdrop-blur-2xl border-b border-white/40 shadow-sm py-4 saturate-200" : "bg-transparent py-8"}`}>
         <div className="max-w-7xl mx-auto px-8 md:px-12 flex justify-between items-center gap-8">
-          <div className="text-2xl font-black text-yellow-600 tracking-tighter shrink-0">MYNEE</div>
+          <Link href="/" className="text-2xl font-black text-yellow-600 tracking-tighter shrink-0">MYNEE</Link>
           
           <div className="hidden md:flex gap-8 items-center text-xs font-bold text-gray-500 uppercase tracking-[0.2em] shrink-0">
-            <a href="#" className="hover:text-yellow-600 transition-colors">Home</a>
+            <Link href="/" className="hover:text-yellow-600 transition-colors">Home</Link>
             <a href="#vision" className="hover:text-yellow-600 transition-colors">Vision</a>
             <a href="#telemetry" className="hover:text-yellow-600 transition-colors">Telemetry</a>
-            <a href="#hardware" className="hover:text-yellow-600 transition-colors">Hardware</a>
-            <button className="ml-2 px-6 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition-all shadow-lg shadow-yellow-500/20">Dev Log</button>
+            <Link href="/meetings" className="hover:text-yellow-600 transition-colors">Meetings</Link>
+            <Link href="/devlog">
+              <button className="ml-2 px-6 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition-all shadow-lg shadow-yellow-500/20">Dev Log</button>
+            </Link>
           </div>
         </div>
       </nav>
