@@ -1,7 +1,7 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Add this line!
 import Link from "next/link";
 
 const fadeUpVariant = {
@@ -54,14 +54,20 @@ export default function Meetings() {
           </motion.h1>
           
           <motion.div variants={fadeUpVariant} className="bg-white p-10 md:p-14 rounded-[40px] shadow-2xl border border-gray-100 flex flex-col md:flex-row gap-10 items-center hover:border-yellow-300 transition-colors duration-500">
-            <div className="w-32 h-32 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white text-5xl font-black shrink-0 shadow-inner">
-              J
+            <div className="w-48 h-48 relative shrink-0 rounded-full overflow-hidden border-4 border-white">
+              <Image 
+                src="/judhi.jpg" 
+                alt="Dr. Judhi" 
+                fill 
+                className="object-cover"
+                priority
+              />
             </div>
             <div className="text-center md:text-left">
               <h3 className="text-3xl font-black text-gray-800 mb-2">Dr. Judhi</h3>
               <p className="text-yellow-600 font-bold uppercase tracking-widest text-xs mb-4">Project Supervisor • Middlesex University Dubai</p>
               <p className="text-gray-500 leading-relaxed font-light">
-                Overseeing the development of the Mynee smart knee brace, ensuring engineering rigor, ethical compliance, and structural integrity for the SoC Design & Implementation module.
+                Overseeing the development of the Mynee smart knee brace, ensuring engineering rigor, ethical compliance, and structural integrity for the Design & Implementation.
               </p>
             </div>
           </motion.div>
