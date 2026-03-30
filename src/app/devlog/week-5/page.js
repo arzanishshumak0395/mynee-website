@@ -1,5 +1,5 @@
 "use client";
-
+import Sidebar from "../Sidebar";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -55,38 +55,7 @@ export default function Week1Log() {
       <div className="flex max-w-7xl mx-auto w-full px-8 pt-40 pb-32 gap-16 relative">
         
         {/* --- DYNAMIC LEFT SIDEBAR --- */}
-        <aside className="w-56 shrink-0 hidden lg:block">
-          <div className="sticky top-32 p-6 bg-white border border-gray-100 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
-            <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-6">Log Index</h4>
-            <div className="flex flex-col gap-4">
-              {weeks.map((week) => {
-                // Determine the status of each week
-                const isActive = week === activeWeek;
-                const isCompleted = week <= latestPublishedWeek && !isActive;
-                const isUpcoming = week > latestPublishedWeek;
-
-                return (
-                  <Link 
-                    key={week} 
-                    href={isUpcoming ? "#" : `/devlog/week-${week}`}
-                    className={`text-sm font-semibold transition-all flex items-center gap-3 ${
-                      isActive ? "text-yellow-600 translate-x-2 font-black" : 
-                      isCompleted ? "text-emerald-500 hover:text-emerald-600 hover:translate-x-1" : 
-                      "text-gray-300 cursor-not-allowed opacity-60"
-                    }`}
-                  >
-                    {/* Status Indicator Dots/Checkmarks */}
-                    {isActive && <span className="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.6)]"></span>}
-                    {isCompleted && <span className="text-emerald-500 text-[10px]">✓</span>}
-                    {isUpcoming && <span className="w-1.5 h-1.5 rounded-full bg-gray-200"></span>}
-                    
-                    Week {week}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </aside>
+        <Sidebar activeWeek={5} />
 
         {/* --- RIGHT COLUMN: BLOG CONTENT --- */}
         <article className="flex-1 max-w-3xl">
