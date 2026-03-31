@@ -24,12 +24,7 @@ const slideInRight = {
 
 export default function Week1Log() {
   const [scrolled, setScrolled] = useState(false);
-  const weeks = Array.from({ length: 12 }, (_, i) => i + 1);
-  
-  // Timeline Logic
-  const activeWeek = 5; // The page we are currently on
-  const latestPublishedWeek = 9; // Everything up to week 9 will be Green
-
+ 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);

@@ -1,4 +1,5 @@
 "use client";
+
 import Sidebar from "../Sidebar";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -24,7 +25,8 @@ const slideInRight = {
 
 export default function Week1Log() {
   const [scrolled, setScrolled] = useState(false);
- 
+
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
@@ -50,7 +52,7 @@ export default function Week1Log() {
       <div className="flex max-w-7xl mx-auto w-full px-8 pt-40 pb-32 gap-16 relative">
         
         {/* --- DYNAMIC LEFT SIDEBAR --- */}
-       <Sidebar activeWeek={4} />
+       <Sidebar activeWeek={12} />
 
         {/* --- RIGHT COLUMN: BLOG CONTENT --- */}
         <article className="flex-1 max-w-3xl">

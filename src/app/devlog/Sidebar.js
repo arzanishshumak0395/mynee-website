@@ -3,20 +3,20 @@ import Link from "next/link";
 
 export default function Sidebar({ activeWeek }) {
   // The latest week you have actually finished writing
-  const latestPublishedWeek = 9; 
+  const latestPublishedWeek = 12; 
 
   const weeks = [
-    { num: 1, text: "text-red-500", dot: "bg-green-700" },
-    { num: 2, text: "text-orange-500", dot: "bg-orange-700" },
-    { num: 3, text: "text-amber-500", dot: "bg-amber-700" },
-    { num: 4, text: "text-yellow-500", dot: "bg-pink-700" },
-    { num: 5, text: "text-green-500", dot: "bg-indigo-700" },
-    { num: 6, text: "text-emerald-500", dot: "bg-teal-700" },
-    { num: 7, text: "text-teal-500", dot: "bg-rose-700" },
-    { num: 8, text: "text-pink-500", dot: "bg-red-700" },
-    { num: 9, text: "text-rose-500", dot: "bg-brown-700" },
-    { num: 10, text: "text-indigo-500", dot: "white-700" },
-    { num: 11, text: "text-blue-500", dot: "bg-blue-700" },
+    { num: 1, text: "text-indigo-500", dot: "bg-indigo-700" },
+    { num: 2, text: "text-lime-500", dot: "bg-lime-700" },
+    { num: 3, text: "text-green-500", dot: "bg-green-700" },
+    { num: 4, text: "text-blue-500", dot: "bg-blue-700" },
+    { num: 5, text: "text-teal-500", dot: "bg-teal-700" },
+    { num: 6, text: "text-yellow-500", dot: "bg-yellow-700" },
+    { num: 7, text: "text-orange-500", dot: "bg-orange-700" },
+    { num: 8, text: "text-red-500", dot: "bg-red-700" },
+    { num: 9, text: "text-pink-500", dot: "bg-pink-700" },
+    { num: 10, text: "text-sky-500", dot: "sky-700" },
+    { num: 11, text: "text-emerald-500", dot: "emerald-700" },
     // Steel Gray (Slate) and a Custom Gold Hex
     { num: 12, text: "text-[#D4AF37]", dot: "bg-[#D4AF37]", isGold: true }, 
   ];
