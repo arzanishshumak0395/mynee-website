@@ -57,7 +57,7 @@ export default function Week1Log() {
         <article className="flex-1 max-w-3xl">
           
           <motion.div initial="hidden" animate="visible" variants={fadeUp} className="mb-16">
-            <span className="text-yellow-500 font-bold tracking-widest uppercase text-xs mb-4 block">September 14, 2026</span>
+            <span className="text-yellow-500 font-bold tracking-widest uppercase text-xs mb-4 block">January 14, 2026</span>
             <h1 className="text-5xl md:text-6xl font-black text-gray-800 tracking-tight leading-[1.1] mb-6">
               The Genesis: Establishing the Core Architecture.
             </h1>
