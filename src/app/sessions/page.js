@@ -47,17 +47,7 @@ export default function Sessions() {
   return (
     <main className="relative flex min-h-screen flex-col bg-slate-50 text-gray-900 font-sans overflow-x-hidden [perspective:1000px]">
       
-      {/* NAVIGATION MENU */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/40 backdrop-blur-2xl border-b border-white/40 shadow-sm py-4" : "bg-transparent py-8"}`}>
-        <div className="max-w-7xl mx-auto px-8 md:px-12 flex justify-between items-center gap-8">
-          <Link href="/" className="text-2xl font-black text-yellow-600 tracking-tighter shrink-0">MYNEE</Link>
-          <div className="hidden md:flex gap-8 items-center text-xs font-bold text-gray-500 uppercase tracking-[0.2em]">
-            <Link href="/" className="hover:text-yellow-600 transition-colors">Home</Link>
-            <Link href="/sessions" className="text-yellow-600">Sessions</Link>
-            <Link href="/devlog" className="hover:text-yellow-600 transition-colors">Dev Log</Link>
-          </div>
-        </div>
-      </nav>
+      
 
       {/* HEADER - RESTORED ORIGINAL */}
       <section className="max-w-6xl mx-auto px-8 pt-48 pb-12 w-full text-center">

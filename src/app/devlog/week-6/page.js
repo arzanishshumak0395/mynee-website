@@ -35,18 +35,7 @@ export default function Week1Log() {
   return (
     <main className="relative flex min-h-screen flex-col bg-slate-50 text-gray-900 font-sans">
       
-      {/* NAVIGATION MENU */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-sm py-4 saturate-150" : "bg-transparent py-8"}`}>
-        <div className="max-w-7xl mx-auto px-8 md:px-12 flex justify-between items-center gap-8">
-          <Link href="/" className="text-2xl font-black text-yellow-600 tracking-tighter shrink-0">MYNEE</Link>
-          <div className="hidden md:flex gap-8 items-center text-xs font-bold text-gray-500 uppercase tracking-[0.2em] shrink-0">
-            <Link href="/" className="hover:text-yellow-600 transition-colors">Home</Link>
-            <Link href="/sessions" className="hover:text-yellow-600 transition-colors">Sessions</Link>
-            <Link href="/devlog" className="text-yellow-600 transition-colors">Dev Log</Link>
-          </div>
-        </div>
-      </nav>
-
+      
       {/* MAIN LAYOUT GRID */}
       <div className="flex max-w-7xl mx-auto w-full px-8 pt-40 pb-32 gap-16 relative">
         

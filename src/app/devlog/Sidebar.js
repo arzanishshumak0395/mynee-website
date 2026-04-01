@@ -73,11 +73,9 @@ export default function Sidebar({ activeWeek }) {
   const weeks = Array.from({ length: 12 }, (_, i) => ({ num: i + 1 }));
 
   return (
-    <aside className="w-56 shrink-0 hidden lg:block relative z-10">
-      
+<aside className="w-56 shrink-0 hidden lg:block sticky top-32 self-start z-10">      
       {/* Container with Dark Mode glass look */}
-      <div className="sticky top-32 bg-black/80 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.4)] overflow-hidden relative min-h-[500px]">
-        
+<div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.4)] overflow-hidden relative min-h-[500px]">        
         {/* THE BACKGROUND LAYER */}
         <SidebarBackground />
 

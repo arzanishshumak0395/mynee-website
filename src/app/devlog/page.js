@@ -4,11 +4,45 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// --- BACKGROUND ANIMATION COMPONENTS ---
+// --- 1. SUPERCHARGED STEALTH DUST FOR CARDS ---
+const CardTechDust = () => (
+  <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden rounded-[30px]">
+    {/* Added a subtle internal indigo glow so the dust has something to contrast against */}
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-indigo-600/20 blur-[60px] rounded-full animate-pulse" style={{ animationDuration: '5s' }} />
+    
+    {/* Increased to 45 particles, made them larger, and boosted opacity to 100% at peak */}
+    {[...Array(45)].map((_, i) => (
+      <motion.div
+        key={i}
+        initial={{ opacity: 0 }}
+        animate={{
+          y: [0, -40, 0],
+          x: [0, Math.random() * 20 - 10, 0],
+          opacity: [0.3, 1, 0.3] // Peaking at full brightness!
+        }}
+        transition={{
+          duration: 3 + Math.random() * 5,
+          repeat: Infinity,
+          delay: i * 0.1,
+        }}
+        // Stronger white shadow glow
+        className="absolute bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]"
+        style={{
+          // Bigger base size (1.5px to 3px)
+          width: `${1.5 + Math.random() * 1.5}px`,
+          height: `${1.5 + Math.random() * 1.5}px`,
+          left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+        }}
+      />
+    ))}
+  </div>
+);
 
+// --- BACKGROUND ANIMATION COMPONENTS ---
 const BouncingOrb = () => {
   const [pos, setPos] = useState({ x: 100, y: 100 });
-  const vel = useRef({ x: 1.2, y: 1 }); // Smooth, pro-velocity speed
+  const vel = useRef({ x: 1.2, y: 1 }); 
   const requestRef = useRef();
 
   const animate = () => {
@@ -16,7 +50,6 @@ const BouncingOrb = () => {
       let nextX = prev.x + vel.current.x;
       let nextY = prev.y + vel.current.y;
 
-      // Bounce off viewport edges
       if (nextX <= 0 || nextX >= window.innerWidth - 200) vel.current.x *= -1;
       if (nextY <= 0 || nextY >= window.innerHeight - 200) vel.current.y *= -1;
 
@@ -32,8 +65,6 @@ const BouncingOrb = () => {
 
   return (
     <motion.div
-      // --- VISUAL FIX 1: Maxed Opacity Range ---
-      // We’re now pulsating from a bright 60% to an intense 90% opacity.
       animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0.9, 0.6] }}
       transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       className="fixed pointer-events-none z-0"
@@ -43,8 +74,6 @@ const BouncingOrb = () => {
         width: '450px',
         height: '450px',
         borderRadius: '50%',
-        // --- VISUAL FIX 2: Darker, Saturated Amber ---
-        // Switched to a deep, intense amber with a very high (0.8) alpha channel.
         background: 'radial-gradient(circle, rgba(180, 83, 9, 0.8) 0%, transparent 70%)',
         filter: 'blur(70px)',
       }}
@@ -55,30 +84,22 @@ const BouncingOrb = () => {
 const AmbientBackground = () => {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* --- VISUAL FIX 3: Intensified Deep Background Glows --- */}
-      {/* Saturated colors (yellow-500 and sky-500) at higher opacity (35% & 30%). */}
       <div className="absolute top-[-15%] left-[-5%] w-[60%] h-[60%] bg-yellow-500/35 rounded-full blur-[140px]" />
       <div className="absolute bottom-[-10%] right-[-5%] w-[50%] h-[50%] bg-sky-500/30 rounded-full blur-[120px]" />
-      
       <BouncingOrb />
-      
-      {/* --- ENHANCED PARTICLE FIELD --- */}
-      {/* User Request: Significantly increased count from 6 to 25. */}
       {[...Array(25)].map((_, i) => (
         <motion.div
           key={i}
           animate={{
             y: [0, -120, 0],
             x: [0, Math.random() * 40 - 20, 0],
-            // Particles are now brilliant, shimmering points of light (30% to 80% opacity).
             opacity: [0.3, 0.8, 0.3]
           }}
           transition={{
             duration: 12 + Math.random() * 8,
             repeat: Infinity,
-            delay: i * 0.5, // Tighter delays for a continuous shimmering effect
+            delay: i * 0.5,
           }}
-          // Darker amber for better saturation against the gray grid lines.
           className="absolute w-1.5 h-1.5 bg-amber-700 rounded-full blur-[0.5px]"
           style={{
             left: `${Math.random() * 100}%`,
@@ -91,7 +112,6 @@ const AmbientBackground = () => {
 };
 
 // --- MAIN PAGE VARIANTS ---
-
 const fadeUpVariant = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
@@ -104,7 +124,24 @@ const staggerContainer = {
 
 export default function DevLog() {
   const [scrolled, setScrolled] = useState(false);
-  const weeks = Array.from({ length: 12 }, (_, i) => i + 1);
+
+  const weeksData = Array.from({ length: 12 }, (_, i) => {
+    const num = i + 1;
+    if (num === 1) {
+      return {
+        num,
+        title: "The First Step.",
+        desc: "Transitioning from broad concepts to zeroing in on a solvable engineering problem.",
+        isDarkTheme: true 
+      };
+    }
+    return {
+      num,
+      title: "Upcoming Log",
+      desc: "Documentation covering milestones, GitHub commits, and design iterations.",
+      isDarkTheme: false
+    };
+  });
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -115,24 +152,10 @@ export default function DevLog() {
   return (
     <main className="relative flex min-h-screen flex-col items-center bg-slate-50 text-gray-900 font-sans overflow-x-hidden">
       
-      {/* 1. ADD DENSE PARTICLE FIELD LAYER */}
       <AmbientBackground />
 
-      {/* 2. WRAP CONTENT IN Z-10 TO STAY ABOVE ANIMATIONS */}
       <div className="relative z-10 w-full flex flex-col items-center">
         
-        {/* NAVIGATION MENU */}
-        <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? "bg-white/30 backdrop-blur-2xl border-b border-white/40 shadow-sm py-4 saturate-200" : "bg-transparent py-8"}`}>
-          <div className="max-w-7xl mx-auto px-8 md:px-12 flex justify-between items-center gap-8">
-            <Link href="/" className="text-2xl font-black text-yellow-600 tracking-tighter shrink-0">MYNEE</Link>
-            <div className="hidden md:flex gap-8 items-center text-xs font-bold text-gray-500 uppercase tracking-[0.2em] shrink-0">
-              <Link href="/" className="hover:text-yellow-600 transition-colors">Home</Link>
-              <Link href="/sessions" className="hover:text-yellow-600 transition-colors">Sessions</Link>
-              <Link href="/devlog" className="text-yellow-600 transition-colors">Dev Log</Link>
-            </div>
-          </div>
-        </nav>
-
         {/* HEADER SECTION */}
         <div className="w-full max-w-5xl px-8 pt-40 pb-16 text-center">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col items-center">
@@ -155,18 +178,46 @@ export default function DevLog() {
           variants={staggerContainer}
           className="w-full max-w-6xl px-8 pb-32 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
-          {weeks.map((week) => (
-            <Link key={week} href={`/devlog/week-${week}`}>
-              {/* Cards retain glassmorphism to show the dense particle field passing behind. */}
-              <motion.div variants={fadeUpVariant} className="p-8 bg-white/70 backdrop-blur-md border border-gray-100 rounded-[30px] hover:border-yellow-400 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer h-full flex flex-col justify-between">
-                <div>
-                  <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-yellow-600 font-black mb-6 group-hover:bg-yellow-100 transition-colors">
-                    {week}
+          {weeksData.map((week) => (
+            <Link key={week.num} href={`/devlog/week-${week.num}`}>
+              <motion.div 
+                variants={fadeUpVariant} 
+                className={`relative overflow-hidden p-8 backdrop-blur-md rounded-[30px] hover:-translate-y-2 transition-all duration-300 group cursor-pointer h-full flex flex-col justify-between
+                  ${week.isDarkTheme 
+                    ? "bg-black border border-white/10 hover:border-yellow-500/50 shadow-[0_15px_30px_rgba(0,0,0,0.4)]" 
+                    : "bg-white/70 border border-gray-100 hover:border-yellow-400 hover:shadow-xl"
+                  }
+                `}
+              >
+                {/* Dust is now much brighter and larger! */}
+                {week.isDarkTheme && <CardTechDust />}
+
+                <div className="relative z-10">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black mb-6 transition-colors
+                    ${week.isDarkTheme 
+                      ? "bg-white/10 text-yellow-500 group-hover:bg-yellow-500/20" 
+                      : "bg-slate-50 text-yellow-600 group-hover:bg-yellow-100"
+                    }
+                  `}>
+                    {week.num}
                   </div>
-                  <h4 className="text-xl font-bold text-gray-800 mb-2">Week {week}</h4>
-                  <p className="text-xs text-gray-400 leading-relaxed mb-6">Documentation covering milestones, GitHub commits, and design iterations.</p>
+                  
+                  <h4 className={`text-xl font-bold mb-1 ${week.isDarkTheme ? "text-white" : "text-gray-800"}`}>
+                    Week {week.num}
+                  </h4>
+                  
+                  <h5 className={`text-sm font-bold mb-3 ${week.isDarkTheme ? "text-yellow-500" : "text-gray-400"}`}>
+                    {week.title}
+                  </h5>
+                  
+                  <p className={`text-xs leading-relaxed mb-6 ${week.isDarkTheme ? "text-gray-400" : "text-gray-400"}`}>
+                    {week.desc}
+                  </p>
                 </div>
-                <div className="text-[10px] font-bold text-yellow-600 uppercase tracking-widest group-hover:translate-x-2 transition-transform">
+
+                <div className={`relative z-10 text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform
+                  ${week.isDarkTheme ? "text-yellow-500" : "text-yellow-600"}
+                `}>
                   Read Log →
                 </div>
               </motion.div>
