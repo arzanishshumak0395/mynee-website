@@ -3,36 +3,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-// --- STEALTH DUST FOR HARDWARE CARDS ---
-const CardTechDust = () => (
-  <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden rounded-[40px]">
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-indigo-600/10 blur-[60px] rounded-full animate-pulse" style={{ animationDuration: '5s' }} />
-    {[...Array(35)].map((_, i) => (
-      <motion.div
-        key={i}
-        initial={{ opacity: 0 }}
-        animate={{
-          y: [0, -40, 0],
-          x: [0, Math.random() * 20 - 10, 0],
-          opacity: [0.1, 0.6, 0.1] 
-        }}
-        transition={{
-          duration: 3 + Math.random() * 5,
-          repeat: Infinity,
-          delay: i * 0.1,
-        }}
-        className="absolute bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.6)]"
-        style={{
-          width: `${1 + Math.random() * 1.5}px`,
-          height: `${1 + Math.random() * 1.5}px`,
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-        }}
-      />
-    ))}
-  </div>
-);
-
 // --- THE 5-SECOND HEARTBEAT BACKGROUND ---
 const HomeBackground = () => {
   return (
@@ -164,7 +134,7 @@ export default function Home() {
         }}
       />
 
-      {/* --- HERO SECTION (CLEANED UP) --- */}
+      {/* --- HERO SECTION --- */}
       <motion.div 
         initial="hidden"
         animate="visible"
@@ -262,10 +232,10 @@ export default function Home() {
       {/* --- OVERHAULED CORE ENGINEERING --- */}
       <motion.div 
         id="hardware" 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={staggerContainer}
+        initial="hidden" 
+        whileInView="visible" 
+        viewport={{ once: true, margin: "-100px" }} 
+        variants={staggerContainer} 
         className="z-10 w-full max-w-6xl py-32 px-8 mb-10"
       >
         <motion.div variants={fadeUpVariant} className="text-center mb-16">
@@ -274,8 +244,9 @@ export default function Home() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* 1. Compute Node */}
           <motion.div variants={fadeUpVariant} className="relative overflow-hidden p-10 bg-gray-950 border border-white/10 rounded-[40px] hover:border-yellow-500/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group">
-            <CardTechDust />
             <div className="relative z-10">
               <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 transition-colors">
                 <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
@@ -286,8 +257,8 @@ export default function Home() {
             </div>
           </motion.div>
 
+          {/* 2. Actuation */}
           <motion.div variants={fadeUpVariant} className="relative overflow-hidden p-10 bg-gray-950 border border-white/10 rounded-[40px] hover:border-yellow-500/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group">
-            <CardTechDust />
             <div className="relative z-10">
               <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 transition-colors">
                 <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -298,8 +269,8 @@ export default function Home() {
             </div>
           </motion.div>
 
+          {/* 3. Kinematics */}
           <motion.div variants={fadeUpVariant} className="relative overflow-hidden p-10 bg-gray-950 border border-white/10 rounded-[40px] hover:border-yellow-500/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group">
-            <CardTechDust />
             <div className="relative z-10">
               <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 transition-colors">
                 <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2-1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
@@ -310,8 +281,8 @@ export default function Home() {
             </div>
           </motion.div>
 
+          {/* 4. Gait Detection */}
           <motion.div variants={fadeUpVariant} className="relative overflow-hidden p-10 bg-gray-950 border border-white/10 rounded-[40px] hover:border-yellow-500/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group">
-            <CardTechDust />
             <div className="relative z-10">
               <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 transition-colors">
                 <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
