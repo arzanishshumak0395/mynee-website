@@ -158,7 +158,7 @@ export default function DevLog() {
     return {
       num,
       title: "Upcoming Log",
-      desc: "🔒 Work in Progress", // Added a tiny lock emoji here
+      desc: "🔒 Work in Progress", 
       isDarkTheme: false
     };
   });
@@ -202,9 +202,10 @@ export default function DevLog() {
             <Link key={week.num} href={`/devlog/week-${week.num}`}>
               <motion.div 
                 variants={fadeUpVariant} 
-                className={`relative overflow-hidden p-8 backdrop-blur-md rounded-[30px] transition-all duration-300 group cursor-pointer h-full flex flex-col justify-between
+                whileHover={week.isDarkTheme ? { y: -8 } : {}} // <-- THIS FIXES THE JITTER
+                className={`relative overflow-hidden p-8 backdrop-blur-md rounded-[30px] transition-colors transition-shadow duration-300 group cursor-pointer h-full flex flex-col justify-between
                   ${week.isDarkTheme 
-                    ? "bg-black border border-white/10 hover:border-yellow-500/50 shadow-[0_15px_30px_rgba(0,0,0,0.4)] hover:-translate-y-2" 
+                    ? "bg-black border border-white/10 hover:border-yellow-500/50 shadow-[0_15px_30px_rgba(0,0,0,0.4)]" 
                     : "bg-white/70 border border-gray-100 hover:bg-white/90"
                   }
                 `}

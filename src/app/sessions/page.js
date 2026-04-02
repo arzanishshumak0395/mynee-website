@@ -29,26 +29,53 @@ const fadeUpVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
 };
 
+// --- WORK IN PROGRESS ANIMATIONS ---
+const floatAnimation = {
+  animate: {
+    y: [0, -10, 0],
+    rotate: [0, -3, 3, 0],
+    transition: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+  }
+};
+
+const pulseGlow = {
+  animate: {
+    opacity: [0.1, 0.4, 0.1],
+    scale: [0.95, 1.05, 0.95],
+    transition: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+  }
+};
+
+const loadingBar = {
+  hidden: { width: "0%" },
+  visible: { 
+    width: "100%", 
+    transition: { duration: 2.5, repeat: Infinity, ease: "linear" } 
+  }
+};
+
 export default function Sessions() {
   const [scrolled, setScrolled] = useState(false);
+  const [dots, setDots] = useState("");
 
+  // Scroll handler
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const meetingLogs = [
-    { id: 1, date: "Week 2", topic: "Project Proposal & Ethics Package", notes: "Reviewed initial hardware schematic. Approved direction for Osteoarthritis focus. Pending submission of final ethics documentation." },
-    { id: 2, date: "Week 4", topic: "VHDL & Sensor Integration", notes: "Discussed the architecture for the SoC Design & Implementation module. Evaluated analog flex sensor reliability." },
-    { id: 3, date: "Week 7", topic: "UX/UI & Telemetry Feedback", notes: "Presented the live web dashboard. Advised to ensure data streaming latency remains below 100ms for accurate medical review." },
-  ];
+  // Terminal typing effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <main className="relative flex min-h-screen flex-col bg-slate-50 text-gray-900 font-sans overflow-x-hidden [perspective:1000px]">
       
-      
-
       {/* HEADER - RESTORED ORIGINAL */}
       <section className="max-w-6xl mx-auto px-8 pt-48 pb-12 w-full text-center">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center mb-16">
@@ -109,7 +136,7 @@ export default function Sessions() {
                 SoC solutions for real-time orthopedic monitoring.
               </p>
               <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                {["VHDL", "SoC Design", "Next.js", "Video Editing"].map((skill) => (
+                {["VHDL", "SoC Design", "Hardware Design", "Next.js", "Technical Writing", "C++/Python" ].map((skill) => (
                   <span key={skill} className="px-6 py-2 bg-white shadow-sm text-gray-600 rounded-2xl text-[11px] font-bold border border-gray-100 hover:border-sky-200 hover:text-sky-600 transition-all cursor-default">
                     {skill}
                   </span>
@@ -120,27 +147,78 @@ export default function Sessions() {
         </motion.div>
       </motion.div>
 
-      {/* ARCHIVES */}
-      <section className="w-full max-w-5xl mx-auto px-8 mt-60 pb-32 border-t border-gray-200/60 pt-24 [perspective:none]">
+      {/* ARCHIVES - WORK IN PROGRESS */}
+      <section className="w-full max-w-5xl mx-auto px-8 mt-40 pb-32 border-t border-gray-200/60 pt-24 [perspective:none]">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="space-y-10">
-          <motion.div variants={fadeUpVariant} className="flex justify-between items-end mb-12">
+          
+          <motion.div variants={fadeUpVariant} className="flex justify-between items-end mb-8">
             <div>
               <h3 className="text-5xl font-black text-gray-900 tracking-tighter">Meeting Archives</h3>
               <p className="text-gray-400 font-medium mt-2">Documented progress and supervisor feedback</p>
             </div>
           </motion.div>
           
-          <div className="grid grid-cols-1 gap-6">
-            {meetingLogs.map((log) => (
-              <motion.div key={log.id} variants={fadeUpVariant} className="group bg-white p-10 rounded-[40px] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
-                <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-                  <h4 className="text-2xl font-black text-gray-800 group-hover:text-yellow-600 transition-colors">{log.topic}</h4>
-                  <span className="px-5 py-1.5 bg-slate-100 text-slate-500 text-[10px] font-black uppercase tracking-widest rounded-full whitespace-nowrap w-max">{log.date}</span>
-                </div>
-                <p className="text-gray-500 text-lg font-light leading-relaxed">{log.notes}</p>
+          {/* UNDER CONSTRUCTION BLOCK */}
+          <motion.div variants={fadeUpVariant} className="w-full relative overflow-hidden bg-gray-950 border border-white/10 rounded-[40px] p-12 md:p-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
+            
+            {/* Background Glow */}
+            <motion.div 
+              variants={pulseGlow} 
+              animate="animate" 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-500/20 blur-[80px] rounded-full pointer-events-none"
+            />
+
+            <div className="relative z-10 flex flex-col items-center">
+              
+              {/* Floating Emoji Character */}
+              <motion.div 
+                variants={floatAnimation} 
+                animate="animate" 
+                className="text-6xl md:text-7xl mb-6 drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+              >
+                👷‍♂️📋
               </motion.div>
-            ))}
-          </div>
+
+              {/* Status Badge */}
+              <div className="inline-block mb-4 px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 text-[10px] font-black tracking-[0.3em] uppercase">
+                Status: Work In Progress
+              </div>
+
+              {/* Main Heading */}
+              <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-4">
+                Meeting Logs<br />Compiling.
+              </h3>
+              
+              {/* Description */}
+              <p className="text-base text-gray-400 font-light max-w-md mx-auto mb-10">
+                Supervisor meeting notes, feedback, and action items are currently being formatted for documentation. Check back soon.
+              </p>
+
+              {/* Fake Terminal / Loading Bar */}
+              <div className="w-full max-w-sm bg-black/50 border border-white/5 rounded-2xl p-4 text-left shadow-inner">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                  <span className="text-[10px] text-gray-500 font-mono ml-2 uppercase tracking-widest">Supervisor_Terminal</span>
+                </div>
+                <div className="text-yellow-500 font-mono text-xs mb-3 flex">
+                  <span>&gt; Syncing feedback logs{dots}</span>
+                </div>
+                {/* Animated Progress Bar */}
+                <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                  <motion.div 
+                    variants={loadingBar} 
+                    initial="hidden" 
+                    animate="visible" 
+                    className="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 rounded-full"
+                  />
+                </div>
+              </div>
+
+            </div>
+          </motion.div>
+          
         </motion.div>
       </section>
 
