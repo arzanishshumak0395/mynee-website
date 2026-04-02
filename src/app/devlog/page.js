@@ -1,47 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// --- 1. DARK DUST FOR PUBLISHED LOGS ---
+// --- 1. DARK DUST FOR PUBLISHED LOGS (GPU-Accelerated CSS Animations) ---
 const DarkCardTechDust = () => {
   const [particles, setParticles] = useState([]);
 
   useEffect(() => {
-    setParticles([...Array(45)].map(() => ({
-      xTarget: Math.random() * 20 - 10,
-      duration: 3 + Math.random() * 5,
-      delay: Math.random() * 0.5,
-      size: 1.5 + Math.random() * 1.5,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
+    // Reduced count to 20 per card (plenty for the effect, much better for performance)
+    setParticles([...Array(20)].map(() => ({
+      tx: `${Math.random() * 20 - 10}px`,
+      dur: `${3 + Math.random() * 5}s`,
+      del: `${Math.random() * 0.5}s`,
+      size: `${1.5 + Math.random() * 1.5}px`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
     })));
   }, []);
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden rounded-[30px]">
       {particles.map((p, i) => (
-        <motion.div
+        <div
           key={i}
-          initial={{ opacity: 0 }}
-          animate={{
-            y: [0, -40, 0],
-            x: [0, p.xTarget, 0],
-            opacity: [0.3, 1, 0.3] 
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            delay: p.delay,
-            ease: "easeInOut"
-          }}
-          className="absolute bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]"
+          className="absolute bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)] will-change-transform"
           style={{
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            left: `${p.left}%`,
-            top: `${p.top}%`,
+            width: p.size,
+            height: p.size,
+            left: p.left,
+            top: p.top,
+            '--tx': p.tx, // Pass random target X to CSS
+            animation: `floatDust ${p.dur} infinite ease-in-out ${p.del}`
           }}
         />
       ))}
@@ -58,9 +49,8 @@ const LockedWatermark = () => (
   </div>
 );
 
-// --- BACKGROUND ANIMATION COMPONENTS (OPTIMIZED) ---
+// --- BACKGROUND ANIMATION COMPONENTS (GPU-Accelerated) ---
 const BouncingOrb = () => {
-  // GPU-accelerated orb movement without triggering React re-renders
   return (
     <motion.div
       animate={{ 
@@ -75,7 +65,7 @@ const BouncingOrb = () => {
         scale: { duration: 6, repeat: Infinity, ease: "easeInOut" },
         opacity: { duration: 6, repeat: Infinity, ease: "easeInOut" }
       }}
-      className="fixed pointer-events-none z-0"
+      className="fixed pointer-events-none z-0 will-change-transform"
       style={{
         left: '20%',
         top: '10%',
@@ -93,40 +83,43 @@ const AmbientBackground = () => {
   const [particles, setParticles] = useState([]);
 
   useEffect(() => {
-    setParticles([...Array(25)].map(() => ({
-      xTarget: Math.random() * 40 - 20,
-      duration: 12 + Math.random() * 8,
-      delay: Math.random() * 0.5,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
+    setParticles([...Array(15)].map(() => ({
+      tx: `${Math.random() * 40 - 20}px`,
+      dur: `${12 + Math.random() * 8}s`,
+      del: `${Math.random() * 0.5}s`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
     })));
   }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      
+      {/* Global styles for our GPU-accelerated particles */}
+      <style>{`
+        @keyframes floatDust {
+          0%, 100% { transform: translate(0px, 0px); opacity: 0.3; }
+          50% { transform: translate(var(--tx), -40px); opacity: 1; }
+        }
+        @keyframes floatAmbient {
+          0%, 100% { transform: translate(0px, 0px); opacity: 0.3; }
+          50% { transform: translate(var(--tx), -120px); opacity: 0.8; }
+        }
+      `}</style>
+
       <div className="absolute top-[-15%] left-[-5%] w-[60%] h-[60%] bg-yellow-500/35 rounded-full blur-[140px]" />
       <div className="absolute bottom-[-10%] right-[-5%] w-[50%] h-[50%] bg-sky-500/30 rounded-full blur-[120px]" />
       <BouncingOrb />
       
       {particles.map((p, i) => (
-        <motion.div
+        <div
           key={i}
-          initial={{ opacity: 0, y: 0, x: 0 }}
-          animate={{
-            y: [0, -120, 0],
-            x: [0, p.xTarget, 0],
-            opacity: [0.3, 0.8, 0.3]
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            delay: p.delay,
-            ease: "easeInOut"
-          }}
-          className="absolute w-1.5 h-1.5 bg-amber-700 rounded-full blur-[0.5px]"
+          className="absolute w-1.5 h-1.5 bg-amber-700 rounded-full blur-[0.5px] will-change-transform"
           style={{
-            left: `${p.left}%`,
-            top: `${p.top}%`,
+            left: p.left,
+            top: p.top,
+            '--tx': p.tx,
+            animation: `floatAmbient ${p.dur} infinite ease-in-out ${p.del}`
           }}
         />
       ))}
@@ -134,7 +127,7 @@ const AmbientBackground = () => {
   );
 };
 
-// --- MAIN PAGE VARIANTS (UPGRADED TO SPRING PHYSICS) ---
+// --- MAIN PAGE VARIANTS ---
 const fadeUpVariant = {
   hidden: { opacity: 0, y: 40 },
   visible: { 
@@ -152,7 +145,6 @@ const staggerContainer = {
 export default function DevLog() {
   const [scrolled, setScrolled] = useState(false);
 
-  // --- UPDATED WEEKS DATA ---
   const weeksData = Array.from({ length: 12 }, (_, i) => {
     const num = i + 1;
     
@@ -163,7 +155,6 @@ export default function DevLog() {
     if (num === 5) return { num, title: "Methodologies & The MVP.", desc: "Selecting Agile frameworks and bench-testing the Sense-Compute-Actuate hardware loop.", isDarkTheme: true };
     if (num === 6) return { num, title: "Stress-Testing & Architecture.", desc: "Evaluating the MVP, fixing sensor jitter, and generating UML flow diagrams.", isDarkTheme: true };
 
-    // Default for Upcoming Weeks
     return {
       num,
       title: "Upcoming Log",
@@ -208,19 +199,17 @@ export default function DevLog() {
           className="w-full max-w-6xl px-8 pb-32 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
           {weeksData.map((week) => (
-            <Link key={week.num} href={`/devlog/week-${week.num}`}>
+            <Link key={week.num} href={week.isDarkTheme ? `/devlog/week-${week.num}` : "#"}>
               <motion.div 
                 variants={fadeUpVariant} 
-                // Organic spring bounce on hover
                 whileHover={week.isDarkTheme ? { y: -8, transition: { type: "spring", stiffness: 300, damping: 20 } } : {}}
-                className={`relative overflow-hidden p-8 backdrop-blur-md rounded-[30px] transition-colors transition-shadow duration-300 group cursor-pointer h-full flex flex-col justify-between
+                className={`relative overflow-hidden p-8 backdrop-blur-md rounded-[30px] transition-colors transition-shadow duration-300 group h-full flex flex-col justify-between will-change-transform
                   ${week.isDarkTheme 
-                    ? "bg-black border border-white/10 hover:border-yellow-500/50 shadow-[0_15px_30px_rgba(0,0,0,0.4)]" 
-                    : "bg-white/70 border border-gray-100 hover:bg-white/90"
+                    ? "bg-black border border-white/10 hover:border-yellow-500/50 shadow-[0_15px_30px_rgba(0,0,0,0.4)] cursor-pointer" 
+                    : "bg-white/70 border border-gray-100 cursor-default"
                   }
                 `}
               >
-                {/* Dynamically render dark dust or locked watermark */}
                 {week.isDarkTheme ? <DarkCardTechDust /> : <LockedWatermark />}
 
                 <div className="relative z-10">
@@ -246,7 +235,6 @@ export default function DevLog() {
                   </p>
                 </div>
 
-                {/* Only show "Read Log ->" if the week is published */}
                 {week.isDarkTheme && (
                   <div className="relative z-10 text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform text-yellow-500 mt-auto pt-6">
                     Read Log →
