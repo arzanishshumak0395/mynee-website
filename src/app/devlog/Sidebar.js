@@ -3,59 +3,72 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-// --- 1. LOCAL SIDEBAR BACKGROUND (FIXED INDIGO BREATH) ---
+// --- 1. LOCAL SIDEBAR BACKGROUND (FIXED INDIGO BREATH & JITTER) ---
 
 const SidebarBackground = () => {
+  // Jitter Fix: Generate random particle values ONCE on mount
+  const [dustParticles, setDustParticles] = useState([]);
+
+  useEffect(() => {
+    const particles = [...Array(15)].map(() => ({
+      xTarget: Math.random() * 20 - 10,
+      duration: 10 + Math.random() * 8,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+    }));
+    setDustParticles(particles);
+  }, []);
+
   return (
     <div className="absolute inset-0 pointer-events-none z-0 bg-black">
       
       {/* --- Slow Breathing Animation CSS --- */}
       <style>{`
         @keyframes deepBreathe {
-          0%, 40%   { opacity: 0.05; transform: scale(0.95); }
-          60%       { opacity: 0.4; transform: scale(1.05); }
-          80%, 100% { opacity: 0.05; transform: scale(0.95); }
+          0%, 40%   { opacity: 0.02; transform: scale(0.95); }
+          /* Reduced max opacity from 0.4 to 0.15 for a much subtler glow */
+          60%       { opacity: 0.15; transform: scale(1.05); }
+          80%, 100% { opacity: 0.02; transform: scale(0.95); }
         }
         .pulse-core {
-          opacity: 0.05; /* Prevents the initial full-brightness flash */
+          opacity: 0.02;
           transform: scale(0.95);
           animation: deepBreathe 12s ease-in-out infinite;
         }
         .pulse-echo {
-          opacity: 0.05; /* Prevents the initial full-brightness flash */
+          opacity: 0.02;
           transform: scale(0.95);
           animation: deepBreathe 12s ease-in-out infinite;
-          /* Negative delay starts the animation instantly, shifted in time */
           animation-delay: -10s; 
         }
       `}</style>
 
-      {/* --- The Slow Indigo Hues --- */}
+      {/* --- The Slow Indigo Hues (Reduced base opacity for subtlety) --- */}
       {/* Deep Indigo Core */}
-      <div className="pulse-core absolute top-[10%] left-[-20%] w-[140%] h-[50%] bg-indigo-600 rounded-full blur-[50px]" />
+      <div className="pulse-core absolute top-[10%] left-[-20%] w-[140%] h-[50%] bg-indigo-600/40 rounded-full blur-[50px]" />
       
       {/* Lighter Indigo Echo */}
-      <div className="pulse-echo absolute bottom-[10%] right-[-20%] w-[120%] h-[60%] bg-indigo-400/80 rounded-full blur-[60px]" />
+      <div className="pulse-echo absolute bottom-[10%] right-[-20%] w-[120%] h-[60%] bg-indigo-400/30 rounded-full blur-[60px]" />
 
-      {/* --- White Shimmering Tech Dust --- */}
-      {[...Array(15)].map((_, i) => (
+      {/* --- White Shimmering Tech Dust (Using locked state) --- */}
+      {dustParticles.map((p, i) => (
         <motion.div
           key={i}
-          initial={{ opacity: 0.1, y: 0, x: 0 }} // Explicit initial state to prevent React mount flashes
+          initial={{ opacity: 0.1, y: 0, x: 0 }} 
           animate={{
             y: [0, -60, 0], 
-            x: [0, Math.random() * 20 - 10, 0],
+            x: [0, p.xTarget, 0],
             opacity: [0.1, 0.8, 0.1] 
           }}
           transition={{
-            duration: 10 + Math.random() * 8,
+            duration: p.duration,
             repeat: Infinity,
             delay: i * 0.5, 
           }}
           className="absolute w-1 h-1 bg-white rounded-full blur-[0.5px]"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${p.left}%`,
+            top: `${p.top}%`,
           }}
         />
       ))}
@@ -68,14 +81,15 @@ const SidebarBackground = () => {
 export default function Sidebar({ activeWeek }) {
   // CONFIGURATION
   const latestPublishedWeek = 12; 
-  const completedUntil = 8; 
+  const completedUntil = 6; // <-- Updated to 6 so Weeks 7 & 8 are just dots!
 
   const weeks = Array.from({ length: 12 }, (_, i) => ({ num: i + 1 }));
 
   return (
-<aside className="w-56 shrink-0 hidden lg:block sticky top-32 self-start z-10">      
+    <aside className="w-56 shrink-0 hidden lg:block sticky top-32 self-start z-10">       
       {/* Container with Dark Mode glass look */}
-<div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.4)] overflow-hidden relative min-h-[500px]">        
+      <div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.4)] overflow-hidden relative min-h-[500px]">         
+        
         {/* THE BACKGROUND LAYER */}
         <SidebarBackground />
 
