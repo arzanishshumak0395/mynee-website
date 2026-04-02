@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// --- 1. DARK DUST FOR PUBLISHED LOGS (Jitter-Fixed, No Purple Hue) ---
+// --- 1. DARK DUST FOR PUBLISHED LOGS ---
 const DarkCardTechDust = () => {
   const [particles, setParticles] = useState([]);
 
@@ -34,6 +34,7 @@ const DarkCardTechDust = () => {
             duration: p.duration,
             repeat: Infinity,
             delay: p.delay,
+            ease: "easeInOut"
           }}
           className="absolute bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]"
           style={{
@@ -57,38 +58,27 @@ const LockedWatermark = () => (
   </div>
 );
 
-// --- BACKGROUND ANIMATION COMPONENTS ---
+// --- BACKGROUND ANIMATION COMPONENTS (OPTIMIZED) ---
 const BouncingOrb = () => {
-  const [pos, setPos] = useState({ x: 100, y: 100 });
-  const vel = useRef({ x: 1.2, y: 1 }); 
-  const requestRef = useRef();
-
-  const animate = () => {
-    setPos((prev) => {
-      let nextX = prev.x + vel.current.x;
-      let nextY = prev.y + vel.current.y;
-
-      if (nextX <= 0 || nextX >= window.innerWidth - 200) vel.current.x *= -1;
-      if (nextY <= 0 || nextY >= window.innerHeight - 200) vel.current.y *= -1;
-
-      return { x: nextX, y: nextY };
-    });
-    requestRef.current = requestAnimationFrame(animate);
-  };
-
-  useEffect(() => {
-    requestRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(requestRef.current);
-  }, []);
-
+  // GPU-accelerated orb movement without triggering React re-renders
   return (
     <motion.div
-      animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0.9, 0.6] }}
-      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ 
+        x: [0, 300, -150, 200, 0],
+        y: [0, 200, 300, -100, 0],
+        scale: [1, 1.15, 1], 
+        opacity: [0.6, 0.9, 0.6] 
+      }}
+      transition={{ 
+        x: { duration: 25, repeat: Infinity, ease: "linear" },
+        y: { duration: 30, repeat: Infinity, ease: "linear" },
+        scale: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+        opacity: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+      }}
       className="fixed pointer-events-none z-0"
       style={{
-        left: pos.x,
-        top: pos.y,
+        left: '20%',
+        top: '10%',
         width: '450px',
         height: '450px',
         borderRadius: '50%',
@@ -100,28 +90,43 @@ const BouncingOrb = () => {
 };
 
 const AmbientBackground = () => {
+  const [particles, setParticles] = useState([]);
+
+  useEffect(() => {
+    setParticles([...Array(25)].map(() => ({
+      xTarget: Math.random() * 40 - 20,
+      duration: 12 + Math.random() * 8,
+      delay: Math.random() * 0.5,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+    })));
+  }, []);
+
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       <div className="absolute top-[-15%] left-[-5%] w-[60%] h-[60%] bg-yellow-500/35 rounded-full blur-[140px]" />
       <div className="absolute bottom-[-10%] right-[-5%] w-[50%] h-[50%] bg-sky-500/30 rounded-full blur-[120px]" />
       <BouncingOrb />
-      {[...Array(25)].map((_, i) => (
+      
+      {particles.map((p, i) => (
         <motion.div
           key={i}
+          initial={{ opacity: 0, y: 0, x: 0 }}
           animate={{
             y: [0, -120, 0],
-            x: [0, Math.random() * 40 - 20, 0],
+            x: [0, p.xTarget, 0],
             opacity: [0.3, 0.8, 0.3]
           }}
           transition={{
-            duration: 12 + Math.random() * 8,
+            duration: p.duration,
             repeat: Infinity,
-            delay: i * 0.5,
+            delay: p.delay,
+            ease: "easeInOut"
           }}
           className="absolute w-1.5 h-1.5 bg-amber-700 rounded-full blur-[0.5px]"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${p.left}%`,
+            top: `${p.top}%`,
           }}
         />
       ))}
@@ -129,15 +134,19 @@ const AmbientBackground = () => {
   );
 };
 
-// --- MAIN PAGE VARIANTS ---
+// --- MAIN PAGE VARIANTS (UPGRADED TO SPRING PHYSICS) ---
 const fadeUpVariant = {
   hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { type: "spring", stiffness: 70, damping: 15, mass: 1 } 
+  }
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+  visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
 };
 
 export default function DevLog() {
@@ -202,7 +211,8 @@ export default function DevLog() {
             <Link key={week.num} href={`/devlog/week-${week.num}`}>
               <motion.div 
                 variants={fadeUpVariant} 
-                whileHover={week.isDarkTheme ? { y: -8 } : {}} // <-- THIS FIXES THE JITTER
+                // Organic spring bounce on hover
+                whileHover={week.isDarkTheme ? { y: -8, transition: { type: "spring", stiffness: 300, damping: 20 } } : {}}
                 className={`relative overflow-hidden p-8 backdrop-blur-md rounded-[30px] transition-colors transition-shadow duration-300 group cursor-pointer h-full flex flex-col justify-between
                   ${week.isDarkTheme 
                     ? "bg-black border border-white/10 hover:border-yellow-500/50 shadow-[0_15px_30px_rgba(0,0,0,0.4)]" 
