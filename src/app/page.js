@@ -3,6 +3,36 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+// --- STEALTH DUST FOR HARDWARE CARDS ---
+const CardTechDust = () => (
+  <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden rounded-[40px]">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-indigo-600/10 blur-[60px] rounded-full animate-pulse" style={{ animationDuration: '5s' }} />
+    {[...Array(35)].map((_, i) => (
+      <motion.div
+        key={i}
+        initial={{ opacity: 0 }}
+        animate={{
+          y: [0, -40, 0],
+          x: [0, Math.random() * 20 - 10, 0],
+          opacity: [0.1, 0.6, 0.1] 
+        }}
+        transition={{
+          duration: 3 + Math.random() * 5,
+          repeat: Infinity,
+          delay: i * 0.1,
+        }}
+        className="absolute bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.6)]"
+        style={{
+          width: `${1 + Math.random() * 1.5}px`,
+          height: `${1 + Math.random() * 1.5}px`,
+          left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+        }}
+      />
+    ))}
+  </div>
+);
+
 // --- THE 5-SECOND HEARTBEAT BACKGROUND ---
 const HomeBackground = () => {
   return (
@@ -41,19 +71,12 @@ const HomeBackground = () => {
 
 const fadeUpVariant = {
   hidden: { opacity: 0, y: 40 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
-  }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
 };
 
 const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.2 }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
 };
 
 export default function Home() {
@@ -74,6 +97,10 @@ export default function Home() {
 
   const handleMouseMove = (e) => {
     setMousePosition({ x: e.clientX, y: e.clientY });
+  };
+
+  const scrollToHardware = () => {
+    document.getElementById('hardware')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -137,12 +164,12 @@ export default function Home() {
         }}
       />
 
-      {/* --- HERO SECTION --- */}
+      {/* --- HERO SECTION (CLEANED UP) --- */}
       <motion.div 
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
-        className="z-10 min-h-screen w-full max-w-5xl flex flex-col items-center justify-center font-sans p-8 md:p-24 text-center"
+        className="z-10 min-h-screen w-full max-w-5xl flex flex-col items-center justify-center font-sans p-8 md:p-24 text-center relative"
       >
         <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-1.5 rounded-full bg-yellow-100/50 border border-yellow-200 text-yellow-700 text-[10px] font-bold tracking-[0.3em] uppercase mt-28">
           Project In Development
@@ -158,20 +185,18 @@ export default function Home() {
         <motion.p variants={fadeUpVariant} className="text-base md:text-lg max-w-xl mx-auto mb-12 text-gray-400 leading-relaxed font-light">
           A device designed to provide real-time monitoring and physical support to improve daily mobility.
         </motion.p>
-        <motion.button variants={fadeUpVariant} className="px-10 py-4 bg-yellow-500 hover:bg-yellow-400 text-white rounded-full font-bold transition-all shadow-[0_20px_40px_rgba(234,179,8,0.3)] hover:scale-105 active:scale-95">
+        
+        <motion.button 
+          onClick={scrollToHardware}
+          variants={fadeUpVariant} 
+          className="px-10 py-4 bg-yellow-500 hover:bg-yellow-400 text-white rounded-full font-bold transition-all shadow-[0_20px_40px_rgba(234,179,8,0.3)] hover:scale-105 active:scale-95"
+        >
           Explore Hardware
         </motion.button>
       </motion.div>
 
       {/* --- VISION & PROTOTYPE SECTION --- */}
-      <motion.div 
-        id="vision" 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={staggerContainer}
-        className="z-10 w-full max-w-6xl py-32 px-12 border-t border-gray-100"
-      >
+      <motion.div id="vision" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="z-10 w-full max-w-6xl py-32 px-12 border-t border-gray-100">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
           <div className="space-y-8">
             <motion.h3 variants={fadeUpVariant} className="text-5xl font-black text-gray-800 tracking-tight leading-none">Engineering for the <span className="text-yellow-500">Human Form.</span></motion.h3>
@@ -196,14 +221,7 @@ export default function Home() {
       </motion.div>
 
       {/* --- LIVE TELEMETRY DASHBOARD --- */}
-      <motion.div 
-        id="telemetry" 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={staggerContainer}
-        className="z-10 w-full max-w-5xl py-20 px-8"
-      >
+      <motion.div id="telemetry" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="z-10 w-full max-w-5xl py-20 px-8">
         <motion.h3 variants={fadeUpVariant} className="text-3xl font-bold mb-2 text-gray-800">Live Telemetry Simulation</motion.h3>
         <motion.p variants={fadeUpVariant} className="text-gray-500 mb-8">Real-time data streaming capabilities from the on-board IMU and Flex sensors.</motion.p>
         
@@ -211,73 +229,99 @@ export default function Home() {
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Flexion Angle</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black ${flexColors.text}`}>
-                {sensorData.flexionAngle}°
-              </span>
+              <span className={`text-6xl font-black ${flexColors.text}`}>{sensorData.flexionAngle}°</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-              <div 
-                className={`h-3 rounded-full ${flexColors.bg}`} 
-                style={{ width: `${(sensorData.flexionAngle / 120) * 100}%` }}
-              ></div>
+              <div className={`h-3 rounded-full ${flexColors.bg}`} style={{ width: `${(sensorData.flexionAngle / 120) * 100}%` }}></div>
             </div>
           </motion.div>
 
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Impact Force (IMU)</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black ${impactColors.text}`}>
-                {sensorData.gForce}
-              </span>
+              <span className={`text-6xl font-black ${impactColors.text}`}>{sensorData.gForce}</span>
               <span className="text-xl font-bold text-gray-400 mb-1">G</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-              <div 
-                className={`h-3 rounded-full ${impactColors.bg}`} 
-                style={{ width: `${(sensorData.gForce / 3) * 100}%` }}
-              ></div>
+              <div className={`h-3 rounded-full ${impactColors.bg}`} style={{ width: `${(sensorData.gForce / 3) * 100}%` }}></div>
             </div>
           </motion.div>
 
           <motion.div variants={fadeUpVariant} className="bg-white p-6 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:border-yellow-400 transition-colors">
             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Material Strain</h4>
             <div className="flex items-end gap-2 mb-4">
-              <span className={`text-6xl font-black ${strainColors.text}`}>
-                {sensorData.strainLevel}%
-              </span>
+              <span className={`text-6xl font-black ${strainColors.text}`}>{sensorData.strainLevel}%</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-              <div 
-                className={`h-3 rounded-full ${strainColors.bg}`} 
-                style={{ width: `${sensorData.strainLevel}%` }}
-              ></div>
+              <div className={`h-3 rounded-full ${strainColors.bg}`} style={{ width: `${sensorData.strainLevel}%` }}></div>
             </div>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* --- CORE ENGINEERING --- */}
+      {/* --- OVERHAULED CORE ENGINEERING --- */}
       <motion.div 
         id="hardware" 
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
-        className="z-10 w-full max-w-5xl py-32 px-8 mb-10"
+        className="z-10 w-full max-w-6xl py-32 px-8 mb-10"
       >
-        <motion.h3 variants={fadeUpVariant} className="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-800">Core Engineering</motion.h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          {[
-            { title: 'Compute Unit', spec: 'Raspberry Pi' }, 
-            { title: 'Actuation', spec: 'PG36-555 Gear Motors' }, 
-            { title: 'Kinematics', spec: 'MPU6050 IMU' }, 
-            { title: 'Gait Detection', spec: 'Analog FSRs' }
-          ].map((item, i) => (
-            <motion.div key={item.title} variants={fadeUpVariant} className="p-8 bg-white border border-gray-100 rounded-[30px] hover:border-yellow-400 hover:bg-yellow-50 hover:shadow-[0_10px_30px_rgba(234,179,8,0.15)] hover:-translate-y-2 transition-all duration-300 flex flex-col items-center justify-center">
-              <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-xs text-gray-500 font-mono font-medium">{item.spec}</p>
-            </motion.div>
-          ))}
+        <motion.div variants={fadeUpVariant} className="text-center mb-16">
+          <h3 className="text-4xl md:text-5xl font-black text-gray-800 tracking-tight">Core Engineering</h3>
+          <p className="text-gray-500 mt-4 max-w-2xl mx-auto">The hardware architecture powering the Mynee exoskeleton. Shifting away from bulky pneumatic systems in favor of accessible, high-torque electromechanical components.</p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.div variants={fadeUpVariant} className="relative overflow-hidden p-10 bg-gray-950 border border-white/10 rounded-[40px] hover:border-yellow-500/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group">
+            <CardTechDust />
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 transition-colors">
+                <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Compute Unit</h3>
+              <p className="text-yellow-500 font-mono text-sm mb-4 tracking-wider uppercase">Raspberry Pi Node</p>
+              <p className="text-gray-400 leading-relaxed font-light">Serves as the central brain of the exoskeleton. Executes complex local Python processing, sensor fusion via Kalman filtering, and manages the real-time PID control loops without relying on cloud computing latency.</p>
+            </div>
+          </motion.div>
+
+          <motion.div variants={fadeUpVariant} className="relative overflow-hidden p-10 bg-gray-950 border border-white/10 rounded-[40px] hover:border-yellow-500/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group">
+            <CardTechDust />
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 transition-colors">
+                <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Actuation</h3>
+              <p className="text-yellow-500 font-mono text-sm mb-4 tracking-wider uppercase">PG36-555 Gear Motors</p>
+              <p className="text-gray-400 leading-relaxed font-light">High-torque planetary gear DC motors driven by heavy-duty IBT-2 H-Bridges. Designed to deliver 5-10 Nm of active torque directly to the knee joint to assist specifically during sit-to-stand motions.</p>
+            </div>
+          </motion.div>
+
+          <motion.div variants={fadeUpVariant} className="relative overflow-hidden p-10 bg-gray-950 border border-white/10 rounded-[40px] hover:border-yellow-500/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group">
+            <CardTechDust />
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 transition-colors">
+                <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2-1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Kinematics</h3>
+              <p className="text-yellow-500 font-mono text-sm mb-4 tracking-wider uppercase">MPU6050 IMU</p>
+              <p className="text-gray-400 leading-relaxed font-light">A highly responsive 6-axis accelerometer and gyroscope module. It provides real-time spatial orientation data, allowing the system to continuously calculate the user's exact knee flexion angle.</p>
+            </div>
+          </motion.div>
+
+          <motion.div variants={fadeUpVariant} className="relative overflow-hidden p-10 bg-gray-950 border border-white/10 rounded-[40px] hover:border-yellow-500/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-300 group">
+            <CardTechDust />
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/30 transition-colors">
+                <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Gait Detection</h3>
+              <p className="text-yellow-500 font-mono text-sm mb-4 tracking-wider uppercase">Analog FSRs</p>
+              <p className="text-gray-400 leading-relaxed font-light">Force Sensitive Resistors embedded within the footwear. These sensors monitor foot-strike pressure, enabling the control algorithm to definitively differentiate between the swing and stance phases of walking.</p>
+            </div>
+          </motion.div>
+
         </div>
       </motion.div>
 

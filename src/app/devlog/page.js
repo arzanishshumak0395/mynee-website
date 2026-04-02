@@ -125,8 +125,11 @@ const staggerContainer = {
 export default function DevLog() {
   const [scrolled, setScrolled] = useState(false);
 
+  // --- UPDATED WEEKS DATA ---
   const weeksData = Array.from({ length: 12 }, (_, i) => {
     const num = i + 1;
+    
+    // Week 1 Data
     if (num === 1) {
       return {
         num,
@@ -135,6 +138,18 @@ export default function DevLog() {
         isDarkTheme: true 
       };
     }
+    
+    // Week 2 Data (NEWLY ADDED)
+    if (num === 2) {
+      return {
+        num,
+        title: "Formalizing the Blueprint.",
+        desc: "Defining the multi-tiered system architecture, establishing ethical guardrails, and mapping the timeline.",
+        isDarkTheme: true 
+      };
+    }
+
+    // Default for Upcoming Weeks
     return {
       num,
       title: "Upcoming Log",
@@ -166,7 +181,7 @@ export default function DevLog() {
               Engineering <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-yellow-600">Logs.</span>
             </motion.h1>
             <motion.p variants={fadeUpVariant} className="text-lg text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
-              Documenting the 12-week journey of building the Mynee smart knee brace. Exploring hardware integration, UX/UI design, and software architecture.
+              Documenting the 12-week journey of building the Mynee smart knee exoskeleton. Exploring hardware integration, design, and software architecture.
             </motion.p>
           </motion.div>
         </div>
