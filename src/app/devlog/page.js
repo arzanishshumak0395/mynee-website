@@ -139,12 +139,32 @@ export default function DevLog() {
       };
     }
     
-    // Week 2 Data (NEWLY ADDED)
+    // Week 2 Data 
     if (num === 2) {
       return {
         num,
         title: "Formalizing the Blueprint.",
         desc: "Defining the multi-tiered system architecture, establishing ethical guardrails, and mapping the timeline.",
+        isDarkTheme: true 
+      };
+    }
+
+    // Week 3 Data (NEWLY ADDED)
+    if (num === 3) {
+      return {
+        num,
+        title: "Kinetic Intelligence.",
+        desc: "Grounding the project in biomechanical literature, quasi-direct drive theory, and sensor fusion.",
+        isDarkTheme: true 
+      };
+    }
+
+    // Week 4 Data (NEWLY ADDED)
+    if (num === 4) {
+      return {
+        num,
+        title: "The Architecture of Execution.",
+        desc: "Establishing the Work Breakdown Structure, Gantt scheduling, and hardware agile methodology.",
         isDarkTheme: true 
       };
     }
