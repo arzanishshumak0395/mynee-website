@@ -149,7 +149,7 @@ export default function DevLog() {
       };
     }
 
-    // Week 3 Data (NEWLY ADDED)
+    // Week 3 Data
     if (num === 3) {
       return {
         num,
@@ -159,7 +159,7 @@ export default function DevLog() {
       };
     }
 
-    // Week 4 Data (NEWLY ADDED)
+    // Week 4 Data
     if (num === 4) {
       return {
         num,
@@ -169,11 +169,31 @@ export default function DevLog() {
       };
     }
 
+    // Week 5 Data (NEWLY ADDED)
+    if (num === 5) {
+      return {
+        num,
+        title: "Methodologies & The MVP.",
+        desc: "Selecting Agile frameworks and bench-testing the Sense-Compute-Actuate hardware loop.",
+        isDarkTheme: true 
+      };
+    }
+
+    // Week 6 Data (NEWLY ADDED)
+    if (num === 6) {
+      return {
+        num,
+        title: "Stress-Testing & Architecture.",
+        desc: "Evaluating the MVP, fixing sensor jitter, and generating UML flow diagrams.",
+        isDarkTheme: true 
+      };
+    }
+
     // Default for Upcoming Weeks
     return {
       num,
       title: "Upcoming Log",
-      desc: "Documentation covering milestones, GitHub commits, and design iterations.",
+      desc: "Work in Progress",
       isDarkTheme: false
     };
   });

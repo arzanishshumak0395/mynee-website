@@ -1,121 +1,137 @@
 "use client";
 
 import Sidebar from "../Sidebar";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 
-// --- UPGRADED SPRING PHYSICS ANIMATIONS ---
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+// --- CUSTOM ANIMATIONS ---
+const floatAnimation = {
+  animate: {
+    y: [0, -15, 0],
+    rotate: [0, -5, 5, 0],
+    transition: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+  }
 };
 
-// Added a subtle rotation and spring bounce for a much more premium feel
-const slideInLeft = {
-  hidden: { opacity: 0, x: -100, rotate: -3 },
-  visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", bounce: 0.4, duration: 1.2 } }
+const pulseGlow = {
+  animate: {
+    opacity: [0.3, 0.8, 0.3],
+    scale: [0.95, 1.05, 0.95],
+    transition: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+  }
 };
 
-const slideInRight = {
-  hidden: { opacity: 0, x: 100, rotate: 3 },
-  visible: { opacity: 1, x: 0, rotate: 0, transition: { type: "spring", bounce: 0.4, duration: 1.2 } }
+const loadingBar = {
+  hidden: { width: "0%" },
+  visible: { 
+    width: "100%", 
+    transition: { duration: 2.5, repeat: Infinity, ease: "linear" } 
+  }
 };
 
-export default function Week1Log() {
-  const [scrolled, setScrolled] = useState(false);
-  
+export default function Week10Log() {
+  const [dots, setDots] = useState("");
 
+  // Simple typing effect for the loading dots
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const interval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    }, 500);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <main className="relative flex min-h-screen flex-col bg-slate-50 text-gray-900 font-sans">
       
-     
+      {/* BACKGROUND GRID */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
+        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-yellow-200/20 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[5%] left-[-10%] w-[50%] h-[50%] bg-indigo-100/20 rounded-full blur-[140px]" />
+      </div>
 
       {/* MAIN LAYOUT GRID */}
-      <div className="flex max-w-7xl mx-auto w-full px-8 pt-40 pb-32 gap-16 relative">
+      <div className="flex max-w-7xl mx-auto w-full px-8 pt-40 pb-32 gap-16 relative z-10">
         
         {/* --- DYNAMIC LEFT SIDEBAR --- */}
-       <Sidebar activeWeek={10} />
+        <Sidebar activeWeek={10} />
 
-        {/* --- RIGHT COLUMN: BLOG CONTENT --- */}
-        <article className="flex-1 max-w-3xl">
+        {/* --- RIGHT COLUMN: UNDER CONSTRUCTION --- */}
+        <article className="flex-1 max-w-3xl flex flex-col items-center justify-center min-h-[60vh]">
           
-          <motion.div initial="hidden" animate="visible" variants={fadeUp} className="mb-16">
-            <span className="text-yellow-500 font-bold tracking-widest uppercase text-xs mb-4 block">September 14, 2026</span>
-            <h1 className="text-5xl md:text-6xl font-black text-gray-800 tracking-tight leading-[1.1] mb-6">
-              The Genesis: Establishing the Core Architecture.
-            </h1>
-            <p className="text-xl text-gray-500 font-light leading-relaxed">
-              In our first week of the SoC Design module, the primary objective was to finalize the hardware schematic and validate the IMU sensor constraints.
-            </p>
-          </motion.div>
+          <div className="w-full relative overflow-hidden bg-gray-950 border border-white/10 rounded-[40px] p-12 md:p-20 text-center shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
+            
+            {/* Background Glow */}
+            <motion.div 
+              variants={pulseGlow} 
+              animate="animate" 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-500/20 blur-[80px] rounded-full pointer-events-none"
+            />
 
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} className="prose prose-lg text-gray-600 font-light mb-16">
-            <p>
-              The human knee is a complex hinge joint. To properly track its flexion and extension without restricting the user's natural gait, we realized that rigid PCBs would not suffice. We began researching flexible analog sensors that could be integrated directly into a breathable neoprene sleeve.
-            </p>
-          </motion.div>
+            <div className="relative z-10 flex flex-col items-center">
+              
+              {/* Floating Emoji Character */}
+              <motion.div 
+                variants={floatAnimation} 
+                animate="animate" 
+                className="text-7xl md:text-8xl mb-8 drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+              >
+                👷‍♂️⚙️
+              </motion.div>
 
-          {/* FIX: amount: 0.3 ensures animation waits until 30% of the image is safely on screen */}
-          <motion.div 
-            initial="hidden" 
-            whileInView="visible" 
-            viewport={{ once: true, amount: 0.3 }} 
-            variants={slideInLeft} 
-            className="w-full relative aspect-video rounded-[30px] overflow-hidden shadow-2xl mb-16 border border-gray-100"
-          >
-            <Image src="/judhi.jpg" alt="Sensor Prototype" fill className="object-cover" />
-            <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-gray-800">
-              Fig 1.1 - Initial MPU6050 Testing
+              {/* Status Badge */}
+              <div className="inline-block mb-6 px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 text-[10px] font-black tracking-[0.3em] uppercase">
+                Status: Work In Progress
+              </div>
+
+              {/* Main Heading */}
+              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
+                Hardware Assembly<br />Underway.
+              </h1>
+              
+              {/* Description */}
+              <p className="text-lg text-gray-400 font-light max-w-md mx-auto mb-12">
+                This section of the engineering log is currently being compiled. The exoskeleton logic is being routed and tested.
+              </p>
+
+              {/* Fake Terminal / Loading Bar */}
+              <div className="w-full max-w-sm bg-black/50 border border-white/5 rounded-2xl p-4 text-left mb-10 shadow-inner">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                  <span className="text-[10px] text-gray-500 font-mono ml-2 uppercase tracking-widest">System_Terminal</span>
+                </div>
+                <div className="text-yellow-500 font-mono text-xs mb-3 flex">
+                  <span>&gt; Compiling Week 10 log data{dots}</span>
+                </div>
+                {/* Animated Progress Bar */}
+                <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                  <motion.div 
+                    variants={loadingBar} 
+                    initial="hidden" 
+                    animate="visible" 
+                    className="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 rounded-full"
+                  />
+                </div>
+              </div>
+
+              {/* Back Button */}
+              <Link href="/devlog">
+                <button className="group flex items-center gap-3 px-8 py-3 bg-white hover:bg-yellow-500 text-gray-900 hover:text-white rounded-full font-bold transition-all shadow-xl hover:shadow-yellow-500/30 active:scale-95">
+                  <span className="group-hover:-translate-x-1 transition-transform">←</span>
+                  Return to Index
+                </button>
+              </Link>
+
             </div>
-          </motion.div>
-
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} className="prose prose-lg text-gray-600 font-light mb-16">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4 mt-8">Microcontroller Selection</h3>
-            <p>
-              We debated between the standard Arduino Nano and the ESP32. We ultimately chose the ESP32 due to its native Bluetooth Low Energy (BLE) capabilities. Sending 60 frames per second of live telemetry data requires significant bandwidth, and the ESP32's dual-core processor handles the sensor fusion math effortlessly.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            initial="hidden" 
-            whileInView="visible" 
-            viewport={{ once: true, amount: 0.3 }} 
-            variants={slideInRight} 
-            className="w-full relative aspect-[4/3] rounded-[30px] overflow-hidden shadow-2xl mb-16 border border-gray-100 md:w-3/4 md:ml-auto"
-          >
-            <Image src="/judhi.jpg" alt="ESP32 Board" fill className="object-cover" />
-            <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-gray-800">
-              Fig 1.2 - ESP32 Architecture
-            </div>
-          </motion.div>
-
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} className="prose prose-lg text-gray-600 font-light mb-16">
-            <p>
-              By the end of the week, Dr. Judhi approved our initial ethics package. Moving into Week 2, our focus will shift to writing the VHDL code for the custom digital stopwatch IP to measure step timing exactly.
-            </p>
-          </motion.div>
-
-          <div className="border-t border-gray-200 pt-8 mt-16 flex justify-between items-center">
-            <div className="text-gray-400 text-sm font-bold tracking-widest uppercase">End of Log 1</div>
-            <Link href="/devlog/week-2">
-              <button className="px-8 py-3 bg-gray-900 hover:bg-emerald-500 text-white rounded-full font-bold transition-colors">
-                Read Week 2 →
-              </button>
-            </Link>
           </div>
 
         </article>
       </div>
 
-      <footer className="w-full py-16 bg-white border-t border-gray-100 text-center">
+      <footer className="w-full py-16 bg-white border-t border-gray-100 text-center relative z-10 mt-auto">
         <div className="text-xl font-black text-yellow-600 mb-4 tracking-tighter">MYNEE</div>
         <p className="text-gray-400 text-[10px] uppercase tracking-widest">© 2026 Syed Arzanish.</p>
       </footer>
