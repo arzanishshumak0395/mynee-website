@@ -4,38 +4,56 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// --- 1. SUPERCHARGED STEALTH DUST FOR CARDS ---
-const CardTechDust = () => (
-  <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden rounded-[30px]">
-    {/* Added a subtle internal indigo glow so the dust has something to contrast against */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-indigo-600/20 blur-[60px] rounded-full animate-pulse" style={{ animationDuration: '5s' }} />
-    
-    {/* Increased to 45 particles, made them larger, and boosted opacity to 100% at peak */}
-    {[...Array(45)].map((_, i) => (
-      <motion.div
-        key={i}
-        initial={{ opacity: 0 }}
-        animate={{
-          y: [0, -40, 0],
-          x: [0, Math.random() * 20 - 10, 0],
-          opacity: [0.3, 1, 0.3] // Peaking at full brightness!
-        }}
-        transition={{
-          duration: 3 + Math.random() * 5,
-          repeat: Infinity,
-          delay: i * 0.1,
-        }}
-        // Stronger white shadow glow
-        className="absolute bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]"
-        style={{
-          // Bigger base size (1.5px to 3px)
-          width: `${1.5 + Math.random() * 1.5}px`,
-          height: `${1.5 + Math.random() * 1.5}px`,
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-        }}
-      />
-    ))}
+// --- 1. DARK DUST FOR PUBLISHED LOGS (Jitter-Fixed, No Purple Hue) ---
+const DarkCardTechDust = () => {
+  const [particles, setParticles] = useState([]);
+
+  useEffect(() => {
+    setParticles([...Array(45)].map(() => ({
+      xTarget: Math.random() * 20 - 10,
+      duration: 3 + Math.random() * 5,
+      delay: Math.random() * 0.5,
+      size: 1.5 + Math.random() * 1.5,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+    })));
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden rounded-[30px]">
+      {particles.map((p, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{
+            y: [0, -40, 0],
+            x: [0, p.xTarget, 0],
+            opacity: [0.3, 1, 0.3] 
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+          }}
+          className="absolute bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]"
+          style={{
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            left: `${p.left}%`,
+            top: `${p.top}%`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// --- 2. SUBTLE LOCK WATERMARK FOR UPCOMING LOGS ---
+const LockedWatermark = () => (
+  <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden rounded-[30px] opacity-[0.03]">
+    <svg className="w-56 h-56 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+    </svg>
   </div>
 );
 
@@ -129,71 +147,18 @@ export default function DevLog() {
   const weeksData = Array.from({ length: 12 }, (_, i) => {
     const num = i + 1;
     
-    // Week 1 Data
-    if (num === 1) {
-      return {
-        num,
-        title: "The First Step.",
-        desc: "Transitioning from broad concepts to zeroing in on a solvable engineering problem.",
-        isDarkTheme: true 
-      };
-    }
-    
-    // Week 2 Data 
-    if (num === 2) {
-      return {
-        num,
-        title: "Formalizing the Blueprint.",
-        desc: "Defining the multi-tiered system architecture, establishing ethical guardrails, and mapping the timeline.",
-        isDarkTheme: true 
-      };
-    }
-
-    // Week 3 Data
-    if (num === 3) {
-      return {
-        num,
-        title: "Kinetic Intelligence.",
-        desc: "Grounding the project in biomechanical literature, quasi-direct drive theory, and sensor fusion.",
-        isDarkTheme: true 
-      };
-    }
-
-    // Week 4 Data
-    if (num === 4) {
-      return {
-        num,
-        title: "The Architecture of Execution.",
-        desc: "Establishing the Work Breakdown Structure, Gantt scheduling, and hardware agile methodology.",
-        isDarkTheme: true 
-      };
-    }
-
-    // Week 5 Data (NEWLY ADDED)
-    if (num === 5) {
-      return {
-        num,
-        title: "Methodologies & The MVP.",
-        desc: "Selecting Agile frameworks and bench-testing the Sense-Compute-Actuate hardware loop.",
-        isDarkTheme: true 
-      };
-    }
-
-    // Week 6 Data (NEWLY ADDED)
-    if (num === 6) {
-      return {
-        num,
-        title: "Stress-Testing & Architecture.",
-        desc: "Evaluating the MVP, fixing sensor jitter, and generating UML flow diagrams.",
-        isDarkTheme: true 
-      };
-    }
+    if (num === 1) return { num, title: "The First Step.", desc: "Transitioning from broad concepts to zeroing in on a solvable engineering problem.", isDarkTheme: true };
+    if (num === 2) return { num, title: "Formalizing the Blueprint.", desc: "Defining the multi-tiered system architecture, establishing ethical guardrails, and mapping the timeline.", isDarkTheme: true };
+    if (num === 3) return { num, title: "Kinetic Intelligence.", desc: "Grounding the project in biomechanical literature, quasi-direct drive theory, and sensor fusion.", isDarkTheme: true };
+    if (num === 4) return { num, title: "The Architecture of Execution.", desc: "Establishing the Work Breakdown Structure, Gantt scheduling, and hardware agile methodology.", isDarkTheme: true };
+    if (num === 5) return { num, title: "Methodologies & The MVP.", desc: "Selecting Agile frameworks and bench-testing the Sense-Compute-Actuate hardware loop.", isDarkTheme: true };
+    if (num === 6) return { num, title: "Stress-Testing & Architecture.", desc: "Evaluating the MVP, fixing sensor jitter, and generating UML flow diagrams.", isDarkTheme: true };
 
     // Default for Upcoming Weeks
     return {
       num,
       title: "Upcoming Log",
-      desc: "Work in Progress",
+      desc: "🔒 Work in Progress", // Added a tiny lock emoji here
       isDarkTheme: false
     };
   });
@@ -237,21 +202,21 @@ export default function DevLog() {
             <Link key={week.num} href={`/devlog/week-${week.num}`}>
               <motion.div 
                 variants={fadeUpVariant} 
-                className={`relative overflow-hidden p-8 backdrop-blur-md rounded-[30px] hover:-translate-y-2 transition-all duration-300 group cursor-pointer h-full flex flex-col justify-between
+                className={`relative overflow-hidden p-8 backdrop-blur-md rounded-[30px] transition-all duration-300 group cursor-pointer h-full flex flex-col justify-between
                   ${week.isDarkTheme 
-                    ? "bg-black border border-white/10 hover:border-yellow-500/50 shadow-[0_15px_30px_rgba(0,0,0,0.4)]" 
-                    : "bg-white/70 border border-gray-100 hover:border-yellow-400 hover:shadow-xl"
+                    ? "bg-black border border-white/10 hover:border-yellow-500/50 shadow-[0_15px_30px_rgba(0,0,0,0.4)] hover:-translate-y-2" 
+                    : "bg-white/70 border border-gray-100 hover:bg-white/90"
                   }
                 `}
               >
-                {/* Dust is now much brighter and larger! */}
-                {week.isDarkTheme && <CardTechDust />}
+                {/* Dynamically render dark dust or locked watermark */}
+                {week.isDarkTheme ? <DarkCardTechDust /> : <LockedWatermark />}
 
                 <div className="relative z-10">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black mb-6 transition-colors
                     ${week.isDarkTheme 
                       ? "bg-white/10 text-yellow-500 group-hover:bg-yellow-500/20" 
-                      : "bg-slate-50 text-yellow-600 group-hover:bg-yellow-100"
+                      : "bg-slate-50 text-gray-400"
                     }
                   `}>
                     {week.num}
@@ -270,11 +235,12 @@ export default function DevLog() {
                   </p>
                 </div>
 
-                <div className={`relative z-10 text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform
-                  ${week.isDarkTheme ? "text-yellow-500" : "text-yellow-600"}
-                `}>
-                  Read Log →
-                </div>
+                {/* Only show "Read Log ->" if the week is published */}
+                {week.isDarkTheme && (
+                  <div className="relative z-10 text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform text-yellow-500 mt-auto pt-6">
+                    Read Log →
+                  </div>
+                )}
               </motion.div>
             </Link>
           ))}
