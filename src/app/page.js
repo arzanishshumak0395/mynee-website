@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 // --- THE 5-SECOND HEARTBEAT BACKGROUND ---
@@ -35,6 +35,47 @@ const HomeBackground = () => {
           />
         </svg>
       </div>
+    </div>
+  );
+};
+
+// --- GPU-ACCELERATED FOOTER DUST ---
+const FooterDust = () => {
+  const [particles, setParticles] = useState([]);
+
+  useEffect(() => {
+    setParticles([...Array(30)].map(() => ({
+      tx: `${Math.random() * 30 - 15}px`,
+      dur: `${5 + Math.random() * 7}s`,
+      del: `${Math.random() * 1}s`,
+      size: `${1 + Math.random() * 1.5}px`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+    })));
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-60">
+      <style>{`
+        @keyframes floatFooterDust {
+          0%, 100% { transform: translate(0px, 0px); opacity: 0.1; }
+          50% { transform: translate(var(--tx), -30px); opacity: 0.8; }
+        }
+      `}</style>
+      {particles.map((p, i) => (
+        <div
+          key={i}
+          className="absolute bg-white rounded-full shadow-[0_0_5px_rgba(255,255,255,0.7)] will-change-transform"
+          style={{
+            width: p.size,
+            height: p.size,
+            left: p.left,
+            top: p.top,
+            '--tx': p.tx,
+            animation: `floatFooterDust ${p.dur} infinite ease-in-out ${p.del}`
+          }}
+        />
+      ))}
     </div>
   );
 };
@@ -182,10 +223,16 @@ export default function Home() {
                ))}
             </motion.div>
           </div>
-          <motion.div variants={fadeUpVariant} className="aspect-video bg-white rounded-[40px] shadow-2xl border border-gray-100 flex items-center justify-center text-gray-300 font-mono text-xs uppercase tracking-widest p-12 text-center overflow-hidden relative group transition-transform duration-500 hover:scale-[1.02]">
-             <div className="absolute inset-0 bg-yellow-500/5 group-hover:bg-transparent transition-all"></div>
-             <video src="/prototype.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover relative z-10" />
-             <span className="absolute z-0">Prototype Visual</span>
+          <motion.div variants={fadeUpVariant} className="aspect-video bg-white rounded-[40px] shadow-2xl border border-gray-100 p-2 overflow-hidden relative group transition-transform duration-500 hover:scale-[1.02]">
+             {/* Dynamic color overlay on hover */}
+             <div className="absolute inset-0 bg-yellow-500/5 group-hover:bg-transparent transition-all z-20 rounded-[38px]"></div>
+             
+             {/* Standard HTML Img Tag for flawless rendering */}
+             <img 
+                src="/prototype.jpg" 
+                alt="Mynee Smart Knee Brace Prototype"
+                className="w-full h-full object-cover rounded-[38px] relative z-10" 
+             />
           </motion.div>
         </div>
       </motion.div>
@@ -296,10 +343,75 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* --- FOOTER --- */}
-      <footer className="z-10 w-full py-20 bg-white border-t border-gray-100 text-center">
-        <div className="text-xl font-black text-yellow-600 mb-4 tracking-tighter">MYNEE</div>
-        <p className="text-gray-400 text-[10px] uppercase tracking-widest">© 2026 Mynee Smart Tech. Developed by Syed Arzanish.</p>
+      {/* --- MEGA FOOTER WITH DUST --- */}
+      <footer className="relative z-10 w-full bg-gray-950 border-t border-white/10 pt-20 pb-10 overflow-hidden">
+        
+        {/* The Animated Dust Layer */}
+        <FooterDust />
+
+        {/* Ensure footer content sits strictly above the dust */}
+        <div className="relative z-10 max-w-6xl mx-auto px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+            
+            {/* Brand Column */}
+            <div className="lg:col-span-2">
+              <div className="text-2xl font-black text-yellow-500 mb-6 tracking-tighter">MYNEE</div>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
+                A smart knee exoskeleton bridging the gap between frugal innovation and medical-grade biomechanical assistance through edge-AI and sensor fusion.
+              </p>
+              <div className="flex items-center gap-4 text-gray-400">
+                <a href="#" className="hover:text-yellow-500 transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
+                </a>
+                <a href="#" className="hover:text-yellow-500 transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg>
+                </a>
+                <a href="mailto:syedarzanish@gmail.com" className="hover:text-yellow-500 transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Navigation Column */}
+            <div>
+              <h4 className="text-white font-bold mb-6">Navigation</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><Link href="/" className="hover:text-yellow-500 transition-colors">Home</Link></li>
+                <li><Link href="/sessions" className="hover:text-yellow-500 transition-colors">Sessions</Link></li>
+                <li><Link href="/devlog" className="hover:text-yellow-500 transition-colors">Dev Log</Link></li>
+                <li><button onClick={scrollToHardware} className="hover:text-yellow-500 transition-colors">Core Engineering</button></li>
+              </ul>
+            </div>
+
+            {/* Topics Column */}
+            <div>
+              <h4 className="text-white font-bold mb-6">Topics</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><span className="hover:text-yellow-500 transition-colors cursor-default">Biomechanics</span></li>
+                <li><span className="hover:text-yellow-500 transition-colors cursor-default">Edge Computing</span></li>
+                <li><span className="hover:text-yellow-500 transition-colors cursor-default">PID Control</span></li>
+                <li><span className="hover:text-yellow-500 transition-colors cursor-default">Sensor Fusion</span></li>
+              </ul>
+            </div>
+
+            {/* Resources Column */}
+            <div>
+              <h4 className="text-white font-bold mb-6">Resources</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-yellow-500 transition-colors flex items-center gap-1">GitHub ↗</a></li>
+                <li><a href="#" className="hover:text-yellow-500 transition-colors flex items-center gap-1">LinkedIn ↗</a></li>
+                <li><a href="#" className="hover:text-yellow-500 transition-colors flex items-center gap-1">University ↗</a></li>
+              </ul>
+            </div>
+
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+            <p>© 2026 MYNEE | Syed Arzanish - Final Year Project.</p>
+            <p>Built with <span className="text-gray-300 font-medium">Next.js</span> & <span className="text-gray-300 font-medium">Tailwind CSS</span>.</p>
+          </div>
+        </div>
       </footer>
     </main>
   );
