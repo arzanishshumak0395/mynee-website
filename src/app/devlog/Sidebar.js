@@ -81,7 +81,7 @@ const SidebarBackground = () => {
 export default function Sidebar({ activeWeek }) {
   // CONFIGURATION
   const latestPublishedWeek = 12; 
-  const completedUntil = 6; // <-- Updated to 6 so Weeks 7 & 8 are just dots!
+  const completedUntil = 11; // <-- Updated to 6 so Weeks 7 & 8 are just dots!
 
   const weeks = Array.from({ length: 12 }, (_, i) => ({ num: i + 1 }));
 

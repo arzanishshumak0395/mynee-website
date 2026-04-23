@@ -1,180 +1,256 @@
 "use client";
 
 import Sidebar from "../Sidebar";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
-};
+// ==========================================
+// REUSABLE UI BLOCKS
+// ==========================================
 
+const DocAttachment = ({ title, type, fileSize }) => (
+  <motion.a href="#" whileHover={{ scale: 1.02 }} className="flex items-center justify-between p-5 mb-8 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md hover:border-yellow-400 transition-all group">
+    <div className="flex items-center gap-4">
+      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs uppercase tracking-wider ${type === 'DOCX' ? 'bg-blue-100 text-blue-500' : 'bg-red-100 text-red-500'}`}>
+        {type}
+      </div>
+      <div>
+        <h4 className="text-gray-900 font-bold group-hover:text-yellow-600 transition-colors">{title}</h4>
+        <p className="text-gray-400 text-xs uppercase tracking-widest">{fileSize}</p>
+      </div>
+    </div>
+    <svg className="w-5 h-5 text-gray-400 group-hover:text-yellow-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+  </motion.a>
+);
+
+// --- NEW BLOCK: Methodology Comparison Table ---
+const MethodologyTable = () => (
+  <div className="mb-8 overflow-hidden rounded-2xl border border-gray-200 shadow-sm bg-white overflow-x-auto">
+    <table className="w-full text-left text-sm min-w-[600px]">
+      <thead className="bg-gray-50 border-b border-gray-200 text-gray-600 font-bold uppercase tracking-wider text-[10px]">
+        <tr>
+          <th className="p-4 w-1/4">Methodology</th>
+          <th className="p-4 w-1/4">Core Focus</th>
+          <th className="p-4 w-1/2">Application to Mynee Exoskeleton</th>
+        </tr>
+      </thead>
+      <tbody className="text-gray-600 font-light divide-y divide-gray-100">
+        <tr className="hover:bg-gray-50 transition-colors">
+          <td className="p-4 font-bold text-gray-800">Quantitative</td>
+          <td className="p-4">Numerical data, objective measurements, telemetry.</td>
+          <td className="p-4 text-xs leading-relaxed">Measuring specific IMU flexion angles, calculating actuator torque output (Nm), and tracking algorithm latency (ms).</td>
+        </tr>
+        <tr className="hover:bg-gray-50 transition-colors">
+          <td className="p-4 font-bold text-gray-800">Qualitative</td>
+          <td className="p-4">Subjective feedback, user experience, observations.</td>
+          <td className="p-4 text-xs leading-relaxed">Assessing physical comfort of the neoprene sleeve, perceived ease of walking, and user confidence during sit-to-stand motions.</td>
+        </tr>
+        <tr className="hover:bg-gray-50 transition-colors bg-yellow-50/30">
+          <td className="p-4 font-bold text-yellow-700">Mixed Methods</td>
+          <td className="p-4">Integration of both hard data and user experience.</td>
+          <td className="p-4 text-xs leading-relaxed font-medium"><strong>*Chosen Approach*</strong> Correlating hard telemetry data (PID torque curves) with subjective user feedback to ensure the brace is both powerful and comfortable.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+);
+
+// --- NEW BLOCK: Literature Review Summary Table ---
+const LiteratureTable = () => (
+  <div className="mb-8 overflow-hidden rounded-2xl border border-gray-200 shadow-sm bg-white overflow-x-auto">
+    <table className="w-full text-left text-sm min-w-[700px]">
+      <thead className="bg-gray-900 border-b border-gray-800 text-gray-300 font-bold uppercase tracking-wider text-[10px]">
+        <tr>
+          <th className="p-4 w-1/4">Research Domain</th>
+          <th className="p-4 w-1/3">Key Findings (Synthesized)</th>
+          <th className="p-4 w-5/12">Identified Gap / Limitation</th>
+        </tr>
+      </thead>
+      <tbody className="text-gray-600 font-light divide-y divide-gray-100">
+        <tr className="hover:bg-gray-50 transition-colors">
+          <td className="p-4 font-bold text-gray-800 text-xs">Wearable Actuation (QDD)</td>
+          <td className="p-4 text-xs leading-relaxed">Quasi-Direct Drive (QDD) motors offer high back-drivability and torque-density suitable for human joints compared to highly geared servos.</td>
+          <td className="p-4 text-xs leading-relaxed text-red-600/80 font-medium">Current QDD setups require massive external power supplies and are too bulky for daily, concealed wear.</td>
+        </tr>
+        <tr className="hover:bg-gray-50 transition-colors">
+          <td className="p-4 font-bold text-gray-800 text-xs">Gait Phase Detection</td>
+          <td className="p-4 text-xs leading-relaxed">Combining IMU kinematics with in-sole FSR (Force Sensitive Resistor) data provides &gt;95% accuracy in detecting Stance vs. Swing phases.</td>
+          <td className="p-4 text-xs leading-relaxed text-red-600/80 font-medium">Most models rely on post-processing on powerful external PCs rather than real-time edge processing.</td>
+        </tr>
+        <tr className="hover:bg-gray-50 transition-colors">
+          <td className="p-4 font-bold text-gray-800 text-xs">Commercial Orthotics</td>
+          <td className="p-4 text-xs leading-relaxed">Passive braces effectively stabilize the joint but provide zero kinetic energy to assist weakened muscles during flexion.</td>
+          <td className="p-4 text-xs leading-relaxed text-red-600/80 font-medium">Active (powered) alternatives cost upwards of $30,000, creating a massive barrier to entry for average patients.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+);
+
+// ==========================================
+// ANIMATIONS & EFFECTS
+// ==========================================
+const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } };
 const holoHover = {
-  initial: { 
-    scale: 1, 
-    y: 0, 
-    rotateX: 0, 
-    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05)",
-    borderColor: "rgba(243, 244, 246, 1)" 
-  },
-  hover: { 
-    scale: 1.015, 
-    y: -6, 
-    rotateX: -1, 
-    borderColor: "rgba(234, 179, 8, 0.6)", 
-    boxShadow: "0 30px 60px -15px rgba(234, 179, 8, 0.2), 0 10px 20px -5px rgba(234, 179, 8, 0.1)",
-    transition: { type: "spring", stiffness: 350, damping: 25, mass: 1 }
-  }
+  initial: { scale: 1, y: 0, rotateX: 0, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05)", borderColor: "rgba(243, 244, 246, 1)" },
+  hover: { scale: 1.015, y: -6, rotateX: -1, borderColor: "rgba(234, 179, 8, 0.6)", boxShadow: "0 30px 60px -15px rgba(234, 179, 8, 0.2), 0 10px 20px -5px rgba(234, 179, 8, 0.1)", transition: { type: "spring", stiffness: 350, damping: 25, mass: 1 } }
 };
 
 const StealthTechDust = () => (
   <div className="absolute inset-0 pointer-events-none z-0">
     {[...Array(80)].map((_, i) => (
-      <motion.div
-        key={i}
-        initial={{ opacity: 0.2 }}
-        animate={{
-          y: [0, -40, 0],
-          x: [0, Math.random() * 30 - 15, 0],
-          opacity: [0.1, 0.8, 0.1]
-        }}
-        transition={{ duration: 4 + Math.random() * 8, repeat: Infinity, delay: i * 0.05 }}
-        className="absolute bg-white rounded-full shadow-[0_0_4px_rgba(255,255,255,0.4)]"
-        style={{
-          width: `${0.5 + Math.random() * 1.3}px`,
-          height: `${0.5 + Math.random() * 1.3}px`,
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-        }}
-      />
+      <motion.div key={i} initial={{ opacity: 0.2 }} animate={{ y: [0, -40, 0], x: [0, Math.random() * 30 - 15, 0], opacity: [0.1, 0.8, 0.1] }} transition={{ duration: 4 + Math.random() * 8, repeat: Infinity, delay: i * 0.05 }} className="absolute bg-white rounded-full shadow-[0_0_4px_rgba(255,255,255,0.4)]" style={{ width: `${0.5 + Math.random() * 1.3}px`, height: `${0.5 + Math.random() * 1.3}px`, left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }} />
     ))}
   </div>
 );
 
+const FooterDust = () => {
+  const [particles, setParticles] = useState([]);
+  useEffect(() => { setParticles([...Array(30)].map(() => ({ tx: `${Math.random() * 30 - 15}px`, dur: `${5 + Math.random() * 7}s`, del: `${Math.random() * 1}s`, size: `${1 + Math.random() * 1.5}px`, left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }))); }, []);
+  return (
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-60">
+      <style>{`@keyframes floatFooterDust { 0%, 100% { transform: translate(0px, 0px); opacity: 0.1; } 50% { transform: translate(var(--tx), -30px); opacity: 0.8; } }`}</style>
+      {particles.map((p, i) => (<div key={i} className="absolute bg-white rounded-full shadow-[0_0_5px_rgba(255,255,255,0.7)] will-change-transform" style={{ width: p.size, height: p.size, left: p.left, top: p.top, '--tx': p.tx, animation: `floatFooterDust ${p.dur} infinite ease-in-out ${p.del}` }} />))}
+    </div>
+  );
+};
+
+// ==========================================
+// MAIN PAGE LAYOUT
+// ==========================================
 export default function Week3Log() {
-  const [litReviewHoloActive, setLitReviewHoloActive] = useState(false);
+  const [isMethodHoloActive, setIsMethodHoloActive] = useState(false);
+  const [isGapHoloActive, setIsGapHoloActive] = useState(false);
+  
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   return (
     <main className="relative flex min-h-screen flex-col bg-slate-50 text-gray-900 font-sans">
-      
-      {/* BACKGROUND GRID */}
+      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 origin-left z-[100]" style={{ scaleX }} />
+
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
         <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-yellow-200/20 rounded-full blur-[120px]" />
         <div className="absolute bottom-[5%] left-[-10%] w-[50%] h-[50%] bg-indigo-100/20 rounded-full blur-[140px]" />
       </div>
 
-      <div className="flex max-w-7xl mx-auto w-full px-8 pt-40 pb-32 gap-16 relative z-10">
+      <div className="flex flex-col lg:flex-row max-w-7xl mx-auto w-full px-8 pt-52 pb-32 gap-16 relative z-10">
+        
+        {/* SIDEBAR - Updated to Week 3 */}
         <Sidebar activeWeek={3} />
 
         <article className="flex-1 max-w-3xl">
           
           {/* HEADER */}
-          <motion.header initial="hidden" animate="visible" variants={fadeUp} className="mb-20 relative overflow-hidden bg-black border border-white/10 rounded-[40px] p-16">
+          <motion.header initial="hidden" animate="visible" variants={fadeUp} className="mb-20 relative overflow-hidden bg-black border border-white/10 rounded-[40px] p-12 md:p-16 shadow-2xl">
             <StealthTechDust />
             <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-yellow-500 font-bold tracking-widest uppercase text-[10px]">Feb 6, 2026</span>
-                <span className="text-gray-600">•</span>
-                <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">6 min read</span>
+              <div className="flex flex-wrap items-center gap-3 mb-6">
+                <span className="px-3 py-1 bg-yellow-500/20 text-yellow-500 rounded-full font-bold tracking-widest uppercase text-[10px] border border-yellow-500/30">Project Phase 1</span>
+                <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">7 min read</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
-                Kinetic Intelligence: Grounding Mynee in the Landscape of Assisted Mobility.
+              <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter leading-tight">
+                Week 3: <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Theoretical Framework.</span>
               </h1>
             </div>
           </motion.header>
 
-          {/* OVERVIEW */}
+          {/* INTRO TEXT */}
           <motion.div initial="hidden" animate="visible" variants={fadeUp} className="mb-16 px-4">
             <p className="text-xl text-gray-500 font-light leading-relaxed mb-6">
-              With the Mynee blueprint finalized, Week 3 shifted focus toward building the <strong>intellectual scaffolding</strong> of the project. A technical build is only as strong as the research supporting it. This week was dedicated to my structured Literature Review (Chapter 2), ensuring that every sensor and motor choice is justified by academic rigor.
-            </p>
-            <p className="text-xl text-gray-500 font-light leading-relaxed">
-              I spent the week synthesizing findings across biomechanics, electromechanical compliance, and edge-computing paradigms. The goal was to move from <em>"How do I build this?"</em> to <em>"Why is this the most effective way to solve the problem?"</em>
+              With the project proposal approved in Week 2, the goal for Week 3 was to build the scientific foundation. You cannot engineer a solution to a problem you don't deeply understand. This week was entirely dedicated to academic research, synthesizing peer-reviewed literature, establishing a strict research methodology, and drafting Chapter 2 of the dissertation.
             </p>
           </motion.div>
 
-          {/* LITERATURE REVIEW SECTION (INTERACTIVE) */}
+          {/* RESEARCH METHODOLOGY */}
           <motion.div 
-            initial="initial" whileInView="visible" whileHover="hover" variants={holoHover}
-            onHoverStart={() => setLitReviewHoloActive(true)} onHoverEnd={() => setLitReviewHoloActive(false)}
-            className="relative prose prose-lg text-gray-600 font-light mb-16 bg-white p-12 rounded-[40px] border border-gray-100 cursor-default"
+            initial="initial" whileInView="visible" whileHover="hover" variants={holoHover} viewport={{ once: true, amount: 0.2 }}
+            onHoverStart={() => setIsMethodHoloActive(true)} onHoverEnd={() => setIsMethodHoloActive(false)}
+            className="relative prose prose-lg text-gray-600 font-light mb-16 bg-white p-10 md:p-12 rounded-[40px] border border-gray-100 cursor-default"
             style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
           >
-            <div className={`absolute inset-0 rounded-[40px] pointer-events-none opacity-0 transition-opacity duration-700 ${litReviewHoloActive ? "opacity-[0.04]" : "opacity-0"}`} style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '15px 15px' }} />
+            <div className={`absolute inset-0 rounded-[40px] pointer-events-none opacity-0 transition-opacity duration-700 ${isMethodHoloActive ? "opacity-[0.04]" : "opacity-0"}`} style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '15px 15px' }} />
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 mt-0 relative z-10">Thematic Literature Review</h2>
-            <div className="relative z-10 space-y-8">
-              
-              <div>
-                <h4 className="text-gray-900 font-black mb-2 uppercase text-xs tracking-widest">Theme 1: Electromechanical Compliance & Actuation</h4>
-                <p className="text-sm leading-relaxed">
-                  Traditional active orthoses, such as the <em>Roam Robotics Ascend</em>, utilize pneumatic actuators to achieve "compliance" (the ability of a joint to feel natural and 'squishy' rather than rigid). However, <strong>Dollar & Herr (2008)</strong> emphasize that pneumatic systems are limited by the weight of air compressors. Recent literature suggests that <strong>Quasi-Direct Drive (QDD)</strong> motors—like my choice of the <strong>PG36 planetary gears</strong>—can replicate this compliance through high-torque-density and back-drivability, offering a more portable solution for daily use (Young & Ferris, 2017).
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-gray-900 font-black mb-2 uppercase text-xs tracking-widest">Theme 2: Multi-Modal Sensor Fusion for Intent Recognition</h4>
-                <p className="text-sm leading-relaxed">
-                  A major failure point in elderly mobility aids is the inability to distinguish between standard walking and the high-torque demand of a <strong>Sit-to-Stand (STS)</strong> transition. <strong>Huo et al. (2016)</strong> highlight that IMUs alone suffer from cumulative drift. My research this week validated the need for <strong>Force Sensitive Resistors (FSRs)</strong>. By fusing IMU spatial data with FSR ground-reaction-force data, the system can achieve &gt;95% accuracy in intent recognition, ensuring the motors engage only when the user intends to lift their center of mass (Hussain et al., 2013).
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-gray-900 font-black mb-2 uppercase text-xs tracking-widest">Theme 3: Edge Computing in Biomechanics</h4>
-                <p className="text-sm leading-relaxed">
-                  Current IoT research often offloads processing to the cloud. However, for a gait-assist device, the <strong>Human-in-the-Loop</strong> latency must be under 100ms to prevent user imbalance. Utilizing a <strong>Raspberry Pi</strong> for local PID control, as supported by <strong>Hassani et al. (2025)</strong>, allows Mynee to run complex Kalman filters and control loops natively, ensuring real-time response without the risks of network dropouts.
-                </p>
-              </div>
-
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 mt-0 relative z-10" style={{ transform: "translateZ(20px)" }}>Defining the Research Methodology</h2>
+            <div className="relative z-10 space-y-4" style={{ transform: "translateZ(10px)" }}>
+              <p>
+                To structure the evaluation of the Mynee prototype, I analyzed the three core research methodologies: Qualitative, Quantitative, and Mixed Methods. Given that an exoskeleton sits squarely at the intersection of hard physics and human-computer interaction, a purely data-driven approach wasn't enough. 
+              </p>
+              <p>
+                A motor outputting 10 Nm of torque might be an empirical success quantitatively, but if it causes severe discomfort to the user, it is a qualitative failure. Therefore, I formally selected a <strong>Mixed Methods Methodology</strong> for this project.
+              </p>
             </div>
           </motion.div>
 
-          {/* RESEARCH GAPS & QUESTIONS */}
+          {/* METHODOLOGY TABLE */}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp} className="mb-16">
+             <h3 className="text-sm font-black text-gray-400 uppercase tracking-[0.2em] mb-6 px-4">Methodology Comparison</h3>
+             <MethodologyTable />
+          </motion.div>
+
+          {/* NARRATIVE LITERATURE REVIEW */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp} className="prose prose-lg text-gray-600 font-light mb-16 px-4">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 uppercase tracking-tighter">The "Accessibility Gap"</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 mt-8 uppercase tracking-tighter">The Narrative Literature Review</h2>
             <p>
-              From the literature, a massive gap emerged: **Cost vs. Utility**. Most assisted-living exoskeletons are industrial prototypes costing upwards of $30,000. There is very little research on <em>Frugal Innovation</em>—using low-cost DC motors and 3D-printed PETG structures to provide medical-grade support. Mynee aims to address this by answering:
+              Drafting Chapter 2 required a deep dive into existing biometric and engineering literature. I sourced over a dozen peer-reviewed articles, eventually narrowing them down to a core group of 6 highly relevant papers. I categorized my research into three specific domains:
             </p>
-            <ul className="list-disc pl-6 space-y-4 font-medium text-gray-700 italic">
-              <li>How effectively can a low-cost electromechanical system replicate the variable impedance of biological knee muscles during Osteoarthritic flares?</li>
-              <li>Can local edge-processing on a Linux-based node achieve the deterministic timing required for safe joint assistance?</li>
+            <ul className="list-disc pl-6 space-y-2 font-medium text-gray-700 mb-8">
+              <li><strong>Actuation Hardware:</strong> The physics of moving the joint (Pneumatics vs. Geared Motors).</li>
+              <li><strong>Sensor Fusion:</strong> The intelligence required to understand the joint (IMUs, EMG, and FSRs).</li>
+              <li><strong>Control Logic:</strong> The algorithms driving the assistance (PID and state-machines).</li>
             </ul>
           </motion.div>
 
-          {/* REFLECTION */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp} className="prose prose-lg text-gray-600 font-light mb-16 px-4">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 mt-8 uppercase tracking-tighter">Reflection</h2>
-            <p>
-              This week transformed my perspective. I realized that building Mynee isn't just about making a leg move; it’s about **Cognitive-Kinetic Harmony**. The literature reinforced that the device must be "Assist-As-Needed" (AAN). If the motor helps too much, the user's muscles will atrophy. If it helps too little, the user remains immobile.
-            </p>
-            <p>
-              The research has given me a new-found confidence in my PG36 motor selection. The path is clear: next week, the coding of the PID control logic begins.
-            </p>
+          {/* LITERATURE TABLE */}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp} className="mb-16">
+             <h3 className="text-sm font-black text-gray-400 uppercase tracking-[0.2em] mb-6 px-4">Literature Synthesis & Gap Identification</h3>
+             <LiteratureTable />
           </motion.div>
 
-          {/* REFERENCES SECTION */}
-          <section className="bg-gray-100/50 p-8 rounded-3xl mb-16">
-            <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">References Sourced This Week</h4>
-            <ul className="text-[10px] text-gray-500 space-y-2 list-none pl-0 font-mono">
-              <li>• Dollar, A. M., & Herr, H. (2008). 'Lower extremity exoskeletons and active orthoses: Challenges and state-of-the-art', IEEE Transactions on Robotics.</li>
-              <li>• Hussain, S. et al. (2013). 'Control of a robotic orthosis for gait rehabilitation', Robotics and Autonomous Systems.</li>
-              <li>• Young, A. J., & Ferris, D. P. (2017). 'State of the art and future directions for lower limb robotic exoskeletons', IEEE Transactions on Neural Systems.</li>
-              <li>• Huo, W. et al. (2016). 'Lower limb assistance and rehabilitation: Exoskeletons and their control', Control Engineering Practice.</li>
-            </ul>
-          </section>
+          {/* IDENTIFYING THE GAP (Interactive Box) */}
+          <motion.div 
+            initial="initial" whileInView="visible" whileHover="hover" variants={holoHover} viewport={{ once: true, amount: 0.2 }}
+            onHoverStart={() => setIsGapHoloActive(true)} onHoverEnd={() => setIsGapHoloActive(false)}
+            className="relative prose prose-lg text-gray-600 font-light mb-16 bg-gray-900 p-10 md:p-12 rounded-[40px] border border-gray-800 shadow-xl cursor-default"
+            style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
+          >
+            <h2 className="text-2xl font-bold text-white mb-6 mt-0 relative z-10" style={{ transform: "translateZ(20px)" }}>Summary & The Engineering Gap</h2>
+            <div className="relative z-10 space-y-4" style={{ transform: "translateZ(10px)" }}>
+              <p className="text-gray-300">
+                Synthesizing this literature allowed me to perfectly frame the end of Chapter 2. The research clearly shows a polarized industry. 
+              </p>
+              <p className="text-gray-300">
+                On one end, we have incredibly sophisticated, clinically viable powered exoskeletons. However, their reliance on custom pneumatics and tethered power supplies makes them economically impossible for consumer use. On the other end, we have affordable passive braces that offer zero intelligent kinetic assistance.
+              </p>
+              <p className="text-yellow-500 font-medium">
+                <strong>The Identified Gap:</strong> There is a critical lack of frugal, edge-processed, electromechanical active-assist devices designed for daily wear. Mynee aims directly at this gap by utilizing accessible planetary gear motors and local Raspberry Pi processing to deliver intelligent, affordable assistance.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* DELIVERABLES UPLOAD BLOCK */}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp} className="mb-16">
+            <h3 className="text-sm font-black text-gray-400 uppercase tracking-[0.2em] mb-6 px-4">Submitted Deliverables</h3>
+            <DocAttachment title="Research Methodology Comparison" type="DOCX" fileSize="1.1 MB" />
+            <DocAttachment title="Literature Review Summary Tables" type="PDF" fileSize="850 KB" />
+            <DocAttachment title="Chapter 2: Formative Literature Review" type="DOCX" fileSize="3.2 MB" />
+          </motion.div>
 
           {/* FOOTER NAV */}
           <div className="border-t border-gray-200 pt-12 mt-16 flex justify-between items-center relative z-20">
             <Link href="/devlog/week-2">
               <button className="group flex items-center gap-4 px-8 py-3 bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 rounded-full font-bold transition-all active:scale-95">
-                <span className="group-hover:-translate-x-1 transition-transform">←</span> Week 2
+                <span className="group-hover:-translate-x-1 transition-transform">←</span>
+                Week 2
               </button>
             </Link>
+            
             <Link href="/devlog/week-4">
               <button className="group flex items-center gap-4 px-10 py-4 bg-gray-900 hover:bg-yellow-500 text-white rounded-full font-bold transition-all shadow-xl hover:shadow-yellow-500/40 active:scale-95">
-                Read Week 4 <span className="group-hover:translate-x-1 transition-transform">→</span>
+                Read Week 4 
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
               </button>
             </Link>
           </div>
@@ -182,9 +258,48 @@ export default function Week3Log() {
         </article>
       </div>
 
-      <footer className="w-full py-16 bg-white border-t border-gray-100 text-center relative z-10">
-        <div className="text-xl font-black text-yellow-600 mb-4 tracking-tighter">MYNEE</div>
-        <p className="text-gray-400 text-[10px] uppercase tracking-widest">© 2026 Syed Arzanish.</p>
+      {/* --- MEGA FOOTER --- */}
+      <footer className="relative z-10 w-full bg-gray-950 border-t border-white/10 pt-20 pb-10 overflow-hidden">
+        <FooterDust />
+        <div className="relative z-10 max-w-6xl mx-auto px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+            
+            <div className="lg:col-span-2">
+              <div className="text-2xl font-black text-yellow-500 mb-6 tracking-tighter">MYNEE</div>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">A smart knee exoskeleton bridging the gap between frugal innovation and medical-grade biomechanical assistance through edge-AI and sensor fusion.</p>
+            </div>
+
+            <div>
+              <h4 className="text-white font-bold mb-6">Navigation</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><Link href="/" className="hover:text-yellow-500 transition-colors">Home</Link></li>
+                <li><Link href="/sessions" className="hover:text-yellow-500 transition-colors">Sessions</Link></li>
+                <li><Link href="/devlog" className="hover:text-yellow-500 transition-colors">Dev Log</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-white font-bold mb-6">Topics</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><span className="hover:text-yellow-500 transition-colors cursor-default">Biomechanics</span></li>
+                <li><span className="hover:text-yellow-500 transition-colors cursor-default">Literature Review</span></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-white font-bold mb-6">Resources</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-yellow-500 transition-colors flex items-center gap-1">GitHub ↗</a></li>
+                <li><a href="#" className="hover:text-yellow-500 transition-colors flex items-center gap-1">University ↗</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="pt-8 border-t border-white/10 flex justify-between items-center text-xs text-gray-500">
+            <p>© 2026 MYNEE | Syed Arzanish</p>
+            <p>Built with <span className="text-gray-300 font-medium">Next.js</span></p>
+          </div>
+        </div>
       </footer>
     </main>
   );

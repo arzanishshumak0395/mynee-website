@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const config = {
+  darkMode: 'class', // <--- THE MAGIC KEY IS NOW IN THE CORRECT OBJECT!
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -18,4 +19,5 @@ const config = {
   },
   plugins: [],
 };
+
 export default config;

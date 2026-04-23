@@ -207,33 +207,39 @@ export default function Home() {
       </motion.div>
 
       {/* --- VISION & PROTOTYPE SECTION --- */}
-      <motion.div id="vision" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="z-10 w-full max-w-6xl py-32 px-12 border-t border-gray-100">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-          <div className="space-y-8">
-            <motion.h3 variants={fadeUpVariant} className="text-5xl font-black text-gray-800 tracking-tight leading-none">Engineering for the <span className="text-yellow-500">Human Form.</span></motion.h3>
+      <motion.div id="vision" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="z-10 w-full max-w-7xl py-32 px-8 md:px-12 border-t border-gray-100">
+        
+        {/* Changed grid layout from 50/50 to 40/60 to make the image much larger */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          
+          {/* Text Column - Takes up 5 out of 12 columns */}
+          <div className="space-y-8 lg:col-span-5">
+            <motion.h3 variants={fadeUpVariant} className="text-5xl md:text-6xl font-black text-gray-800 tracking-tight leading-none">Engineering for the <span className="text-yellow-500">Human Form.</span></motion.h3>
             <motion.p variants={fadeUpVariant} className="text-gray-500 text-lg leading-relaxed font-light">
-              Combining 3D-printed lightweight structures with flexible sensor arrays. Our prototype focuses on the pivot point of the knee, ensuring zero restriction in natural gait.
+              Integrating high-torque actuators within a rigid structural chassis. The electromechanical framework is precisely aligned with the knee's axis of rotation, delivering deterministic power without compromising kinematic freedom.
             </motion.p>
             <motion.div variants={fadeUpVariant} className="grid grid-cols-1 gap-4">
-               {['Ergonomic 3D Mesh Housing', 'Breathable Bio-compatible Material', 'Low-Latency Bluetooth 5.0'].map((item) => (
+               {['High-Torque Planetary Gear Motors', 'Multi-Modal Sensor Fusion (IMU + FSR)', 'Deterministic Local Edge Processing'].map((item) => (
                  <div key={item} className="flex items-center gap-4 text-gray-700 font-medium">
-                   <div className="w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center text-white text-xs">✓</div>
+                   <div className="w-6 h-6 shrink-0 rounded-full bg-yellow-500 flex items-center justify-center text-white text-xs shadow-sm">✓</div>
                    {item}
                  </div>
                ))}
             </motion.div>
           </div>
-          <motion.div variants={fadeUpVariant} className="aspect-video bg-white rounded-[40px] shadow-2xl border border-gray-100 p-2 overflow-hidden relative group transition-transform duration-500 hover:scale-[1.02]">
-             {/* Dynamic color overlay on hover */}
-             <div className="absolute inset-0 bg-yellow-500/5 group-hover:bg-transparent transition-all z-20 rounded-[38px]"></div>
+          
+          {/* Image Column - Takes up 7 out of 12 columns */}
+          <motion.div variants={fadeUpVariant} className="lg:col-span-7 aspect-video w-full bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden relative group transition-transform duration-700 hover:scale-[1.02]">
+             {/* Subtle glow overlay on hover */}
+             <div className="absolute inset-0 bg-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 rounded-[40px] pointer-events-none"></div>
              
-             {/* Standard HTML Img Tag for flawless rendering */}
              <img 
                 src="/prototype.jpg" 
                 alt="Mynee Smart Knee Brace Prototype"
-                className="w-full h-full object-cover rounded-[38px] relative z-10" 
+                className="w-full h-full object-cover relative z-10" 
              />
           </motion.div>
+          
         </div>
       </motion.div>
 
@@ -343,7 +349,7 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* --- MEGA FOOTER WITH DUST --- */}
+      {/* --- ENHANCED MEGA FOOTER WITH DUST --- */}
       <footer className="relative z-10 w-full bg-gray-950 border-t border-white/10 pt-20 pb-10 overflow-hidden">
         
         {/* The Animated Dust Layer */}
