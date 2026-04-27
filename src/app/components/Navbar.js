@@ -1,33 +1,16 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "next-themes"; // <-- Switched to the official package!
-
-const SunIcon = () => (
-  <svg className="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-);
-const MoonIcon = () => (
-  <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-);
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  
-  // next-themes provides resolvedTheme to know exactly what mode we are in
-  const { resolvedTheme, setTheme } = useTheme(); 
 
   useEffect(() => {
-    setMounted(true);
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
-  };
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "top-6 px-4 md:px-8" : "top-0 px-0"}`}>
@@ -76,34 +59,18 @@ export default function Navbar() {
           <Link href="/" className="hover:text-yellow-500 transition-colors">Home</Link>
           <Link href="/sessions" className="hover:text-yellow-500 transition-colors">Sessions</Link>
           <Link href="/devlog" className="hover:text-yellow-500 transition-colors">Dev Log</Link>
+          
+          {/* FIX: Removed 'text-white' from this link so it inherits the correct color! */}
+          <Link href="/documents" className="hover:text-yellow-500 transition-colors">Documents</Link>
+          
           <Link href="/about" className="hover:text-yellow-500 transition-colors">The Architect</Link>
           
-          <div className="flex items-center gap-4 pl-4 border-l border-white/10">
+          <div className="flex items-center pl-4 border-l border-white/10">
             <Link href="/contact">
               <button className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(234,179,8,0.2)] hover:shadow-[0_0_25px_rgba(234,179,8,0.4)]">
                 Contact
               </button>
             </Link>
-
-            <button 
-              onClick={toggleTheme}
-              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
-            >
-              {/* Only render icon after mount to avoid hydration errors */}
-              {mounted && (
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={resolvedTheme}
-                    initial={{ y: -20, opacity: 0, rotate: -90 }}
-                    animate={{ y: 0, opacity: 1, rotate: 0 }}
-                    exit={{ y: 20, opacity: 0, rotate: 90 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
-                  </motion.div>
-                </AnimatePresence>
-              )}
-            </button>
           </div>
         </div>
       </div>
