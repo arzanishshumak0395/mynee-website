@@ -226,21 +226,26 @@ export default function Home() {
                ))}
             </motion.div>
 
-            {/* --- DEVELOPER'S DISCLAIMER BOX RESTORED HERE --- */}
-            <motion.div variants={fadeUpVariant} className="mt-8 p-5 bg-yellow-50 border border-yellow-200 rounded-2xl flex items-start gap-4 shadow-sm">
-              <div className="text-yellow-600 mt-0.5 shrink-0">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            {/* --- RESTORED & RE-STYLED DEVELOPER'S NOTE --- */}
+            <motion.div variants={fadeUpVariant} className="mt-8 p-6 bg-[#FFFDF5] border border-yellow-200/60 rounded-3xl flex items-start gap-4 shadow-sm">
+              <div className="text-yellow-500 mt-0.5 shrink-0">
+                {/* Info Icon */}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
               </div>
-              <p className="text-xs text-gray-600 leading-relaxed font-light">
-                <strong className="text-yellow-700 font-bold uppercase tracking-wider text-[10px] block mb-1">Developer's Note</strong>
-                Visual assets and 3D renderings displayed on this platform represent the envisioned commercial-grade architecture. The physical proof-of-concept developed for this project prioritizes functional engineering, core mechanics, and sensor telemetry over final aesthetic finishing.
-              </p>
+              <div>
+                <strong className="text-yellow-600 font-black uppercase tracking-widest text-[10px] block mb-2">Developer's Note</strong>
+                <p className="text-xs text-gray-500 leading-relaxed font-light">
+                  Visual assets and 3D renderings displayed on this platform represent the envisioned commercial-grade architecture. The physical proof-of-concept developed for this project prioritizes functional engineering, core mechanics, and sensor telemetry over final aesthetic finishing.
+                </p>
+              </div>
             </motion.div>
 
           </div>
           
-          {/* Image Column */}
-          <motion.div variants={fadeUpVariant} className="lg:col-span-7 aspect-[4/3] w-full bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden relative group transition-transform duration-700 hover:scale-[1.02]">
+          {/* Image Column - RESTORED TO ASPECT-VIDEO */}
+          <motion.div variants={fadeUpVariant} className="lg:col-span-7 aspect-video w-full bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden relative group transition-transform duration-700 hover:scale-[1.02]">
              {/* Subtle glow overlay on hover */}
              <div className="absolute inset-0 bg-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 rounded-[40px] pointer-events-none"></div>
              
