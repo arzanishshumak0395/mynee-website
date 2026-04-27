@@ -209,10 +209,9 @@ export default function Home() {
       {/* --- VISION & PROTOTYPE SECTION --- */}
       <motion.div id="vision" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="z-10 w-full max-w-7xl py-32 px-8 md:px-12 border-t border-gray-100">
         
-        {/* Changed grid layout from 50/50 to 40/60 to make the image much larger */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
-          {/* Text Column - Takes up 5 out of 12 columns */}
+          {/* Text Column */}
           <div className="space-y-8 lg:col-span-5">
             <motion.h3 variants={fadeUpVariant} className="text-5xl md:text-6xl font-black text-gray-800 tracking-tight leading-none">Engineering for the <span className="text-yellow-500">Human Form.</span></motion.h3>
             <motion.p variants={fadeUpVariant} className="text-gray-500 text-lg leading-relaxed font-light">
@@ -226,10 +225,22 @@ export default function Home() {
                  </div>
                ))}
             </motion.div>
+
+            {/* --- DEVELOPER'S DISCLAIMER BOX RESTORED HERE --- */}
+            <motion.div variants={fadeUpVariant} className="mt-8 p-5 bg-yellow-50 border border-yellow-200 rounded-2xl flex items-start gap-4 shadow-sm">
+              <div className="text-yellow-600 mt-0.5 shrink-0">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              </div>
+              <p className="text-xs text-gray-600 leading-relaxed font-light">
+                <strong className="text-yellow-700 font-bold uppercase tracking-wider text-[10px] block mb-1">Developer's Note</strong>
+                Visual assets and 3D renderings displayed on this platform represent the envisioned commercial-grade architecture. The physical proof-of-concept developed for this project prioritizes functional engineering, core mechanics, and sensor telemetry over final aesthetic finishing.
+              </p>
+            </motion.div>
+
           </div>
           
-          {/* Image Column - Takes up 7 out of 12 columns */}
-          <motion.div variants={fadeUpVariant} className="lg:col-span-7 aspect-video w-full bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden relative group transition-transform duration-700 hover:scale-[1.02]">
+          {/* Image Column */}
+          <motion.div variants={fadeUpVariant} className="lg:col-span-7 aspect-[4/3] w-full bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden relative group transition-transform duration-700 hover:scale-[1.02]">
              {/* Subtle glow overlay on hover */}
              <div className="absolute inset-0 bg-yellow-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 rounded-[40px] pointer-events-none"></div>
              
