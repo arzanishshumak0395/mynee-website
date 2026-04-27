@@ -15,10 +15,6 @@ export default function Navbar() {
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "top-6 px-4 md:px-8" : "top-0 px-0"}`}>
       <style>{`
-        @keyframes driftDust {
-          from { background-position: 0px 0px; }
-          to { background-position: 100px 100px; }
-        }
         @keyframes deepBreathe {
           0%, 40%   { opacity: 0.1; transform: translate(-50%, -50%) scale(0.95); }
           60%       { opacity: 0.3; transform: translate(-50%, -50%) scale(1.1); }
@@ -37,7 +33,7 @@ export default function Navbar() {
       }`}>
 
         <div className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${scrolled ? "opacity-100" : "opacity-0"}`}>
-          <div className="nav-pulse-hue absolute top-1/2 left-1/2 w-[70%] h-[130%] bg-indigo-500/20 rounded-full blur-[40px] z-0" />
+          <div className="nav-pulse-hue absolute top-1/2 left-1/2 w-[70%] h-[130%] bg-teal-500/20 rounded-full blur-[40px] z-0" />
           
           {scrolled && [...Array(16)].map((_, i) => (
             <motion.div
@@ -51,23 +47,23 @@ export default function Navbar() {
           ))}
         </div>
 
-        <Link href="/" className="relative z-10 text-2xl font-black text-yellow-500 tracking-tighter shrink-0 hover:scale-105 transition-transform">
+        {/* UPDATED LOGO GRADIENT */}
+        <Link href="/" className="relative z-10 text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-400 to-yellow-400 tracking-tighter shrink-0 hover:scale-105 transition-transform pb-1">
           MYNEE
         </Link>
         
+        {/* UPDATED HOVER COLORS */}
         <div className={`hidden md:flex gap-8 items-center text-xs font-bold uppercase tracking-[0.2em] shrink-0 relative z-10 transition-colors duration-300 ${scrolled ? "text-gray-200" : "text-gray-500"}`}>
-          <Link href="/" className="hover:text-yellow-500 transition-colors">Home</Link>
-          <Link href="/sessions" className="hover:text-yellow-500 transition-colors">Sessions</Link>
-          <Link href="/devlog" className="hover:text-yellow-500 transition-colors">Dev Log</Link>
-          
-          {/* FIX: Removed 'text-white' from this link so it inherits the correct color! */}
-          <Link href="/documents" className="hover:text-yellow-500 transition-colors">Documents</Link>
-          
-          <Link href="/about" className="hover:text-yellow-500 transition-colors">The Architect</Link>
+          <Link href="/" className="hover:text-teal-400 transition-colors">Home</Link>
+          <Link href="/sessions" className="hover:text-teal-400 transition-colors">Sessions</Link>
+          <Link href="/devlog" className="hover:text-teal-400 transition-colors">Dev Log</Link>
+          <Link href="/documents" className="hover:text-teal-400 transition-colors">Documents</Link>
+          <Link href="/about" className="hover:text-teal-400 transition-colors">The Architect</Link>
           
           <div className="flex items-center pl-4 border-l border-white/10">
             <Link href="/contact">
-              <button className="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(234,179,8,0.2)] hover:shadow-[0_0_25px_rgba(234,179,8,0.4)]">
+              {/* UPDATED BUTTON */}
+              <button className="bg-gradient-to-r from-teal-400 to-emerald-400 text-black px-6 py-2.5 rounded-full font-bold transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(45,212,191,0.2)] hover:shadow-[0_0_25px_rgba(45,212,191,0.5)]">
                 Contact
               </button>
             </Link>

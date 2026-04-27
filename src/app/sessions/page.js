@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
-// --- ADVANCED CYBER-GRID BACKGROUND ---
 const DataGridBackground = () => {
   const [particles, setParticles] = useState([]);
   useEffect(() => {
@@ -172,11 +171,42 @@ export default function Sessions() {
         </motion.div>
       </section>
 
-      {/* FOOTER */}
+      {/* --- MEGA FOOTER RESTORED --- */}
       <footer className="relative z-10 w-full bg-[#020202] border-t border-white/5 pt-20 pb-10 mt-auto overflow-hidden">
-        <div className="relative z-10 max-w-6xl mx-auto px-8">
-          <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600 font-mono tracking-widest uppercase">
-            <p>© 2026 MYNEE | Syed Arzanish.</p><p>Dubai, UAE</p>
+        <div className="relative z-10 max-w-[90rem] mx-auto px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16 xl:px-8">
+            <div className="lg:col-span-2">
+              <div className="text-2xl font-black text-teal-400 mb-6 tracking-tighter">MYNEE</div>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
+                A smart knee exoskeleton bridging the gap between frugal innovation and medical-grade biomechanical assistance through edge-AI and sensor fusion.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-white font-bold mb-6">Navigation</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><Link href="/" className="hover:text-teal-400 transition-colors">Home</Link></li>
+                <li><button onClick={scrollToTop} className="hover:text-teal-400 transition-colors text-white font-bold text-left">Sessions</button></li>
+                <li><Link href="/documents" className="hover:text-teal-400 transition-colors">Documents</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-bold mb-6">Topics</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><span className="hover:text-teal-400 transition-colors cursor-default">Biomechanics</span></li>
+                <li><span className="hover:text-teal-400 transition-colors cursor-default">Edge Computing</span></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-bold mb-6">Resources</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><a href="#" className="hover:text-teal-400 transition-colors flex items-center gap-1">GitHub ↗</a></li>
+                <li><a href="#" className="hover:text-teal-400 transition-colors flex items-center gap-1">LinkedIn ↗</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600 font-mono tracking-widest uppercase xl:px-8">
+            <p>© 2026 MYNEE | Syed Arzanish - Capstone Project.</p>
+            <p>Dubai, UAE</p>
           </div>
         </div>
       </footer>

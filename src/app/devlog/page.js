@@ -52,6 +52,9 @@ const LockedWatermark = () => (
 );
 
 export default function DevLog() {
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  // UPDATED: Week 12 is now fully unlocked and populated
   const weeksData = Array.from({ length: 12 }, (_, i) => {
     const num = i + 1;
     if (num === 1) return { num, title: "Project Genesis & Proposal.", desc: "Defining the rationale, establishing core objectives, and submitting the First-Cut Proposal.", isDarkTheme: true };
@@ -65,6 +68,8 @@ export default function DevLog() {
     if (num === 9) return { num, title: "QA & Performance Evaluation.", desc: "Rigorous unit and integration testing of the electro-mechanical components.", isDarkTheme: true };
     if (num === 10) return { num, title: "Results & Empirical Analysis.", desc: "Analyzing telemetry data, charting performance against benchmarks.", isDarkTheme: true };
     if (num === 11) return { num, title: "Final Conclusions & Handover.", desc: "Assembling appendices, risk assessments, and preparing the final presentation slides.", isDarkTheme: true };
+    if (num === 12) return { num, title: "Final Reflections.", desc: "Looking back at the 12-week gauntlet of hardware failures, late-night coding, and the ultimate success of the live exoskeleton demonstration.", isDarkTheme: true };
+    
     return { num, title: "Project Submission", desc: "🔒 Scheduled for April 24, 2026", isDarkTheme: false };
   });
 
@@ -114,11 +119,43 @@ export default function DevLog() {
           ))}
         </motion.div>
 
-        {/* FOOTER */}
-        <footer className="relative z-10 w-full bg-[#020202] border-t border-white/5 pt-20 pb-10 overflow-hidden">
-          <div className="relative z-10 max-w-6xl mx-auto px-8">
-            <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600 font-mono tracking-widest uppercase">
-              <p>© 2026 MYNEE | Syed Arzanish.</p><p>Dubai, UAE</p>
+        {/* --- MEGA FOOTER --- */}
+        <footer className="relative z-10 w-full bg-[#020202] border-t border-white/5 pt-20 pb-10 mt-auto overflow-hidden">
+          <div className="relative z-10 max-w-[90rem] mx-auto px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16 xl:px-8">
+              <div className="lg:col-span-2">
+                <div className="text-2xl font-black text-teal-400 mb-6 tracking-tighter">MYNEE</div>
+                <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
+                  A smart knee exoskeleton bridging the gap between frugal innovation and medical-grade biomechanical assistance through edge-AI and sensor fusion.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-white font-bold mb-6">Navigation</h4>
+                <ul className="space-y-4 text-sm text-gray-400">
+                  <li><Link href="/" className="hover:text-teal-400 transition-colors">Home</Link></li>
+                  <li><Link href="/sessions" className="hover:text-teal-400 transition-colors">Sessions</Link></li>
+                  <li><button onClick={scrollToTop} className="hover:text-teal-400 transition-colors text-white font-bold text-left">Dev Log</button></li>
+                  <li><Link href="/documents" className="hover:text-teal-400 transition-colors">Documents</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-white font-bold mb-6">Topics</h4>
+                <ul className="space-y-4 text-sm text-gray-400">
+                  <li><span className="hover:text-teal-400 transition-colors cursor-default">Biomechanics</span></li>
+                  <li><span className="hover:text-teal-400 transition-colors cursor-default">Edge Computing</span></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-white font-bold mb-6">Resources</h4>
+                <ul className="space-y-4 text-sm text-gray-400">
+                  <li><a href="https://github.com/arzanishshumak0395" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-teal-400 transition-colors">GitHub ↗</a></li>
+                  <li><a href="#" className="hover:text-teal-400 transition-colors flex items-center gap-1">LinkedIn ↗</a></li>
+                </ul>
+              </div>
+            </div>
+            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600 font-mono tracking-widest uppercase xl:px-8">
+              <p>© 2026 MYNEE | Syed Arzanish - Capstone Project.</p>
+              <p>Dubai, UAE</p>
             </div>
           </div>
         </footer>
