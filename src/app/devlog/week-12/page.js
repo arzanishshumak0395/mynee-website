@@ -10,9 +10,16 @@ import { useState, useEffect } from "react";
 // ==========================================
 const DataGridBackground = () => {
   const [particles, setParticles] = useState([]);
+  
   useEffect(() => {
     setParticles([...Array(40)].map(() => ({
-      tx: `${Math.random() * 40 - 20}px`, dur: `${8 + Math.random() * 12}s`, del: `${Math.random() * 2}s`, size: `${1 + Math.random() * 2}px`, left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, color: Math.random() > 0.5 ? 'bg-teal-400' : 'bg-yellow-500'
+      tx: `${Math.random() * 40 - 20}px`, 
+      dur: `${8 + Math.random() * 12}s`, 
+      del: `${Math.random() * 2}s`, 
+      size: `${1 + Math.random() * 2}px`, 
+      left: `${Math.random() * 100}%`, 
+      top: `${Math.random() * 100}%`, 
+      color: Math.random() > 0.5 ? 'bg-teal-400' : 'bg-yellow-500'
     })));
   }, []);
 
@@ -21,30 +28,29 @@ const DataGridBackground = () => {
       <style>{`
         @keyframes scrollGrid { 0% { transform: translateY(0) rotateX(45deg); } 100% { transform: translateY(60px) rotateX(45deg); } }
         @keyframes floatData { 0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.1; } 50% { transform: translate(var(--tx), -100px) scale(1.5); opacity: 0.7; } }
-        @keyframes twinkleDark { 0%, 100% { opacity: 0.1; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } }
-        @keyframes twinkleStar { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
         
-        /* Card Animations */
-        @keyframes riseEmber { 0% { transform: translateY(100px) scale(0.5); opacity: 0; } 20% { opacity: 0.8; } 80% { opacity: 0.8; } 100% { transform: translateY(-100px) scale(1.2); opacity: 0; } }
-        @keyframes scannerSweep { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
+        /* Flawless Horizon Day/Night Animations */
+        @keyframes skyCycle { 
+          0%, 100% { background: #ea580c; } /* Sunrise */
+          25% { background: #0284c7; } /* Midday */
+          50% { background: #db2777; } /* Sunset */
+          65%, 85% { background: #020617; } /* Deep Night */
+        }
+        @keyframes celestialArc { 
+          0% { transform: rotate(-90deg); } /* Sun at Left Horizon */
+          100% { transform: rotate(270deg); } /* Full 360 rotation */
+        }
+        @keyframes dayElements { 0%, 50%, 100% { opacity: 0; } 10%, 40% { opacity: 1; } }
+        @keyframes nightElements { 0%, 50%, 100% { opacity: 0; } 60%, 90% { opacity: 1; } }
+        @keyframes flyRight { 0% { transform: translateX(-10vw) translateY(20px) scale(0.5); } 100% { transform: translateX(100vw) translateY(-40px) scale(1); } }
+        
+        /* Card & Particle Animations */
+        @keyframes twinkleDark { 0%, 100% { opacity: 0.1; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes twinkleStar { 0%, 100% { opacity: 0.1; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes riseEmber { 0% { transform: translateY(100px) scale(0.5); opacity: 0; } 20% { opacity: 0.8; } 80% { opacity: 0.8; } 100% { transform: translateY(-150px) scale(1.2); opacity: 0; } }
         @keyframes petalFall { 0% { transform: translateY(-50px) rotate3d(1, 1, 1, 0deg); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(350px) rotate3d(1, 1, 1, 360deg); opacity: 0; } }
         @keyframes petalSway { 0%, 100% { transform: translateX(-15px); } 50% { transform: translateX(15px); } }
-        @keyframes circuitDraw { 0% { stroke-dashoffset: 150; opacity: 0; } 10% { opacity: 1; } 80% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-        @keyframes nodePulse { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 0.8; transform: scale(1.1); } }
-        
-        /* Day/Night Cycle Animations */
-        @keyframes skyCycle { 
-          0%, 100% { background: #020617; } /* Night */
-          20% { background: #1e1b4b; } /* Dawn */
-          30% { background: #ea580c; } /* Sunrise */
-          40%, 60% { background: #0284c7; } /* Bright Day */
-          70% { background: #db2777; } /* Sunset */
-          80% { background: #1e1b4b; } /* Dusk */
-        }
-        @keyframes celestialSpin { 0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); } 100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); } }
-        @keyframes flyRight { 0% { transform: translateX(-10vw) translateY(20px) scale(0.5); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(100vw) translateY(-40px) scale(1); opacity: 0; } }
-        @keyframes dayFade { 0%, 25%, 75%, 100% { opacity: 0; } 40%, 60% { opacity: 1; } }
-        @keyframes nightFade { 0%, 20%, 80%, 100% { opacity: 1; } 35%, 65% { opacity: 0; } }
+        @keyframes circuitDraw { 0% { stroke-dashoffset: 400; opacity: 0; } 10% { opacity: 1; } 80% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
       `}</style>
       <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[linear-gradient(rgba(20,184,166,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.05)_1px,transparent_1px)] bg-[size:80px_80px] [transform-origin:center_top]" style={{ animation: 'scrollGrid 15s linear infinite' }} />
       <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] bg-teal-900/10 blur-[150px] rounded-full mix-blend-screen" />
@@ -57,7 +63,7 @@ const DataGridBackground = () => {
   );
 };
 
-// --- THE HARDWARE CRUCIBLE (UPDATED WITH FAMILY) ---
+// --- THE HARDWARE CRUCIBLE ---
 const HardwareCrucibleBoard = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
@@ -145,6 +151,28 @@ const FinalReadinessBoard = () => {
 
 // --- THE ULTIMATE WALL OF GRATITUDE ---
 const GratitudeBoard = () => {
+  const [allahStars, setAllahStars] = useState([]);
+  const [dadEmbers, setDadEmbers] = useState([]);
+  const [momFireflies, setMomFireflies] = useState([]);
+  const [annaPetals, setAnnaPetals] = useState([]);
+
+  useEffect(() => {
+    setAllahStars([...Array(30)].map(() => ({
+      width: `${Math.random() * 4 + 2}px`, height: `${Math.random() * 4 + 2}px`, 
+      top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`,
+      dur: `${2 + Math.random() * 3}s`, del: `${Math.random() * 2}s`
+    })));
+    setDadEmbers([...Array(15)].map(() => ({
+      left: `${Math.random() * 100}%`, dur: `${4 + Math.random() * 4}s`, del: `${Math.random() * 4}s`
+    })));
+    setMomFireflies([...Array(20)].map(() => ({
+      left: `${Math.random() * 100}%`, dur: `${3 + Math.random() * 4}s`, del: `${Math.random() * 5}s`
+    })));
+    setAnnaPetals([...Array(12)].map(() => ({
+      left: `${Math.random() * 100}%`, dur: `${6 + Math.random() * 4}s`, del: `${Math.random() * 4}s`, sway: `${2 + Math.random() * 2}s`
+    })));
+  }, []);
+
   return (
     <div className="mb-16 mt-32">
       <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-[0.3em] mb-16 text-center flex items-center justify-center gap-6">
@@ -153,24 +181,13 @@ const GratitudeBoard = () => {
         <div className="w-16 h-px bg-gradient-to-l from-transparent to-white/50" />
       </h3>
       
-      {/* ROW 1: ALLAH (Pure Blinding White + Cosmic Stars) */}
+      {/* ROW 1: ALLAH */}
       <div className="w-full bg-white border border-white p-12 md:p-16 rounded-[40px] relative overflow-hidden shadow-[0_0_100px_rgba(255,255,255,0.6)] flex flex-col items-center text-center mb-10 z-20 transition-transform duration-500 hover:scale-[1.02]">
-        {/* Dark twinkling stars inside the white card */}
-        {[...Array(25)].map((_, i) => (
-          <div 
-            key={i} 
-            className="absolute bg-black rounded-full" 
-            style={{ 
-              width: Math.random() * 4 + 2 + 'px', 
-              height: Math.random() * 4 + 2 + 'px', 
-              top: Math.random() * 100 + '%', 
-              left: Math.random() * 100 + '%',
-              animation: `twinkleDark ${2 + Math.random() * 3}s infinite alternate`,
-              animationDelay: `${Math.random() * 2}s`
-            }} 
+        {allahStars.map((star, i) => (
+          <div key={i} className="absolute bg-black rounded-full" 
+            style={{ width: star.width, height: star.height, top: star.top, left: star.left, animation: `twinkleDark ${star.dur} infinite alternate`, animationDelay: star.del }} 
           />
         ))}
-        
         <h4 className="text-black text-4xl md:text-5xl font-black mb-6 tracking-[0.3em] relative z-10 drop-shadow-sm">Alhamdulillah</h4>
         <div className="w-16 h-1 bg-black mb-6 relative z-10" />
         <p className="text-gray-900 text-sm md:text-base leading-relaxed font-bold relative z-10 max-w-3xl">
@@ -180,51 +197,43 @@ const GratitudeBoard = () => {
 
       {/* ROW 2: PARENTS & DR JUDHI */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-        {/* Dad (Golden/Amber + Rising Embers) */}
-        <div className="bg-[#050505] border-t-4 border-amber-500 p-8 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(245,158,11,0.2)] relative overflow-hidden group hover:-translate-y-2 transition-all duration-500">
+        
+        {/* Dad */}
+        <div className="bg-[#050505] border-t-4 border-amber-500 p-8 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(245,158,11,0.2)] relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 to-transparent pointer-events-none" />
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {/* Animated Golden Embers */}
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="absolute w-2 h-2 rounded-full bg-amber-400 blur-[2px]"
-                style={{ left: `${Math.random() * 100}%`, animation: `riseEmber ${4 + Math.random() * 4}s ease-in infinite`, animationDelay: `${Math.random() * 4}s` }}
-              />
+            {dadEmbers.map((ember, i) => (
+              <div key={i} className="absolute w-2 h-2 rounded-full bg-amber-400 blur-[2px]" style={{ left: ember.left, animation: `riseEmber ${ember.dur} ease-in infinite`, animationDelay: ember.del }} />
             ))}
           </div>
           <h4 className="text-amber-400 text-xl font-black mb-1 relative z-10 tracking-widest uppercase drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]">My Father</h4>
           <p className="text-amber-200/60 text-[10px] font-mono uppercase tracking-[0.2em] mb-4 relative z-10 font-bold border-b border-amber-500/30 pb-2">The Mentor</p>
-          <p className="text-gray-300 text-xs leading-relaxed font-medium relative z-10">
-            You mentored me, walked the component stores of Gowalmandi with me, and stood by my side as we visited every single welder to build this machine. Thank you for your boundless support and guidance.
+          <p className="text-gray-300 text-xs leading-relaxed font-light relative z-10">
+            My Father, my guiding light. You didn't just mentor me; you walked the dusty streets of Gowalmandi by my side. You stood with me through the heat and frustration of twenty different welders, never once letting me give up when the motors fried and my spirit broke. Your silent strength carried me. This degree belongs as much to you as it does to me.
           </p>
         </div>
 
-        {/* Mom (Lime/Yellow + Rising Energy Fireflies) */}
-        <div className="bg-[#050505] border-t-4 border-lime-400 p-8 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(163,230,53,0.2)] relative overflow-hidden group hover:-translate-y-2 transition-all duration-500">
-          <div className="absolute inset-0 bg-gradient-to-b from-lime-400/10 to-transparent pointer-events-none" />
+        {/* Mom */}
+        <div className="bg-[#050505] border-t-4 border-[#bef264] p-8 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(190,242,100,0.15)] relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#bef264]/10 to-transparent pointer-events-none" />
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {/* Animated Lime Fireflies */}
-            {[...Array(15)].map((_, i) => (
-              <div key={i} className="absolute w-1.5 h-1.5 rounded-full bg-lime-300 blur-[1px] shadow-[0_0_8px_rgba(163,230,53,1)]"
-                style={{ left: `${Math.random() * 100}%`, animation: `riseEmber ${5 + Math.random() * 5}s ease-in-out infinite`, animationDelay: `${Math.random() * 5}s` }}
-              />
+            {momFireflies.map((ff, i) => (
+              <div key={i} className="absolute w-1.5 h-1.5 rounded-full bg-[#bef264] blur-[1px] shadow-[0_0_8px_rgba(190,242,100,1)]" style={{ left: ff.left, animation: `riseEmber ${ff.dur} linear infinite`, animationDelay: ff.del }} />
             ))}
           </div>
-          <h4 className="text-lime-400 text-xl font-black mb-1 relative z-10 tracking-widest uppercase drop-shadow-[0_0_10px_rgba(163,230,53,0.6)]">My Mother</h4>
-          <p className="text-lime-200/60 text-[10px] font-mono uppercase tracking-[0.2em] mb-4 relative z-10 font-bold border-b border-lime-400/30 pb-2">The Inspiration</p>
-          <p className="text-gray-300 text-xs leading-relaxed font-medium relative z-10">
-            You served as the primary inspiration and motivating force behind the conception of the Mynee smart knee orthosis. Your strength is embedded in every piece of this project. I owe you everything.
+          <h4 className="text-[#bef264] text-xl font-black mb-1 relative z-10 tracking-widest uppercase drop-shadow-[0_0_10px_rgba(190,242,100,0.6)]">My Mother</h4>
+          <p className="text-[#d9f99d]/60 text-[10px] font-mono uppercase tracking-[0.2em] mb-4 relative z-10 font-bold border-b border-[#bef264]/30 pb-2">The Inspiration</p>
+          <p className="text-gray-300 text-xs leading-relaxed font-light relative z-10">
+            My Mother, my heart and soul. The conception of the Mynee orthosis was born from my deepest wish to see you supported and strong. Every line of code I wrote, every setback I conquered, was fueled by your endless prayers. Your strength is woven into the very metal of this machine. I owe you everything.
           </p>
         </div>
 
-        {/* Dr Judhi (Teal & Cyan + Scanner Line) */}
-        <div className="bg-[#050505] border-t-4 border-cyan-400 p-8 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(6,182,212,0.2)] relative overflow-hidden group hover:-translate-y-2 transition-all duration-500">
-          <div className="absolute inset-0 bg-gradient-to-b from-cyan-400/10 to-transparent pointer-events-none" />
-          {/* Tech Scanner Line */}
-          <div className="absolute left-0 w-full h-[2px] bg-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,1)]" style={{ animation: 'scannerSweep 4s linear infinite' }} />
-          
-          <h4 className="text-cyan-400 text-xl font-black mb-1 relative z-10 tracking-widest uppercase drop-shadow-[0_0_10px_rgba(6,182,212,0.6)]">Dr. Judhi Prasetyo</h4>
-          <p className="text-cyan-200/60 text-[10px] font-mono uppercase tracking-[0.2em] mb-4 relative z-10 font-bold border-b border-cyan-400/30 pb-2">The Guide</p>
-          <p className="text-gray-300 text-xs leading-relaxed font-medium relative z-10">
+        {/* Dr Judhi */}
+        <div className="bg-[#050505] border-t-4 border-cyan-400 p-8 rounded-3xl flex flex-col items-center text-center shadow-[0_10px_30px_rgba(6,182,212,0.15)] relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.1),transparent_70%)] pointer-events-none" />
+          <h4 className="text-cyan-300 text-xl font-black mb-1 relative z-10 uppercase tracking-widest">Dr. Judhi Prasetyo</h4>
+          <p className="text-teal-100/60 text-[10px] font-mono uppercase tracking-[0.2em] mb-4 relative z-10 font-bold border-b border-cyan-400/30 pb-2">The Guide</p>
+          <p className="text-gray-400 text-xs leading-relaxed font-light relative z-10">
             My sincere gratitude for your continuous support, invaluable guidance, and technical insights throughout the development of this Major Project. Thank you to the entire faculty at Middlesex University Dubai.
           </p>
         </div>
@@ -233,15 +242,13 @@ const GratitudeBoard = () => {
       {/* ROW 3: ANNA & SAFWAN */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         
-        {/* Anna (Crimson Red + Elegant Swooping Petals) */}
-        <div className="bg-[#050505] border-t-4 border-rose-600 p-10 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(225,29,72,0.2)] relative overflow-hidden hover:-translate-y-2 transition-all duration-500">
+        {/* Anna */}
+        <div className="bg-[#050505] border-t-4 border-rose-600 p-10 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(225,29,72,0.2)] relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
           <div className="absolute inset-0 bg-gradient-to-b from-rose-600/10 to-transparent pointer-events-none" />
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {/* Custom Elegant Petal SVG Animation */}
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="absolute text-rose-500/60 drop-shadow-[0_0_8px_rgba(225,29,72,0.8)]" 
-                   style={{ left: `${Math.random() * 100}%`, animation: `petalFall ${6 + Math.random() * 4}s linear infinite`, animationDelay: `${Math.random() * 4}s` }}>
-                <div style={{ animation: `petalSway ${2 + Math.random() * 2}s ease-in-out infinite alternate` }}>
+            {annaPetals.map((petal, i) => (
+              <div key={i} className="absolute text-rose-500/60 drop-shadow-[0_0_8px_rgba(225,29,72,0.8)]" style={{ left: petal.left, animation: `petalFall ${petal.dur} linear infinite`, animationDelay: petal.del }}>
+                <div style={{ animation: `petalSway ${petal.sway} ease-in-out infinite alternate` }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12.1,2.5 C8.5,2.5 5,5 5,9.5 C5,14 12.1,21.5 12.1,21.5 C12.1,21.5 19.2,14 19.2,9.5 C19.2,5 15.7,2.5 12.1,2.5 Z" style={{ transform: 'rotate(45deg)' }} />
                   </svg>
@@ -252,62 +259,46 @@ const GratitudeBoard = () => {
           <h4 className="text-white text-4xl font-black mb-1 relative z-10 drop-shadow-[0_0_15px_rgba(225,29,72,0.8)] tracking-wide">Anna</h4>
           <p className="text-rose-400 text-[11px] font-mono uppercase tracking-[0.4em] mb-6 relative z-10 font-bold border-b border-rose-500/30 pb-2">The Love of My Life</p>
           <p className="text-gray-200 text-sm leading-relaxed font-light relative z-10 max-w-sm">
-            You have made the journey to the completion of my degree truly memorable, making these the absolute best years of my life so far. Thank you for your unwavering emotional support during the most grueling phases of this project.
+            Anna, my anchor, my sanctuary. You have been the beautiful constant through the chaos of this 11-year storm. When the grueling nights of failed prototypes broke me down, your unwavering emotional support and boundless love put me back together. You made the hardest years of my life feel like the absolute best. I could not have crossed this finish line without you.
           </p>
         </div>
 
-        {/* Safwan (Lime/Green + PCB Circuit Trace) */}
-        <div className="bg-[#050505] border-t-4 border-lime-500 p-10 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(132,204,22,0.15)] relative overflow-hidden hover:-translate-y-2 transition-all duration-500">
-          <div className="absolute inset-0 bg-gradient-to-b from-lime-500/10 to-transparent pointer-events-none" />
-          <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
-            {/* High-Tech PCB Trace Animations */}
+        {/* Safwan (Sleek Data Trace) */}
+        <div className="bg-[#050505] border-t-4 border-[#84cc16] p-10 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(132,204,22,0.15)] relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#84cc16]/5 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-              <path d="M 0 50 L 50 50 L 80 80 L 150 80" stroke="#a3e635" strokeWidth="2" fill="none" strokeDasharray="150" style={{ animation: `circuitDraw 4s linear infinite` }} />
-              <circle cx="150" cy="80" r="3" fill="#a3e635" className="animate-pulse" />
-              <path d="M 400 200 L 350 200 L 320 150 L 250 150" stroke="#a3e635" strokeWidth="2" fill="none" strokeDasharray="150" style={{ animation: `circuitDraw 5s linear infinite 1s` }} />
-              <circle cx="250" cy="150" r="3" fill="#a3e635" className="animate-pulse" />
-              <path d="M 50 250 L 100 250 L 120 220 L 200 220" stroke="#a3e635" strokeWidth="1.5" fill="none" strokeDasharray="150" style={{ animation: `circuitDraw 3.5s linear infinite 2s` }} />
-              <circle cx="200" cy="220" r="2.5" fill="#a3e635" className="animate-pulse" />
+              <path d="M -50 120 L 80 120 L 120 80 L 400 80" stroke="#a3e635" strokeWidth="1.5" fill="none" strokeDasharray="400" strokeDashoffset="400" style={{ animation: `circuitDraw 6s cubic-bezier(0.4, 0, 0.2, 1) infinite` }} />
+              <path d="M 500 180 L 350 180 L 320 210 L -50 210" stroke="#a3e635" strokeWidth="1.5" fill="none" strokeDasharray="400" strokeDashoffset="400" style={{ animation: `circuitDraw 6s cubic-bezier(0.4, 0, 0.2, 1) infinite 3s` }} />
             </svg>
           </div>
           <h4 className="text-white text-4xl font-black mb-1 relative z-10 drop-shadow-[0_0_15px_rgba(132,204,22,0.8)] tracking-wide">Safwan</h4>
-          <p className="text-lime-400 text-[11px] font-mono uppercase tracking-[0.4em] mb-6 relative z-10 font-bold border-b border-lime-500/30 pb-2">A Brother for Life</p>
+          <p className="text-[#a3e635] text-[11px] font-mono uppercase tracking-[0.4em] mb-6 relative z-10 font-bold border-b border-[#84cc16]/30 pb-2">A Brother for Life</p>
           <p className="text-gray-200 text-sm leading-relaxed font-light relative z-10 max-w-sm">
-            Your engineering capabilities fundamentally shaped my own passion. Your camaraderie helped me out tremendously; you have been a true friend, and our shared journey through the trenches of engineering has bonded us for life.
+            Safwan, my brother in arms. Your brilliance in engineering challenged me to be better, but it was your profound camaraderie that truly saved me. Through the darkest trenches of this grueling curriculum, your friendship was a beacon. We bled over circuits and code together, and in doing so, forged a brotherhood that will last a lifetime.
           </p>
         </div>
       </div>
 
-      {/* ROW 4: COMBINED BROTHERHOOD & FRIENDS */}
-      <div className="w-full bg-[#050505] border-t-4 border-fuchsia-500 p-10 md:p-12 rounded-[40px] shadow-[0_15px_40px_rgba(217,70,239,0.2)] relative overflow-hidden group hover:-translate-y-2 transition-all duration-500">
-        <div className="absolute inset-0 bg-gradient-to-b from-fuchsia-500/10 to-transparent pointer-events-none" />
-        <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-500/10 blur-[80px] pointer-events-none" />
+      {/* ROW 4: ELITE CLASSMATES SECTION */}
+      <div className="w-full bg-[#07070a] border-t-2 border-fuchsia-500/40 p-10 md:p-12 rounded-[40px] shadow-[0_15px_50px_rgba(217,70,239,0.1)] relative overflow-hidden group">
         
-        {/* Animated Network Constellation Background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
-          <svg className="w-full h-full">
-            <line x1="10%" y1="20%" x2="40%" y2="50%" stroke="#d946ef" strokeWidth="1" />
-            <line x1="40%" y1="50%" x2="80%" y2="30%" stroke="#d946ef" strokeWidth="1" />
-            <line x1="40%" y1="50%" x2="60%" y2="80%" stroke="#d946ef" strokeWidth="1" />
-            <circle cx="10%" cy="20%" r="4" fill="#d946ef" style={{ animation: 'nodePulse 3s infinite' }} />
-            <circle cx="40%" cy="50%" r="6" fill="#d946ef" style={{ animation: 'nodePulse 3s infinite 1s' }} />
-            <circle cx="80%" cy="30%" r="4" fill="#d946ef" style={{ animation: 'nodePulse 3s infinite 2s' }} />
-            <circle cx="60%" cy="80%" r="5" fill="#d946ef" style={{ animation: 'nodePulse 3s infinite 0.5s' }} />
-          </svg>
-        </div>
-
-        <h4 className="text-fuchsia-400 font-black text-2xl uppercase tracking-[0.3em] mb-10 relative z-10 flex items-center justify-center gap-4 text-center drop-shadow-[0_0_10px_rgba(217,70,239,0.8)]">
-          <div className="w-3 h-3 bg-fuchsia-500 rounded-full animate-pulse shadow-[0_0_15px_#d946ef]" />
+        {/* Soft, Elite Gradient Pulses */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-fuchsia-500/10 blur-[120px] rounded-full animate-pulse pointer-events-none" style={{ animationDuration: '8s' }} />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full animate-pulse pointer-events-none" style={{ animationDuration: '10s' }} />
+        
+        <h4 className="text-fuchsia-300 font-black text-2xl uppercase tracking-[0.3em] mb-10 relative z-10 flex items-center justify-center gap-4 text-center drop-shadow-[0_0_10px_rgba(217,70,239,0.6)]">
+          <div className="w-2 h-2 bg-fuchsia-400 rounded-full shadow-[0_0_10px_#d946ef]" />
           My Amazing Classmates
-          <div className="w-3 h-3 bg-fuchsia-500 rounded-full animate-pulse shadow-[0_0_15px_#d946ef]" />
+          <div className="w-2 h-2 bg-fuchsia-400 rounded-full shadow-[0_0_10px_#d946ef]" />
         </h4>
         
-        <div className="relative z-10 max-w-4xl mx-auto text-center bg-black/60 p-8 rounded-3xl border border-white/5 shadow-inner">
+        <div className="relative z-10 max-w-4xl mx-auto text-center bg-black/40 p-8 rounded-3xl border border-white/5 shadow-inner backdrop-blur-md">
           <p className="text-gray-300 text-sm font-light leading-relaxed mb-6">
-            To <strong className="text-white font-bold">Hassan</strong>, my roommate who profoundly shaped my perspective on life. To <strong className="text-white font-bold">Omar and Umer</strong>, who I had the absolute privilege of building the trash bin-carrying robot with last semester. To <strong className="text-white font-bold">William</strong> for your invaluable partnership in the second semester.
+            To <strong className="text-white font-bold drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">Hassan</strong>, my roommate who profoundly shaped my perspective on life. To <strong className="text-white font-bold drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">Omar</strong>, who I had the absolute privilege of building the trash bin-carrying robot with last semester. You were integral to my journey.
           </p>
-          <p className="text-fuchsia-200 text-sm font-medium leading-relaxed mb-6 drop-shadow-sm">
-            And to <strong className="text-fuchsia-400 font-bold">Ayush, Stephano, Justin, Kevin, Shaffaq, Aleena, Jannah, Afeera, Khalid, Anush, Fayiz, Safi, Jad, Ketan, Dylan, Leith, Sheif, Rayaan, Ryan, Reuben, Ziad, Bagosher, Shreya, Mitali, Maleesha, Karim, and Ahmed</strong>—we survived the engineering gauntlet together. You guys were amazing!
+          <p className="text-fuchsia-100/90 text-sm font-medium leading-relaxed mb-6">
+            And to <strong className="text-fuchsia-400 font-bold drop-shadow-[0_0_5px_rgba(217,70,239,0.8)]">William, Umer, Ayush, Stephano, Justin, Kevin, Shaffaq, Aleena, Jannah, Afeera, Khalid, Anush, Fayiz, Safi, Jad, Ketan, Dylan, Leith, Sheif, Rayaan, Ryan, Reuben, Ziad, Bagosher, Shreya, Mitali, Maleesha, Karim, and Ahmed</strong>—we survived the engineering gauntlet together. You guys were amazing!
           </p>
           <div className="w-24 h-px bg-fuchsia-500/30 mx-auto mb-6" />
           <p className="text-gray-400 text-xs font-light leading-relaxed">
@@ -320,50 +311,53 @@ const GratitudeBoard = () => {
   );
 };
 
-// --- NEW BLOCK: The "Comet of Your Journey" Day/Night Flight Path ---
+// --- THE CELESTIAL FLIGHT PATH (FLAWLESS DAY/NIGHT ARC) ---
 const FlightPathTimeline = () => {
+  const [stars, setStars] = useState([]);
+  const [birds, setBirds] = useState([]);
+
+  useEffect(() => {
+    setStars([...Array(50)].map(() => ({
+      width: `${Math.random() * 3}px`, height: `${Math.random() * 3}px`, 
+      top: `${Math.random() * 60}%`, left: `${Math.random() * 100}%`,
+      dur: `${2 + Math.random() * 4}s`, del: `${Math.random() * 2}s`
+    })));
+    setBirds([
+      { top: '20%', dur: '20s', del: '0s', opacity: 0.8, size: '24' },
+      { top: '25%', dur: '25s', del: '2s', opacity: 0.6, size: '18' }
+    ]);
+  }, []);
+
   return (
-    <div className="bg-[#050505] border border-white/10 rounded-[40px] p-8 md:p-16 shadow-[0_30px_80px_rgba(0,0,0,0.8)] relative overflow-hidden mt-32 mb-16 h-[500px] flex flex-col justify-end pb-12">
+    <div className="border-t-2 border-sky-500/50 rounded-[40px] p-8 md:p-16 shadow-[0_30px_80px_rgba(14,165,233,0.15)] relative overflow-hidden mt-32 mb-16 h-[500px] flex flex-col justify-end pb-12">
       
       {/* Dynamic Day/Night Background gradient */}
-      <div className="absolute inset-0 z-0" style={{ animation: 'skyCycle 25s ease-in-out infinite' }} />
+      <div className="absolute inset-0 z-0" style={{ animation: 'skyCycle 30s ease-in-out infinite' }} />
 
-      {/* Day / Night Celestial Spin (Sun & Moon) */}
-      <div className="absolute top-[50px] left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full animate-[celestialSpin_25s_linear_infinite] z-10 pointer-events-none opacity-80">
-        {/* Sun */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-br from-yellow-100 to-orange-500 rounded-full shadow-[0_0_80px_rgba(245,158,11,1)]" />
+      {/* Rotating Celestial Dial (Sun & Moon anchored mathematically) */}
+      <div className="absolute top-[150px] left-1/2 -ml-[400px] w-[800px] h-[800px] rounded-full z-10 pointer-events-none opacity-90 origin-center" style={{ animation: 'celestialArc 30s linear infinite' }}>
+        {/* Sun (Rotates from left (-90) -> top (0) -> right (90)) */}
+        <div className="absolute top-0 left-1/2 -ml-12 -mt-12 w-24 h-24 bg-gradient-to-br from-yellow-100 to-orange-500 rounded-full shadow-[0_0_80px_rgba(245,158,11,1)]" />
         {/* Moon */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-500 rounded-full shadow-[0_0_50px_rgba(255,255,255,0.8)]" />
+        <div className="absolute bottom-0 left-1/2 -ml-10 -mb-10 w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-500 rounded-full shadow-[0_0_50px_rgba(255,255,255,0.8)]" />
       </div>
 
       {/* Starry Night Sky Layer (Fades in/out) */}
-      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden" style={{ animation: 'nightFade 25s linear infinite' }}>
-        {[...Array(50)].map((_, i) => (
-          <div 
-            key={i} 
-            className="absolute bg-white rounded-full" 
-            style={{ 
-              width: Math.random() * 3 + 'px', 
-              height: Math.random() * 3 + 'px', 
-              top: Math.random() * 60 + '%', 
-              left: Math.random() * 100 + '%',
-              animation: `twinkleStar ${2 + Math.random() * 4}s infinite alternate`,
-              animationDelay: `${Math.random() * 2}s`
-            }} 
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden" style={{ animation: 'nightElements 30s linear infinite' }}>
+        {stars.map((star, i) => (
+          <div key={i} className="absolute bg-white rounded-full" 
+            style={{ width: star.width, height: star.height, top: star.top, left: star.left, animation: `twinkleStar ${star.dur} infinite alternate`, animationDelay: star.del }} 
           />
         ))}
       </div>
 
       {/* Day Birds Layer (Fades in/out) */}
-      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden" style={{ animation: 'dayFade 25s linear infinite' }}>
-        {/* Bird 1 */}
-        <div className="absolute top-[20%] opacity-80" style={{ animation: 'flyRight 25s linear infinite' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M22 12c-2.5-1.5-6-2.5-10-2.5S4.5 10.5 2 12c2.5 1.5 6 3 10 3s7.5-1.5 10-3z"/></svg>
-        </div>
-        {/* Bird 2 */}
-        <div className="absolute top-[25%] opacity-60" style={{ animation: 'flyRight 25s linear infinite', animationDelay: '2s' }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M22 12c-2.5-1.5-6-2.5-10-2.5S4.5 10.5 2 12c2.5 1.5 6 3 10 3s7.5-1.5 10-3z"/></svg>
-        </div>
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden" style={{ animation: 'dayElements 30s linear infinite' }}>
+        {birds.map((bird, i) => (
+          <div key={i} className="absolute" style={{ top: bird.top, opacity: bird.opacity, animation: `flyRight ${bird.dur} linear infinite`, animationDelay: bird.del }}>
+            <svg width={bird.size} height={bird.size} viewBox="0 0 24 24" fill="white"><path d="M22 12c-2.5-1.5-6-2.5-10-2.5S4.5 10.5 2 12c2.5 1.5 6 3 10 3s7.5-1.5 10-3z"/></svg>
+          </div>
+        ))}
       </div>
 
       <div className="text-center mb-16 relative z-30">
@@ -386,17 +380,6 @@ const FlightPathTimeline = () => {
             vectorEffect="non-scaling-stroke"
           />
         </svg>
-
-        {/* The Glowing Comet moving perfectly along the arc */}
-        <motion.div 
-          className="absolute z-40 w-5 h-5 bg-white rounded-full shadow-[0_0_30px_10px_rgba(255,255,255,1)]"
-          animate={{ left: ["0%", "100%"], y: [0, -70, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear", y: { duration: 10, repeat: Infinity, ease: "easeInOut" } }}
-          style={{ transform: "translateY(50%)" }}
-        >
-          {/* Comet Tail */}
-          <div className="absolute top-1/2 -left-24 w-24 h-[3px] bg-gradient-to-r from-transparent via-white/50 to-white -translate-y-1/2 rounded-full" />
-        </motion.div>
 
         {/* Nodes */}
         <div className="w-full flex justify-between relative z-30 mt-[4.5rem]">
@@ -435,12 +418,12 @@ const FlightPathTimeline = () => {
 
           {/* Node 4: Dubai */}
           <div className="flex flex-col items-center relative">
-            <div className="w-8 h-8 rounded-full bg-white border-4 border-black z-10 shadow-[0_0_30px_rgba(255,255,255,1)] animate-pulse flex items-center justify-center">
-               <div className="w-3 h-3 bg-black rounded-full" />
+            <div className="w-8 h-8 rounded-full bg-emerald-500 border-4 border-black z-10 shadow-[0_0_20px_rgba(16,185,129,0.8)] animate-pulse flex items-center justify-center">
+               <div className="w-2 h-2 bg-black rounded-full" />
             </div>
             <div className="text-center absolute top-10 w-40 drop-shadow-[0_0_10px_rgba(0,0,0,1)]">
-              <h4 className="text-white font-black uppercase tracking-widest text-sm drop-shadow-[0_0_8px_rgba(255,255,255,1)]">Middlesex</h4>
-              <p className="text-black text-[10px] font-bold font-mono mt-2 bg-white px-3 py-1 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]">Dubai, UAE (Graduation)</p>
+              <h4 className="text-emerald-400 font-black uppercase tracking-widest text-[10px] md:text-xs drop-shadow-[0_0_8px_rgba(16,185,129,1)]">Middlesex</h4>
+              <p className="text-emerald-300/90 text-[9px] font-mono mt-1 font-bold">Dubai, UAE<br/>(Graduation)</p>
             </div>
           </div>
         </div>
