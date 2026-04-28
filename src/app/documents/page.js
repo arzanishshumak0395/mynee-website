@@ -77,18 +77,18 @@ const ArchiveIcon = () => <svg className="w-6 h-6 text-emerald-500" fill="none" 
 const ChartIcon = () => <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>;
 const CodeIcon = () => <svg className="w-6 h-6 text-fuchsia-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>;
 
-// --- DOCUMENTS DATA ---
+// --- DOCUMENTS DATA (UPDATED WITH CORRECT REPLACEMENTS AND LINKS) ---
 const documents = [
-  { id: 1, title: "PDE3823 Final Report", desc: "Comprehensive documentation of the Mynee architecture, kinematic calculations, literature review, and empirical results.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "#", status: "Final Submission" },
-  { id: 2, title: "Capstone Presentation", desc: "Official slide deck utilized for the final project demonstration and industry pitch to the examination panel.", type: "Presentation", date: "April 2026", icon: <PptxIcon />, link: "#", status: "Demo Ready" },
-  { id: 3, title: "Hardware Demo Video", desc: "Live recording of the exoskeleton in operation, demonstrating PID control loops and real-time sensor response.", type: "MP4 Video", date: "April 2026", icon: <VideoIcon />, link: "#", status: "Rendered" },
-  { id: 4, title: "System Architecture Diagrams", desc: "High-resolution UML, sequence, use case, and flowchart diagrams of the edge-computing logic.", type: "ZIP Archive", date: "March 2026", icon: <ArchiveIcon />, link: "#", status: "Approved" },
-  { id: 5, title: "Project Definition Document", desc: "Initial scoping, hardware rationale, Work Breakdown Structure (WBS), and Gantt chart scheduling.", type: "PDF Document", date: "Feb 2026", icon: <PdfIcon />, link: "#", status: "Approved" },
-  { id: 6, title: "Generative AI Use Form", desc: "Official university compliance form detailing the ethical boundaries and use of AI tools during development.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "#", status: "Signed" },
-  { id: 7, title: "Supervisor Meeting Logs", desc: "Compiled logs of feedback, architectural pivots, and milestone approvals with Dr. Judhi.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "#", status: "Compiled" },
-  { id: 8, title: "Risk Assessment Matrix", desc: "Detailed evaluation of electromechanical hazards and mitigation strategies for the exoskeleton prototype.", type: "PDF Document", date: "March 2026", icon: <PdfIcon />, link: "#", status: "Approved" },
-  { id: 9, title: "Gantt Chart & Schedule", desc: "Visual timeline detailing the 12-week development cycle from ideation to final fabrication.", type: "PDF Document", date: "Feb 2026", icon: <ChartIcon />, link: "#", status: "Finalized" },
-  { id: 10, title: "FSM Source Code", desc: "The core deterministic Python script utilizing the Complementary Filter and PID logic.", type: "Python Script", date: "April 2026", icon: <CodeIcon />, link: "#", status: "Validated" }
+  { id: 1, title: "PDE3823 Final Report", desc: "Comprehensive documentation of the Mynee architecture, kinematic calculations, literature review, and empirical results.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Final Submission" },
+  { id: 2, title: "Project Proposal", desc: "Initial project formulation, defining the socioeconomic gap, engineering rationale, and primary objectives.", type: "PDF Document", date: "Feb 2026", icon: <PdfIcon />, link: "/Project Proposal.pdf", status: "Approved" },
+  { id: 3, title: "Hardware Demo Video", desc: "Live recording of the exoskeleton in operation, demonstrating PID control loops and real-time sensor response.", type: "MP4 Video", date: "April 2026", icon: <VideoIcon />, link: "#", status: "Coming Soon" },
+  { id: 4, title: "Black Box Model", desc: "High-level system abstraction mapping external power and sensor inputs to mechanical and diagnostic outputs.", type: "Visual Asset", date: "March 2026", icon: <ArchiveIcon />, link: "/Blackbox.png", status: "Approved" },
+  { id: 5, title: "Work Breakdown Structure", desc: "Hierarchical decomposition of the 12-week project lifecycle from planning to final evaluation and documentation.", type: "Visual Asset", date: "Feb 2026", icon: <ChartIcon />, link: "/WBS.png", status: "Approved" },
+  { id: 6, title: "Generative AI Use Form", desc: "Official university compliance form detailing the ethical boundaries and use of AI tools during development.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Appendix B" },
+  { id: 7, title: "UML Diagram", desc: "Software architecture mapping the deterministic Finite State Machine and sensor-to-actuation logic.", type: "Visual Asset", date: "March 2026", icon: <ArchiveIcon />, link: "/UML.png", status: "Approved" },
+  { id: 8, title: "Risk Assessment Matrix", desc: "Detailed evaluation of electromechanical hazards and mitigation strategies for the exoskeleton prototype.", type: "PDF Document", date: "March 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Appendix C" },
+  { id: 9, title: "Gantt Chart & Schedule", desc: "Visual timeline detailing the 12-week development cycle from ideation to final fabrication.", type: "Visual Asset", date: "Feb 2026", icon: <ChartIcon />, link: "/Gantt Chart.png", status: "Finalized" },
+  { id: 10, title: "FSM Source Code", desc: "The core deterministic Python script utilizing the Complementary Filter and PID logic.", type: "Python Script", date: "April 2026", icon: <CodeIcon />, link: "/devlog/week-7", status: "Validated" }
 ];
 
 export default function DocumentsPage() {
@@ -162,7 +162,7 @@ export default function DocumentsPage() {
                     <span className="text-[8px] text-gray-600 uppercase tracking-widest font-bold mb-1">{doc.type}</span>
                     <span className="text-[10px] text-gray-400">{doc.date}</span>
                   </div>
-                  <a href={doc.link} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 text-white border border-white/20 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:to-emerald-400 group-hover:text-black group-hover:border-none group-hover:shadow-[0_0_15px_rgba(45,212,191,0.6)] transition-all duration-300 active:scale-95">
+                  <a href={doc.link} target={doc.link === "#" ? "_self" : "_blank"} rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 text-white border border-white/20 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:to-emerald-400 group-hover:text-black group-hover:border-none group-hover:shadow-[0_0_15px_rgba(45,212,191,0.6)] transition-all duration-300 active:scale-95">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                   </a>
                 </div>
@@ -507,7 +507,7 @@ export default function DocumentsPage() {
             <div>
               <h4 className="text-white font-bold mb-6">Resources</h4>
               <ul className="space-y-4 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-teal-400 transition-colors flex items-center gap-1">GitHub ↗</a></li>
+                <li><a href="https://github.com/arzanishshumak0395" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-teal-400 transition-colors">GitHub ↗</a></li>
                 <li><a href="#" className="hover:text-teal-400 transition-colors flex items-center gap-1">LinkedIn ↗</a></li>
               </ul>
             </div>
