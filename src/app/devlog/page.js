@@ -3,28 +3,72 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// --- ADVANCED CYBER-GRID BACKGROUND ---
-const DataGridBackground = () => {
-  const [particles, setParticles] = useState([]);
+// --- DYNAMIC CELESTIAL BACKGROUND ---
+const DynamicCelestialBackground = () => {
+  const [stars, setStars] = useState([]);
+  const [birds, setBirds] = useState([]);
+
   useEffect(() => {
-    setParticles([...Array(40)].map(() => ({
-      tx: `${Math.random() * 40 - 20}px`, dur: `${8 + Math.random() * 12}s`, del: `${Math.random() * 2}s`, size: `${1 + Math.random() * 2}px`, left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, color: Math.random() > 0.5 ? 'bg-teal-400' : 'bg-yellow-500'
+    setStars([...Array(60)].map(() => ({
+      width: `${Math.random() * 3}px`, height: `${Math.random() * 3}px`, 
+      top: `${Math.random() * 80}%`, left: `${Math.random() * 100}%`,
+      dur: `${2 + Math.random() * 4}s`, del: `${Math.random() * 2}s`
     })));
+    setBirds([
+      { top: '15%', dur: '20s', del: '0s', opacity: 0.8, size: '24' },
+      { top: '25%', dur: '25s', del: '4s', opacity: 0.6, size: '18' },
+      { top: '10%', dur: '22s', del: '8s', opacity: 0.7, size: '20' }
+    ]);
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#030305]">
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" style={{ animation: 'skyCycle 30s ease-in-out infinite' }}>
       <style>{`
+        @keyframes skyCycle { 
+          0%, 100% { background: #4a0e1e; } /* Dull Maroon / Dawn */
+          25% { background: #0284c7; } /* Midday */
+          50% { background: #9d174d; } /* Sunset */
+          65%, 85% { background: #020617; } /* Deep Night */
+        }
+        @keyframes celestialArc { 
+          0% { transform: translateX(-50%) translateY(50%) rotate(-90deg); } 
+          100% { transform: translateX(-50%) translateY(50%) rotate(270deg); } 
+        }
+        @keyframes dayElements { 0%, 50%, 100% { opacity: 0; } 10%, 40% { opacity: 1; } }
+        @keyframes nightElements { 0%, 50%, 100% { opacity: 0; } 60%, 90% { opacity: 1; } }
+        @keyframes flyRight { 0% { transform: translateX(-10vw) translateY(20px) scale(0.5); } 100% { transform: translateX(100vw) translateY(-40px) scale(1); } }
+        @keyframes twinkleStar { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
         @keyframes scrollGrid { 0% { transform: translateY(0) rotateX(45deg); } 100% { transform: translateY(60px) rotateX(45deg); } }
-        @keyframes floatData { 0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.1; } 50% { transform: translate(var(--tx), -100px) scale(1.5); opacity: 0.7; } }
       `}</style>
-      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[linear-gradient(rgba(20,184,166,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.05)_1px,transparent_1px)] bg-[size:80px_80px] [transform-origin:center_top]" style={{ animation: 'scrollGrid 15s linear infinite' }} />
-      <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] bg-teal-900/10 blur-[150px] rounded-full mix-blend-screen" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-yellow-900/10 blur-[150px] rounded-full mix-blend-screen" />
-      {particles.map((p, i) => (
-        <div key={i} className={`absolute ${p.color} rounded-full shadow-[0_0_10px_currentColor] will-change-transform`} style={{ width: p.size, height: p.size, left: p.left, top: p.top, '--tx': p.tx, animation: `floatData ${p.dur} infinite ease-in-out ${p.del}` }} />
-      ))}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#030305_90%)]" />
+      
+      {/* Cyber Grid Overlay (Subtle) */}
+      <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:80px_80px] [transform-origin:center_top] mix-blend-overlay" style={{ animation: 'scrollGrid 15s linear infinite' }} />
+
+      {/* Rotating Celestial Dial (Sun & Moon anchored to bottom center) */}
+      <div className="absolute bottom-0 left-1/2 w-[1200px] h-[1200px] md:w-[2000px] md:h-[2000px] rounded-full z-10 pointer-events-none opacity-80 origin-center" style={{ animation: 'celestialArc 30s linear infinite' }}>
+        {/* Sun */}
+        <div className="absolute top-0 left-1/2 -ml-16 -mt-16 w-32 h-32 bg-gradient-to-br from-yellow-100 to-orange-500 rounded-full shadow-[0_0_100px_rgba(245,158,11,1)]" />
+        {/* Moon */}
+        <div className="absolute bottom-0 left-1/2 -ml-12 -mb-12 w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-500 rounded-full shadow-[0_0_60px_rgba(255,255,255,0.8)]" />
+      </div>
+
+      {/* Starry Night Sky Layer (Fades in/out) */}
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden" style={{ animation: 'nightElements 30s linear infinite' }}>
+        {stars.map((star, i) => (
+          <div key={i} className="absolute bg-white rounded-full" 
+            style={{ width: star.width, height: star.height, top: star.top, left: star.left, animation: `twinkleStar ${star.dur} infinite alternate`, animationDelay: star.del }} 
+          />
+        ))}
+      </div>
+
+      {/* Day Birds Layer (Fades in/out) */}
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden" style={{ animation: 'dayElements 30s linear infinite' }}>
+        {birds.map((bird, i) => (
+          <div key={i} className="absolute" style={{ top: bird.top, opacity: bird.opacity, animation: `flyRight ${bird.dur} linear infinite`, animationDelay: bird.del }}>
+            <svg width={bird.size} height={bird.size} viewBox="0 0 24 24" fill="white"><path d="M22 12c-2.5-1.5-6-2.5-10-2.5S4.5 10.5 2 12c2.5 1.5 6 3 10 3s7.5-1.5 10-3z"/></svg>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -45,48 +89,44 @@ const DarkCardTechDust = () => {
   );
 };
 
-const LockedWatermark = () => (
-  <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden rounded-[30px] opacity-[0.05]">
-    <svg className="w-56 h-56 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-  </div>
-);
-
 export default function DevLog() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
   
-  // UPDATED: Week 12 is now fully unlocked and populated
+  // EXACTLY MATCHED TITLES AND DESCRIPTIONS
   const weeksData = Array.from({ length: 12 }, (_, i) => {
     const num = i + 1;
-    if (num === 1) return { num, title: "Project Genesis & Proposal.", desc: "Defining the rationale, establishing core objectives, and submitting the First-Cut Proposal.", isDarkTheme: true };
+    if (num === 1) return { num, title: "The First Step.", desc: "Stepping into the final chapter of my degree, transitioning from broad concepts to zeroing in on a specific, solvable engineering problem.", isDarkTheme: true };
     if (num === 2) return { num, title: "Ethics & Architecture.", desc: "Formalizing the project plan, securing ethical clearance for biomechanical data collection.", isDarkTheme: true };
     if (num === 3) return { num, title: "Theoretical Framework.", desc: "Analyzing existing research methodologies and identifying the engineering gap.", isDarkTheme: true };
-    if (num === 4) return { num, title: "WBS & Planning.", desc: "Establishing the Work Breakdown Structure and Gantt scheduling for hardware deployment.", isDarkTheme: true };
+    if (num === 4) return { num, title: "The Architecture of Execution.", desc: "Formally defining the data flow and operational logic before touching a soldering iron.", isDarkTheme: true };
     if (num === 5) return { num, title: "MVP & Hardware Assembly.", desc: "Selecting the Agile framework, wiring the core sensors, and building the initial MVP.", isDarkTheme: true };
-    if (num === 6) return { num, title: "UML & Prototype Testing.", desc: "Stress-testing the MVP, mapping the system architecture through UML diagrams.", isDarkTheme: true };
-    if (num === 7) return { num, title: "Core Implementation.", desc: "Integrating microcontroller sensor logic, data telemetry, and the hardware-software loop.", isDarkTheme: true };
-    if (num === 8) return { num, title: "System Architecture & Debugging.", desc: "Overcoming hardware bottlenecks, documenting API integrations, and drafting Chapter Three.", isDarkTheme: true };
-    if (num === 9) return { num, title: "QA & Performance Evaluation.", desc: "Rigorous unit and integration testing of the electro-mechanical components.", isDarkTheme: true };
-    if (num === 10) return { num, title: "Results & Empirical Analysis.", desc: "Analyzing telemetry data, charting performance against benchmarks.", isDarkTheme: true };
-    if (num === 11) return { num, title: "Final Conclusions & Handover.", desc: "Assembling appendices, risk assessments, and preparing the final presentation slides.", isDarkTheme: true };
-    if (num === 12) return { num, title: "Final Reflections.", desc: "Looking back at the 12-week gauntlet of hardware failures, late-night coding, and the ultimate success of the live exoskeleton demonstration.", isDarkTheme: true };
+    if (num === 6) return { num, title: "Prototype Evaluation.", desc: "Stress-testing the logic, identifying critical failures, and fixing them based on established technical benchmarks.", isDarkTheme: true };
+    if (num === 7) return { num, title: "Software Integration.", desc: "Interfacing sensors with the Raspberry Pi Zero, writing the Python FSM, and establishing a local telemetry stream.", isDarkTheme: true };
+    if (num === 8) return { num, title: "System Integration & Debugging.", desc: "Merging individual code modules onto the physical chassis and overcoming severe electromechanical complexities.", isDarkTheme: true };
+    if (num === 9) return { num, title: "QA & Performance Evaluation.", desc: "Formalizing testing protocols, establishing the frugal benchtop rig, and executing automated unit testing.", isDarkTheme: true };
+    if (num === 10) return { num, title: "Results & Empirical Analysis.", desc: "Executing rigorous bench-test scenarios to generate empirical data on system effectiveness and hardware limitations.", isDarkTheme: true };
+    if (num === 11) return { num, title: "Reflections & Readiness.", desc: "Packaging final deliverables, compiling appendices, and detailing the theory vs. physical metal realities.", isDarkTheme: true };
+    if (num === 12) return { num, title: "From Concept to Completion.", desc: "Looking back at the 12-week gauntlet of hardware failures, late-night coding, and the ultimate success of the exoskeleton.", isDarkTheme: true };
     
     return { num, title: "Project Submission", desc: "🔒 Scheduled for April 24, 2026", isDarkTheme: false };
   });
 
   return (
     <main className="relative flex min-h-screen flex-col items-center bg-[#030305] text-gray-100 font-sans overflow-x-hidden selection:bg-teal-500/30">
-      <DataGridBackground />
+      
+      {/* THE DYNAMIC SKY COMPONENT */}
+      <DynamicCelestialBackground />
 
       <div className="relative z-10 w-full flex flex-col items-center">
         <div className="w-full max-w-5xl px-8 pt-52 pb-16 text-center">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col items-center">
-            <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-[10px] font-black tracking-[0.3em] uppercase shadow-[0_0_15px_rgba(20,184,166,0.2)]">
+            <motion.div variants={fadeUpVariant} className="inline-block mb-6 px-5 py-2 rounded-full bg-black/50 backdrop-blur-md border border-teal-500/30 text-teal-400 text-[10px] font-black tracking-[0.3em] uppercase shadow-[0_0_15px_rgba(20,184,166,0.5)]">
               Development Journal
             </motion.div>
-            <motion.h1 variants={fadeUpVariant} className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white">
+            <motion.h1 variants={fadeUpVariant} className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-white drop-shadow-[0_0_20px_rgba(0,0,0,0.8)]">
               Engineering <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-400 to-yellow-400 drop-shadow-md">Logs.</span>
             </motion.h1>
-            <motion.p variants={fadeUpVariant} className="text-lg text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+            <motion.p variants={fadeUpVariant} className="text-lg text-gray-200 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] bg-black/20 p-4 rounded-2xl backdrop-blur-sm border border-white/5">
               Documenting the 12-week journey of building the Mynee smart knee exoskeleton. From initial literature reviews and ethical clearance to physical prototyping.
             </motion.p>
           </motion.div>
@@ -97,20 +137,20 @@ export default function DevLog() {
             <Link key={week.num} href={week.isDarkTheme ? `/devlog/week-${week.num}` : "#"}>
               <motion.div variants={fadeUpVariant} whileHover={week.isDarkTheme ? { y: -8, transition: { type: "spring", stiffness: 300 } } : {}}
                 className={`relative overflow-hidden p-8 backdrop-blur-xl rounded-[30px] transition-all duration-300 group h-full flex flex-col justify-between will-change-transform
-                  ${week.isDarkTheme ? "bg-[#0a0a0a]/90 border border-white/10 hover:border-teal-500/50 shadow-2xl hover:shadow-[0_20px_40px_rgba(20,184,166,0.2)] cursor-pointer" : "bg-[#0a0a0a]/40 border border-white/5 cursor-default"}
+                  ${week.isDarkTheme ? "bg-[#0a0a0a]/70 border border-white/10 hover:border-teal-500/50 shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_40px_rgba(20,184,166,0.3)] cursor-pointer" : "bg-[#0a0a0a]/40 border border-white/5 cursor-default"}
                 `}
               >
-                {week.isDarkTheme ? <DarkCardTechDust /> : <LockedWatermark />}
+                {week.isDarkTheme && <DarkCardTechDust />}
                 <div className="relative z-10">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black mb-6 transition-colors ${week.isDarkTheme ? "bg-white/5 border border-white/10 text-teal-400 group-hover:bg-teal-500/20" : "bg-white/5 text-gray-600"}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black mb-6 transition-colors ${week.isDarkTheme ? "bg-black/50 border border-white/10 text-teal-400 group-hover:bg-teal-500/20 shadow-inner" : "bg-white/5 text-gray-600"}`}>
                     {week.num}
                   </div>
-                  <h4 className={`text-xl font-bold mb-1 ${week.isDarkTheme ? "text-white group-hover:text-teal-400 transition-colors" : "text-gray-600"}`}>Week {week.num}</h4>
-                  <h5 className={`text-sm font-bold mb-3 ${week.isDarkTheme ? "text-teal-500" : "text-gray-700"}`}>{week.title}</h5>
-                  <p className={`text-xs leading-relaxed mb-6 ${week.isDarkTheme ? "text-gray-400" : "text-gray-700"}`}>{week.desc}</p>
+                  <h4 className={`text-xl font-bold mb-1 ${week.isDarkTheme ? "text-white group-hover:text-teal-400 transition-colors drop-shadow-md" : "text-gray-600"}`}>Week {week.num}</h4>
+                  <h5 className={`text-sm font-bold mb-3 ${week.isDarkTheme ? "text-teal-400 drop-shadow-sm" : "text-gray-700"}`}>{week.title}</h5>
+                  <p className={`text-xs leading-relaxed mb-6 ${week.isDarkTheme ? "text-gray-300 font-light" : "text-gray-700"}`}>{week.desc}</p>
                 </div>
                 {week.isDarkTheme && (
-                  <div className="relative z-10 text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform text-teal-500 mt-auto pt-6 flex items-center gap-1">
+                  <div className="relative z-10 text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform text-teal-400 mt-auto pt-6 flex items-center gap-1 border-t border-white/5">
                     Read Log <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7"></path></svg>
                   </div>
                 )}
