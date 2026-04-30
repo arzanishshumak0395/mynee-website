@@ -52,12 +52,13 @@ export default function Navbar() {
           MYNEE
         </Link>
         
-        {/* UPDATED HOVER COLORS */}
+        {/* UPDATED HOVER COLORS & NEW CRUCIBLE LINK */}
         <div className={`hidden md:flex gap-8 items-center text-xs font-bold uppercase tracking-[0.2em] shrink-0 relative z-10 transition-colors duration-300 ${scrolled ? "text-gray-200" : "text-gray-500"}`}>
           <Link href="/" className="hover:text-teal-400 transition-colors">Home</Link>
           <Link href="/sessions" className="hover:text-teal-400 transition-colors">Sessions</Link>
           <Link href="/devlog" className="hover:text-teal-400 transition-colors">Dev Log</Link>
           <Link href="/documents" className="hover:text-teal-400 transition-colors">Documents</Link>
+          <Link href="/prototyping" className="hover:text-teal-400 transition-colors">Hardware Crucible</Link>
           <Link href="/about" className="hover:text-teal-400 transition-colors">The Architect</Link>
           
           <div className="flex items-center pl-4 border-l border-white/10">

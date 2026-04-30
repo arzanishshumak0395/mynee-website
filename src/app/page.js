@@ -53,9 +53,6 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [sensorData, setSensorData] = useState({ flexionAngle: 120, motorTorque: "0.0", actuatorLoad: 50 });
   
-  const scrollToHardware = () => document.getElementById('hardware')?.scrollIntoView({ behavior: 'smooth' });
-  
-  // FIXED: Added the missing scrollToTop function!
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const handleMouseMove = (e) => {
@@ -124,9 +121,14 @@ export default function Home() {
           A device designed to provide real-time monitoring and physical support to improve daily mobility.
         </motion.p>
         
-        <motion.button onClick={scrollToHardware} variants={fadeUpVariant} className="px-10 py-4 bg-white hover:bg-gradient-to-r hover:from-teal-400 hover:to-emerald-400 text-black rounded-full font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(45,212,191,0.6)] hover:scale-105 active:scale-95">
-          Explore Hardware
-        </motion.button>
+        {/* UPDATED BUTTON ROUTING TO HARDWARE CRUCIBLE */}
+        <motion.div variants={fadeUpVariant}>
+          <Link href="/prototyping">
+            <button className="px-10 py-4 bg-white hover:bg-gradient-to-r hover:from-teal-400 hover:to-emerald-400 text-black rounded-full font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(45,212,191,0.6)] hover:scale-105 active:scale-95">
+              The Hardware Crucible
+            </button>
+          </Link>
+        </motion.div>
       </motion.div>
 
       {/* --- VISION & PROTOTYPE SECTION --- */}
