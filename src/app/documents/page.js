@@ -76,19 +76,20 @@ const VideoIcon = () => <svg className="w-6 h-6 text-sky-500" fill="none" stroke
 const ArchiveIcon = () => <svg className="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>;
 const ChartIcon = () => <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>;
 const CodeIcon = () => <svg className="w-6 h-6 text-fuchsia-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>;
+const LockIcon = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>;
 
-// --- DOCUMENTS DATA (UPDATED WITH CORRECT REPLACEMENTS AND LINKS) ---
+// --- DOCUMENTS DATA ---
 const documents = [
-  { id: 1, title: "PDE3823 Final Report", desc: "Comprehensive documentation of the Mynee architecture, kinematic calculations, literature review, and empirical results.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Final Submission" },
-  { id: 2, title: "Project Proposal", desc: "Initial project formulation, defining the socioeconomic gap, engineering rationale, and primary objectives.", type: "PDF Document", date: "Feb 2026", icon: <PdfIcon />, link: "/Project Proposal.pdf", status: "Approved" },
-  { id: 3, title: "Hardware Demo Video", desc: "Live recording of the exoskeleton in operation, demonstrating PID control loops and real-time sensor response.", type: "MP4 Video", date: "April 2026", icon: <VideoIcon />, link: "#", status: "Coming Soon" },
-  { id: 4, title: "Black Box Model", desc: "High-level system abstraction mapping external power and sensor inputs to mechanical and diagnostic outputs.", type: "Visual Asset", date: "March 2026", icon: <ArchiveIcon />, link: "/Blackbox.png", status: "Approved" },
-  { id: 5, title: "Work Breakdown Structure", desc: "Hierarchical decomposition of the 12-week project lifecycle from planning to final evaluation and documentation.", type: "Visual Asset", date: "Feb 2026", icon: <ChartIcon />, link: "/WBS.png", status: "Approved" },
-  { id: 6, title: "Generative AI Use Form", desc: "Official university compliance form detailing the ethical boundaries and use of AI tools during development.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Appendix B" },
-  { id: 7, title: "UML Diagram", desc: "Software architecture mapping the deterministic Finite State Machine and sensor-to-actuation logic.", type: "Visual Asset", date: "March 2026", icon: <ArchiveIcon />, link: "/UML.png", status: "Approved" },
-  { id: 8, title: "Risk Assessment Matrix", desc: "Detailed evaluation of electromechanical hazards and mitigation strategies for the exoskeleton prototype.", type: "PDF Document", date: "March 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Appendix C" },
-  { id: 9, title: "Gantt Chart & Schedule", desc: "Visual timeline detailing the 12-week development cycle from ideation to final fabrication.", type: "Visual Asset", date: "Feb 2026", icon: <ChartIcon />, link: "/Gantt Chart.png", status: "Finalized" },
-  { id: 10, title: "FSM Source Code", desc: "The core deterministic Python script utilizing the Complementary Filter and PID logic.", type: "Python Script", date: "April 2026", icon: <CodeIcon />, link: "/devlog/week-7", status: "Validated" }
+  { id: 1, title: "PDE3823 Final Report", desc: "Comprehensive documentation of the Mynee architecture, kinematic calculations, literature review, and empirical results.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Final Submission", isAvailable: true },
+  { id: 2, title: "Project Proposal", desc: "Initial project formulation, defining the socioeconomic gap, engineering rationale, and primary objectives.", type: "PDF Document", date: "Feb 2026", icon: <PdfIcon />, link: "/Project Proposal.pdf", status: "Approved", isAvailable: true },
+  { id: 3, title: "Hardware Demo Video", desc: "Live recording of the exoskeleton in operation, demonstrating control loops and real-time sensor response.", type: "MP4 Video", date: "April 2026", icon: <VideoIcon />, link: "https://www.youtube.com/watch?v=5EpfVZZaEpE", status: "Published", isAvailable: true },
+  { id: 4, title: "Black Box Model", desc: "High-level system abstraction mapping external power and sensor inputs to mechanical and diagnostic outputs.", type: "Visual Asset", date: "March 2026", icon: <ArchiveIcon />, link: "/Blackbox.png", status: "Approved", isAvailable: true },
+  { id: 5, title: "Work Breakdown Structure", desc: "Hierarchical decomposition of the 12-week project lifecycle from planning to final evaluation and documentation.", type: "Visual Asset", date: "Feb 2026", icon: <ChartIcon />, link: "/WBS.png", status: "Approved", isAvailable: true },
+  { id: 6, title: "Generative AI Use Form", desc: "Official university compliance form detailing the ethical boundaries and use of AI tools during development.", type: "PDF Document", date: "April 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Appendix B", isAvailable: true },
+  { id: 7, title: "UML Diagram", desc: "Software architecture mapping the deterministic Finite State Machine and sensor-to-actuation logic.", type: "Visual Asset", date: "March 2026", icon: <ArchiveIcon />, link: "/UML.png", status: "Approved", isAvailable: true },
+  { id: 8, title: "Risk Assessment Matrix", desc: "Detailed evaluation of electromechanical hazards and mitigation strategies for the exoskeleton prototype.", type: "PDF Document", date: "March 2026", icon: <PdfIcon />, link: "/FinalReport.pdf", status: "Appendix C", isAvailable: true },
+  { id: 9, title: "Gantt Chart & Schedule", desc: "Visual timeline detailing the 12-week development cycle from ideation to final fabrication.", type: "Visual Asset", date: "Feb 2026", icon: <ChartIcon />, link: "/Gantt Chart.png", status: "Finalized", isAvailable: true },
+  { id: 10, title: "FSM Source Code", desc: "The core deterministic Python script utilizing the Complementary Filter and FSM logic.", type: "Python Script", date: "April 2026", icon: <CodeIcon />, link: "/devlog/week-7", status: "Validated", isAvailable: true }
 ];
 
 export default function DocumentsPage() {
@@ -143,28 +144,40 @@ export default function DocumentsPage() {
         <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:px-8 gap-6 mb-32">
           {documents.map((doc, idx) => (
             <motion.div key={doc.id} variants={reveal} custom={idx + 1} whileHover={{ y: -8, scale: 1.02 }} className="group relative h-full will-change-transform">
-              <div className="absolute -inset-0.5 bg-gradient-to-br from-teal-500/0 via-emerald-500/0 to-yellow-500/0 group-hover:from-teal-500/30 group-hover:via-emerald-500/10 group-hover:to-transparent rounded-[26px] blur opacity-0 group-hover:opacity-100 transition duration-700 z-0" />
-              <div className="relative h-full bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl group-hover:border-teal-500/40 transition-all duration-500 flex flex-col justify-between">
+              <div className={`absolute -inset-0.5 bg-gradient-to-br ${doc.isAvailable ? 'from-teal-500/0 via-emerald-500/0 to-yellow-500/0 group-hover:from-teal-500/30 group-hover:via-emerald-500/10 group-hover:to-transparent' : 'from-gray-500/0'} rounded-[26px] blur opacity-0 group-hover:opacity-100 transition duration-700 z-0`} />
+              <div className={`relative h-full bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl transition-all duration-500 flex flex-col justify-between ${doc.isAvailable ? 'group-hover:border-teal-500/40' : 'opacity-60'}`}>
                 <div>
                   <div className="flex justify-between items-start mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-teal-500/10 group-hover:border-teal-500/30 transition-all duration-300 shadow-inner">
+                    <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 shadow-inner ${doc.isAvailable ? 'group-hover:bg-teal-500/10 group-hover:border-teal-500/30' : 'grayscale'}`}>
                       {doc.icon}
                     </div>
-                    <span className="bg-white/5 text-gray-400 border border-white/10 group-hover:bg-teal-500/10 group-hover:text-teal-400 group-hover:border-teal-500/30 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest transition-all">
+                    <span className={`bg-white/5 border px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest transition-all ${doc.isAvailable ? 'text-gray-400 border-white/10 group-hover:bg-teal-500/10 group-hover:text-teal-400 group-hover:border-teal-500/30' : 'text-gray-600 border-white/5'}`}>
                       {doc.status}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-3 tracking-tight group-hover:text-teal-400 transition-colors leading-tight">{doc.title}</h3>
+                  <h3 className={`text-lg font-bold text-white mb-3 tracking-tight transition-colors leading-tight ${doc.isAvailable ? 'group-hover:text-teal-400' : ''}`}>{doc.title}</h3>
                   <p className="text-xs text-gray-500 font-light leading-relaxed mb-6">{doc.desc}</p>
                 </div>
-                <div className="flex items-center justify-between pt-5 border-t border-white/5 mt-auto group-hover:border-teal-500/20 transition-colors">
+                <div className={`flex items-center justify-between pt-5 border-t border-white/5 mt-auto transition-colors ${doc.isAvailable ? 'group-hover:border-teal-500/20' : ''}`}>
                   <div className="flex flex-col">
                     <span className="text-[8px] text-gray-600 uppercase tracking-widest font-bold mb-1">{doc.type}</span>
                     <span className="text-[10px] text-gray-400">{doc.date}</span>
                   </div>
-                  <a href={doc.link} target={doc.link === "#" ? "_self" : "_blank"} rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 text-white border border-white/20 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:to-emerald-400 group-hover:text-black group-hover:border-none group-hover:shadow-[0_0_15px_rgba(45,212,191,0.6)] transition-all duration-300 active:scale-95">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                  </a>
+                  
+                  {doc.isAvailable ? (
+                    <a href={doc.link} target={doc.link.startsWith('/') ? "_self" : "_blank"} rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 text-white border border-white/20 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:to-emerald-400 group-hover:text-black group-hover:border-none group-hover:shadow-[0_0_15px_rgba(45,212,191,0.6)] transition-all duration-300 active:scale-95">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    </a>
+                  ) : (
+                    <div className="group/lock relative cursor-not-allowed">
+                      <div className="w-8 h-8 rounded-full bg-red-500/10 text-red-500/50 border border-red-500/20 flex items-center justify-center transition-all duration-300 group-hover/lock:bg-red-500/20 group-hover/lock:text-red-400">
+                        <LockIcon />
+                      </div>
+                      <div className="absolute right-10 top-1/2 -translate-y-1/2 opacity-0 group-hover/lock:opacity-100 bg-red-500/20 border border-red-500/50 text-red-400 text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded whitespace-nowrap transition-all duration-300">
+                        Coming Soon
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -314,16 +327,18 @@ export default function DocumentsPage() {
                   <h3 className="text-teal-400 text-xs font-black uppercase tracking-[0.2em] mb-8">System Components List</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
-                      { title: "Raspberry Pi Zero", role: "Central Processing Unit", desc: "1GHz single-core SBC. Chosen for its ultra-compact makeup and ability to execute the FSM in Python without the latency of complex ML algorithms." },
-                      { title: "MPU6050 IMU", role: "Kinematic Sensing", desc: "6-axis accelerometer & gyroscope. Uses a Complementary Filter to track knee flexion while mitigating raw gyroscopic drift." },
-                      { title: "L298N Dual H-Bridge", role: "Motor Driver", desc: "Bridges the 5V logic and 12V power. Receives precise PWM signals from the Pi to modulate the torque of the DC motor." },
-                      { title: "PG36-555 Geared Motor", role: "Electromechanical Actuator", desc: "12V DC brushless variant (70-100 rpm). Provides the dynamic lifting torque necessary for the sit-to-stand motion." },
-                      { title: "Force-Sensitive Resistors", role: "Gait Phase Trigger", desc: "10kΩ analog sensors configured as digital threshold switches (HIGH/LOW) to detect heel-strike and toe-off instantly." },
-                      { title: "Dual Power Topology", role: "System Safety", desc: "Isolated 12V LiPo for actuation and 5V Power Bank for logic, eliminating voltage-sag brownouts." }
+                      { title: "Central Processing Unit", spec: "Raspberry Pi Zero", desc: "1GHz single-core SBC. Chosen for its ultra-compact makeup and ability to execute the FSM in Python without the latency of complex ML algorithms." },
+                      { title: "Kinematic Sensing", spec: "MPU6050 IMU", desc: "6-axis accelerometer & gyroscope. Uses a Complementary Filter to track knee flexion while mitigating raw gyroscopic drift." },
+                      { title: "Motor Driver (Final Phase)", spec: "IBT-2 (BTS7960) Driver", desc: "Industrial-grade H-bridge capable of handling up to 43A. Safely bridges the 5V logic and 12V power to modulate the massive stall current of the worm gear." },
+                      { title: "Motor Driver (Initial Phase)", spec: "L298N Dual H-Bridge", desc: "Employed during the initial breadboard proof-of-concept phase to validate FSM logic before current limits necessitated an upgrade." },
+                      { title: "Electromechanical Actuator (Final Phase)", spec: "12V DC Worm Gear Motor", desc: "High-torque, non-backdrivable actuator. Provides the immense lifting force necessary for the sit-to-stand motion without requiring active holding current." },
+                      { title: "Electromechanical Actuator (Initial Phase)", spec: "PG36-555 Geared Motor", desc: "12V DC brushless variant utilized during the initial logic validation and structural testing before thermal failure mandated a pivot." },
+                      { title: "Gait Phase Trigger", spec: "Force-Sensitive Resistors", desc: "10kΩ analog sensors configured as digital threshold switches (HIGH/LOW) to detect heel-strike and toe-off instantly." },
+                      { title: "System Safety", spec: "Dual Power Topology", desc: "Isolated 12V LiPo for actuation and 5V Power Bank for logic, eliminating voltage-sag brownouts." }
                     ].map((item, i) => (
                       <div key={i} className="bg-black/40 border border-white/5 p-6 rounded-2xl hover:border-teal-500/30 transition-colors group">
-                        <p className="text-gray-500 text-[9px] uppercase tracking-widest font-bold mb-2 group-hover:text-teal-500 transition-colors">{item.role}</p>
-                        <h4 className="text-lg font-bold text-white mb-3">{item.title}</h4>
+                        <p className="text-gray-500 text-[9px] uppercase tracking-widest font-bold mb-2 group-hover:text-teal-500 transition-colors">{item.title}</p>
+                        <h4 className="text-lg font-bold text-white mb-3 group-hover:text-teal-400 transition-colors">{item.spec}</h4>
                         <p className="text-xs text-gray-400 font-light leading-relaxed">{item.desc}</p>
                       </div>
                     ))}
@@ -377,96 +392,96 @@ export default function DocumentsPage() {
 <span className="text-gray-600"># 2. SYSTEM INITIALIZATION</span><br/>
 <span className="text-gray-600"># ==========================================</span><br/>
 <span className="text-fuchsia-400">def</span> <span className="text-yellow-200">setup_hardware</span>():<br/>
-    <span className="text-yellow-200">print</span>(<span className="text-green-300">"Initializing System Hardware..."</span>)<br/>
-    <span className="text-gray-600"># Setup GPIO</span><br/>
-    GPIO.<span className="text-yellow-200">setmode</span>(GPIO.BCM)<br/>
-    GPIO.<span className="text-yellow-200">setwarnings</span>(<span className="text-orange-400">False</span>)<br/>
-    <br/>
-    <span className="text-gray-600"># Configure Motor Pins</span><br/>
-    GPIO.<span className="text-yellow-200">setup</span>(ENA_PIN, GPIO.OUT)<br/>
-    GPIO.<span className="text-yellow-200">setup</span>(IN1_PIN, GPIO.OUT)<br/>
-    GPIO.<span className="text-yellow-200">setup</span>(IN2_PIN, GPIO.OUT)<br/>
-    <br/>
-    <span className="text-gray-600"># Configure FSR Pin (Pull-down resistor enabled to prevent floating ground)</span><br/>
-    GPIO.<span className="text-yellow-200">setup</span>(FSR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)<br/>
-    <br/>
-    <span className="text-gray-600"># Wake up MPU6050</span><br/>
-    bus.<span className="text-yellow-200">write_byte_data</span>(MPU_ADDR, PWR_MGMT_1, <span className="text-orange-400">0</span>)<br/>
-    <span className="text-yellow-200">print</span>(<span className="text-green-300">"Hardware Boot Complete. System Armed."</span>)<br/>
+  <span className="text-yellow-200">print</span>(<span className="text-green-300">"Initializing System Hardware..."</span>)<br/>
+  <span className="text-gray-600"># Setup GPIO</span><br/>
+  GPIO.<span className="text-yellow-200">setmode</span>(GPIO.BCM)<br/>
+  GPIO.<span className="text-yellow-200">setwarnings</span>(<span className="text-orange-400">False</span>)<br/>
+  <br/>
+  <span className="text-gray-600"># Configure Motor Pins</span><br/>
+  GPIO.<span className="text-yellow-200">setup</span>(ENA_PIN, GPIO.OUT)<br/>
+  GPIO.<span className="text-yellow-200">setup</span>(IN1_PIN, GPIO.OUT)<br/>
+  GPIO.<span className="text-yellow-200">setup</span>(IN2_PIN, GPIO.OUT)<br/>
+  <br/>
+  <span className="text-gray-600"># Configure FSR Pin (Pull-down resistor enabled to prevent floating ground)</span><br/>
+  GPIO.<span className="text-yellow-200">setup</span>(FSR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)<br/>
+  <br/>
+  <span className="text-gray-600"># Wake up MPU6050</span><br/>
+  bus.<span className="text-yellow-200">write_byte_data</span>(MPU_ADDR, PWR_MGMT_1, <span className="text-orange-400">0</span>)<br/>
+  <span className="text-yellow-200">print</span>(<span className="text-green-300">"Hardware Boot Complete. System Armed."</span>)<br/>
 <br/>
 <span className="text-gray-600"># ==========================================</span><br/>
 <span className="text-gray-600"># 3. KINEMATIC DATA ACQUISITION</span><br/>
 <span className="text-gray-600"># ==========================================</span><br/>
 <span className="text-fuchsia-400">def</span> <span className="text-yellow-200">read_raw_data</span>(addr):<br/>
-    <span className="text-gray-600"># Read raw 16-bit value from I2C registers</span><br/>
-    high = bus.<span className="text-yellow-200">read_byte_data</span>(MPU_ADDR, addr)<br/>
-    low = bus.<span className="text-yellow-200">read_byte_data</span>(MPU_ADDR, addr+<span className="text-orange-400">1</span>)<br/>
-    val = ((high &lt;&lt; <span className="text-orange-400">8</span>) | low)<br/>
-    <span className="text-fuchsia-400">if</span> val &gt; <span className="text-orange-400">32768</span>:<br/>
-        val = val - <span className="text-orange-400">65536</span><br/>
-    <span className="text-fuchsia-400">return</span> val<br/>
+  <span className="text-gray-600"># Read raw 16-bit value from I2C registers</span><br/>
+  high = bus.<span className="text-yellow-200">read_byte_data</span>(MPU_ADDR, addr)<br/>
+  low = bus.<span className="text-yellow-200">read_byte_data</span>(MPU_ADDR, addr+<span className="text-orange-400">1</span>)<br/>
+  val = ((high &lt;&lt; <span className="text-orange-400">8</span>) | low)<br/>
+  <span className="text-fuchsia-400">if</span> val &gt; <span className="text-orange-400">32768</span>:<br/>
+      val = val - <span className="text-orange-400">65536</span><br/>
+  <span className="text-fuchsia-400">return</span> val<br/>
 <br/>
 <span className="text-fuchsia-400">def</span> <span className="text-yellow-200">get_knee_angle</span>():<br/>
-    <span className="text-gray-600"># Read Accelerometer Y and Z axes</span><br/>
-    accel_y = <span className="text-yellow-200">read_raw_data</span>(<span className="text-orange-400">0x3D</span>)<br/>
-    accel_z = <span className="text-yellow-200">read_raw_data</span>(<span className="text-orange-400">0x3F</span>)<br/>
-    <br/>
-    <span className="text-gray-600"># Calculate angle using basic trigonometry (atan2)</span><br/>
-    angle = math.<span className="text-yellow-200">degrees</span>(math.<span className="text-yellow-200">atan2</span>(accel_y, accel_z))<br/>
-    <br/>
-    <span className="text-gray-600"># Normalize to absolute positive degrees for flexion</span><br/>
-    <span className="text-fuchsia-400">return</span> <span className="text-yellow-200">abs</span>(angle)<br/>
+  <span className="text-gray-600"># Read Accelerometer Y and Z axes</span><br/>
+  accel_y = <span className="text-yellow-200">read_raw_data</span>(<span className="text-orange-400">0x3D</span>)<br/>
+  accel_z = <span className="text-yellow-200">read_raw_data</span>(<span className="text-orange-400">0x3F</span>)<br/>
+  <br/>
+  <span className="text-gray-600"># Calculate angle using basic trigonometry (atan2)</span><br/>
+  angle = math.<span className="text-yellow-200">degrees</span>(math.<span className="text-yellow-200">atan2</span>(accel_y, accel_z))<br/>
+  <br/>
+  <span className="text-gray-600"># Normalize to absolute positive degrees for flexion</span><br/>
+  <span className="text-fuchsia-400">return</span> <span className="text-yellow-200">abs</span>(angle)<br/>
 <br/>
 <span className="text-gray-600"># ==========================================</span><br/>
 <span className="text-gray-600"># 4. MOTOR ACTUATION LOGIC</span><br/>
 <span className="text-gray-600"># ==========================================</span><br/>
 <span className="text-fuchsia-400">def</span> <span className="text-yellow-200">set_motor_state</span>(state, power=<span className="text-orange-400">0</span>):<br/>
-    <span className="text-fuchsia-400">if</span> state == <span className="text-green-300">"ASSIST"</span>:<br/>
-        <span className="text-gray-600"># Provide lifting torque (Forward direction)</span><br/>
-        GPIO.<span className="text-yellow-200">output</span>(IN1_PIN, GPIO.HIGH)<br/>
-        GPIO.<span className="text-yellow-200">output</span>(IN2_PIN, GPIO.LOW)<br/>
-        motor_pwm.<span className="text-yellow-200">ChangeDutyCycle</span>(power)<br/>
-    <span className="text-fuchsia-400">elif</span> state == <span className="text-green-300">"FREE_SWING"</span>:<br/>
-        <span className="text-gray-600"># Cut power to allow gear to free-spin (Zero-impedance)</span><br/>
-        GPIO.<span className="text-yellow-200">output</span>(IN1_PIN, GPIO.LOW)<br/>
-        GPIO.<span className="text-yellow-200">output</span>(IN2_PIN, GPIO.LOW)<br/>
-        motor_pwm.<span className="text-yellow-200">ChangeDutyCycle</span>(<span className="text-orange-400">0</span>)<br/>
+  <span className="text-fuchsia-400">if</span> state == <span className="text-green-300">"ASSIST"</span>:<br/>
+      <span className="text-gray-600"># Provide lifting torque (Forward direction)</span><br/>
+      GPIO.<span className="text-yellow-200">output</span>(IN1_PIN, GPIO.HIGH)<br/>
+      GPIO.<span className="text-yellow-200">output</span>(IN2_PIN, GPIO.LOW)<br/>
+      motor_pwm.<span className="text-yellow-200">ChangeDutyCycle</span>(power)<br/>
+  <span className="text-fuchsia-400">elif</span> state == <span className="text-green-300">"FREE_SWING"</span>:<br/>
+      <span className="text-gray-600"># Cut power to allow gear to free-spin (Zero-impedance)</span><br/>
+      GPIO.<span className="text-yellow-200">output</span>(IN1_PIN, GPIO.LOW)<br/>
+      GPIO.<span className="text-yellow-200">output</span>(IN2_PIN, GPIO.LOW)<br/>
+      motor_pwm.<span className="text-yellow-200">ChangeDutyCycle</span>(<span className="text-orange-400">0</span>)<br/>
 <br/>
 <span className="text-gray-600"># ==========================================</span><br/>
 <span className="text-gray-600"># 5. MAIN FINITE STATE MACHINE (FSM) LOOP</span><br/>
 <span className="text-gray-600"># ==========================================</span><br/>
 <span className="text-fuchsia-400">if</span> __name__ == <span className="text-green-300">'__main__'</span>:<br/>
-    <span className="text-yellow-200">setup_hardware</span>()<br/>
-    <br/>
-    <span className="text-gray-600"># Initialize PWM on ENA Pin</span><br/>
-    motor_pwm = GPIO.<span className="text-yellow-200">PWM</span>(ENA_PIN, PWM_FREQUENCY)<br/>
-    motor_pwm.<span className="text-yellow-200">start</span>(<span className="text-orange-400">0</span>)<br/>
-    <br/>
-    <span className="text-fuchsia-400">try</span>:<br/>
-        <span className="text-fuchsia-400">while True</span>:<br/>
-            <span className="text-gray-600"># Step 1: Gather Proprioceptive Data</span><br/>
-            heel_pressure = GPIO.<span className="text-yellow-200">input</span>(FSR_PIN)<br/>
-            knee_angle = <span className="text-yellow-200">get_knee_angle</span>()<br/>
-            <br/>
-            <span className="text-gray-600"># Step 2: Evaluate Logic & Trigger Actuation</span><br/>
-            <span className="text-fuchsia-400">if</span> heel_pressure == <span className="text-orange-400">1</span> <span className="text-fuchsia-400">and</span> knee_angle &gt; STRAIGHT_ANGLE_THRESHOLD:<br/>
-                <span className="text-gray-600"># STATE 1: Stance Phase (Load-bearing AND Knee is bent)</span><br/>
-                <span className="text-yellow-200">set_motor_state</span>(<span className="text-green-300">"ASSIST"</span>, ASSIST_POWER)<br/>
-                <span className="text-yellow-200">print</span>(<span className="text-green-300">f"Stance Phase - Angle: &#123;knee_angle:.1f&#125; - Motor: ASSISTING"</span>)<br/>
-            <span className="text-fuchsia-400">else</span>:<br/>
-                <span className="text-gray-600"># STATE 2: Swing Phase (Heel lifted OR Leg is fully straight)</span><br/>
-                <span className="text-yellow-200">set_motor_state</span>(<span className="text-green-300">"FREE_SWING"</span>)<br/>
-                <span className="text-yellow-200">print</span>(<span className="text-green-300">f"Swing Phase/Straight - Angle: &#123;knee_angle:.1f&#125; - Motor: OFF"</span>)<br/>
-            <br/>
-            <span className="text-gray-600"># 20ms delay ensures we hit the targeted &lt;20ms system latency specification</span><br/>
-            time.<span className="text-yellow-200">sleep</span>(<span className="text-orange-400">0.02</span>)<br/>
-            <br/>
-    <span className="text-gray-600"># Hardware Interrupt / Failsafe</span><br/>
-    <span className="text-fuchsia-400">except</span> KeyboardInterrupt:<br/>
-        <span className="text-yellow-200">print</span>(<span className="text-green-300">"\nSystem Disarmed. Failsafe Activated."</span>)<br/>
-        <span className="text-yellow-200">set_motor_state</span>(<span className="text-green-300">"FREE_SWING"</span>)<br/>
-        motor_pwm.<span className="text-yellow-200">stop</span>()<br/>
-        GPIO.<span className="text-yellow-200">cleanup</span>()<br/>
+  <span className="text-yellow-200">setup_hardware</span>()<br/>
+  <br/>
+  <span className="text-gray-600"># Initialize PWM on ENA Pin</span><br/>
+  motor_pwm = GPIO.<span className="text-yellow-200">PWM</span>(ENA_PIN, PWM_FREQUENCY)<br/>
+  motor_pwm.<span className="text-yellow-200">start</span>(<span className="text-orange-400">0</span>)<br/>
+  <br/>
+  <span className="text-fuchsia-400">try</span>:<br/>
+      <span className="text-fuchsia-400">while True</span>:<br/>
+          <span className="text-gray-600"># Step 1: Gather Proprioceptive Data</span><br/>
+          heel_pressure = GPIO.<span className="text-yellow-200">input</span>(FSR_PIN)<br/>
+          knee_angle = <span className="text-yellow-200">get_knee_angle</span>()<br/>
+          <br/>
+          <span className="text-gray-600"># Step 2: Evaluate Logic & Trigger Actuation</span><br/>
+          <span className="text-fuchsia-400">if</span> heel_pressure == <span className="text-orange-400">1</span> <span className="text-fuchsia-400">and</span> knee_angle &gt; STRAIGHT_ANGLE_THRESHOLD:<br/>
+              <span className="text-gray-600"># STATE 1: Stance Phase (Load-bearing AND Knee is bent)</span><br/>
+              <span className="text-yellow-200">set_motor_state</span>(<span className="text-green-300">"ASSIST"</span>, ASSIST_POWER)<br/>
+              <span className="text-yellow-200">print</span>(<span className="text-green-300">f"Stance Phase - Angle: &#123;knee_angle:.1f&#125; - Motor: ASSISTING"</span>)<br/>
+          <span className="text-fuchsia-400">else</span>:<br/>
+              <span className="text-gray-600"># STATE 2: Swing Phase (Heel lifted OR Leg is fully straight)</span><br/>
+              <span className="text-yellow-200">set_motor_state</span>(<span className="text-green-300">"FREE_SWING"</span>)<br/>
+              <span className="text-yellow-200">print</span>(<span className="text-green-300">f"Swing Phase/Straight - Angle: &#123;knee_angle:.1f&#125; - Motor: OFF"</span>)<br/>
+          <br/>
+          <span className="text-gray-600"># 20ms delay ensures we hit the targeted &lt;20ms system latency specification</span><br/>
+          time.<span className="text-yellow-200">sleep</span>(<span className="text-orange-400">0.02</span>)<br/>
+          <br/>
+  <span className="text-gray-600"># Hardware Interrupt / Failsafe</span><br/>
+  <span className="text-fuchsia-400">except</span> KeyboardInterrupt:<br/>
+      <span className="text-yellow-200">print</span>(<span className="text-green-300">"\nSystem Disarmed. Failsafe Activated."</span>)<br/>
+      <span className="text-yellow-200">set_motor_state</span>(<span className="text-green-300">"FREE_SWING"</span>)<br/>
+      motor_pwm.<span className="text-yellow-200">stop</span>()<br/>
+      GPIO.<span className="text-yellow-200">cleanup</span>()<br/>
                       </pre>
                     </div>
                   </div>
@@ -476,7 +491,6 @@ export default function DocumentsPage() {
             </AnimatePresence>
           </div>
         </motion.div>
-
       </div>
 
       {/* FOOTER */}
@@ -494,6 +508,7 @@ export default function DocumentsPage() {
               <ul className="space-y-4 text-sm text-gray-400">
                 <li><Link href="/" className="hover:text-teal-400 transition-colors">Home</Link></li>
                 <li><Link href="/sessions" className="hover:text-teal-400 transition-colors">Sessions</Link></li>
+                <li><Link href="/devlog" className="hover:text-teal-400 transition-colors">Dev Log</Link></li>
                 <li><button onClick={scrollToTop} className="hover:text-teal-400 transition-colors text-white font-bold text-left">Documents</button></li>
               </ul>
             </div>
@@ -508,7 +523,6 @@ export default function DocumentsPage() {
               <h4 className="text-white font-bold mb-6">Resources</h4>
               <ul className="space-y-4 text-sm text-gray-400">
                 <li><a href="https://github.com/arzanishshumak0395" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-teal-400 transition-colors">GitHub ↗</a></li>
-                <li><a href="#" className="hover:text-teal-400 transition-colors flex items-center gap-1">LinkedIn ↗</a></li>
               </ul>
             </div>
           </div>

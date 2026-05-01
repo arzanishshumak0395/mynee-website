@@ -214,7 +214,7 @@ export default function Home() {
       </motion.div>
 
       {/* --- OVERHAULED CORE ENGINEERING --- */}
-      <motion.div id="hardware" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="z-10 w-full max-w-6xl py-32 px-8 mb-10 border-t border-white/5">
+      <motion.div id="hardware" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="z-10 w-full max-w-6xl py-32 px-8 mb-10 border-t border-white/5 mt-16">
         <motion.div variants={fadeUpVariant} className="text-center mb-16">
           <h3 className="text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-400 to-yellow-400 pb-2">Core Engineering</h3>
           <p className="text-gray-400 mt-4 max-w-2xl mx-auto">The hardware architecture powering the Mynee exoskeleton. Shifting away from bulky pneumatic systems in favor of accessible, high-torque electromechanical components.</p>
@@ -223,7 +223,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
             { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>, title: "Compute Unit", spec: "Raspberry Pi Node", desc: "Serves as the central brain of the exoskeleton. Executes complex local Python processing, sensor fusion via Kalman filtering, and manages real-time PID control loops." },
-            { icon: <><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></>, title: "Actuation", spec: "PG36-555 Gear Motors", desc: "High-torque planetary gear DC motors driven by heavy-duty IBT-2 H-Bridges. Designed to deliver 5-10 Nm of active torque directly to the knee joint." },
+            { icon: <><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></>, title: "Actuation", spec: "12V DC Worm Gear & IBT-2", desc: "High-torque, non-backdrivable actuator driven by an industrial-grade 43A H-Bridge. Delivers immense lifting force for sit-to-stand motion without active holding current." },
             { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2-1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path>, title: "Kinematics", spec: "MPU6050 IMU", desc: "A highly responsive 6-axis accelerometer and gyroscope module providing real-time spatial orientation data to calculate the exact knee flexion angle." },
             { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>, title: "Gait Detection", spec: "Analog FSRs", desc: "Force Sensitive Resistors embedded within the footwear. These sensors monitor foot-strike pressure, differentiating between the swing and stance phases of walking." }
           ].map((block, idx) => (
@@ -232,9 +232,9 @@ export default function Home() {
                 <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10 group-hover:bg-teal-500/10 group-hover:border-teal-500/30 transition-colors">
                   <svg className="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">{block.icon}</svg>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">{block.title}</h3>
-                <p className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400 font-mono text-sm mb-4 tracking-wider uppercase">{block.spec}</p>
-                <p className="text-gray-400 leading-relaxed font-light">{block.desc}</p>
+                <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">{block.title}</h3>
+                <p className="text-xl font-bold text-white mb-4 leading-tight group-hover:text-teal-400 transition-colors">{block.spec}</p>
+                <p className="text-gray-400 leading-relaxed font-light text-sm">{block.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -242,12 +242,14 @@ export default function Home() {
       </motion.div>
 
       {/* FOOTER */}
-      <footer className="relative z-10 w-full bg-[#020202] border-t border-white/10 pt-20 pb-10 overflow-hidden">
-        <div className="relative z-10 max-w-6xl mx-auto px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+      <footer className="relative z-10 w-full bg-[#020202] border-t border-white/10 pt-20 pb-10 mt-auto overflow-hidden">
+        <div className="relative z-10 max-w-[90rem] mx-auto px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16 xl:px-8">
             <div className="lg:col-span-2">
               <div className="text-2xl font-black text-teal-400 mb-6 tracking-tighter">MYNEE</div>
-              <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">A smart knee exoskeleton bridging the gap between frugal innovation and medical-grade biomechanical assistance through edge-AI and sensor fusion.</p>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
+                A smart knee exoskeleton bridging the gap between frugal innovation and medical-grade biomechanical assistance through edge-AI and sensor fusion.
+              </p>
             </div>
             <div>
               <h4 className="text-white font-bold mb-6">Navigation</h4>
@@ -260,12 +262,18 @@ export default function Home() {
             <div>
               <h4 className="text-white font-bold mb-6">Topics</h4>
               <ul className="space-y-4 text-sm text-gray-400">
-                <li><span className="cursor-default">Biomechanics</span></li>
-                <li><span className="cursor-default">Edge Computing</span></li>
+                <li><span className="hover:text-teal-400 transition-colors cursor-default">Biomechanics</span></li>
+                <li><span className="hover:text-teal-400 transition-colors cursor-default">Edge Computing</span></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-bold mb-6">Resources</h4>
+              <ul className="space-y-4 text-sm text-gray-400">
+                <li><a href="https://github.com/arzanishshumak0395" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-teal-400 transition-colors">GitHub ↗</a></li>
               </ul>
             </div>
           </div>
-          <div className="pt-8 border-t border-white/10 flex justify-between items-center text-xs text-gray-500 font-mono tracking-widest uppercase">
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-mono tracking-widest uppercase xl:px-8">
             <p>© 2026 MYNEE | Syed Arzanish.</p>
             <p>Dubai, UAE</p>
           </div>

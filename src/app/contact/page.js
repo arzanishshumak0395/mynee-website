@@ -58,12 +58,46 @@ const staggerContainer = {
 
 export default function ContactPage() {
   const [formActive, setFormActive] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Handle focus leaving the form entirely to reset the status back to Standby
   const handleFormBlur = (e) => {
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setFormActive(false);
+    }
+  };
+
+  // Form submission handler to provide UX feedback & send to Formspree
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    const formData = new FormData(e.target);
+
+    try {
+      const response = await fetch("https://formspree.io/f/mdabkdjj", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        e.target.reset(); // Clear form on success
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+      // Reset status message after 5 seconds
+      setTimeout(() => setSubmitStatus(null), 5000);
     }
   };
 
@@ -118,35 +152,55 @@ export default function ContactPage() {
             </div>
 
             <form 
-              className="space-y-6 flex flex-col h-full" 
-              onSubmit={(e) => e.preventDefault()}
+              className="space-y-6 flex flex-col h-full relative" 
+              onSubmit={handleSubmit}
               onFocus={() => setFormActive(true)}
               onBlur={handleFormBlur}
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${formActive ? 'text-teal-400' : 'text-gray-500'}`}>Your Name</label>
-                  <input type="text" placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all" />
+                  <label htmlFor="name" className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${formActive ? 'text-teal-400' : 'text-gray-500'}`}>Your Name</label>
+                  <input required id="name" name="name" type="text" placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all" />
                 </div>
                 <div className="space-y-2">
-                  <label className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${formActive ? 'text-teal-400' : 'text-gray-500'}`}>Email Address</label>
-                  <input type="email" placeholder="john@domain.com" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all" />
+                  <label htmlFor="email" className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${formActive ? 'text-teal-400' : 'text-gray-500'}`}>Email Address</label>
+                  <input required id="email" name="email" type="email" placeholder="john@domain.com" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all" />
                 </div>
               </div>
               
               <div className="space-y-2">
-                <label className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${formActive ? 'text-teal-400' : 'text-gray-500'}`}>Subject / Inquiry Type</label>
-                <input type="text" placeholder="Hardware Collaboration / Academic Inquiry" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all" />
+                <label htmlFor="subject" className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${formActive ? 'text-teal-400' : 'text-gray-500'}`}>Subject / Inquiry Type</label>
+                <input required id="subject" name="subject" type="text" placeholder="Hardware Collaboration / Academic Inquiry" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all" />
               </div>
 
               <div className="space-y-2 flex-1 flex flex-col">
-                <label className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${formActive ? 'text-teal-400' : 'text-gray-500'}`}>Message Data</label>
-                <textarea placeholder="Enter transmission details here..." className="w-full flex-1 min-h-[160px] bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all resize-none custom-scrollbar" />
+                <label htmlFor="message" className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${formActive ? 'text-teal-400' : 'text-gray-500'}`}>Message Data</label>
+                <textarea required id="message" name="message" placeholder="Enter transmission details here..." className="w-full flex-1 min-h-[160px] bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all resize-none custom-scrollbar" />
               </div>
 
-              <button className="w-full mt-4 bg-gradient-to-r from-teal-400 to-emerald-400 text-black py-4 rounded-2xl text-xs font-black uppercase tracking-[0.2em] hover:shadow-[0_0_20px_rgba(45,212,191,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3">
-                Send Transmission
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              {/* Status Messages */}
+              {submitStatus === 'success' && (
+                <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm text-center">
+                  Transmission successful. I will respond to your channel shortly.
+                </div>
+              )}
+              {submitStatus === 'error' && (
+                <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm text-center">
+                  Transmission failed. Please try again or use the Direct Comm link.
+                </div>
+              )}
+
+              <button 
+                disabled={isSubmitting}
+                type="submit" 
+                className={`w-full mt-4 py-4 rounded-2xl text-xs font-black uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-3
+                  ${isSubmitting 
+                    ? 'bg-gray-800 text-gray-500 cursor-not-allowed border border-white/10' 
+                    : 'bg-gradient-to-r from-teal-400 to-emerald-400 text-black hover:shadow-[0_0_20px_rgba(45,212,191,0.4)] hover:scale-[1.02] active:scale-95'
+                  }`}
+              >
+                {isSubmitting ? 'Transmitting...' : 'Send Transmission'}
+                {!isSubmitting && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>}
               </button>
             </form>
           </motion.div>

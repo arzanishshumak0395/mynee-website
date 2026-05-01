@@ -118,10 +118,10 @@ const FinalReadinessBoard = () => {
           <p className="text-gray-300 text-sm leading-relaxed font-light">
             The Mynee Exoskeleton framework has reached functional completion. The Python Finite State Machine perfectly commands the driver, achieving our <strong>13.1ms latency target</strong> and our <strong>1.34° kinematic accuracy</strong>. We have empirically proven that an affordable edge-computed device can power a smart orthosis.
           </p>
-          <div className="bg-[#0a0a0a] border border-orange-500/30 p-6 rounded-2xl mt-6 shadow-inner">
-            <p className="text-orange-400 text-xs font-bold mb-3 uppercase tracking-widest">Hardware Sourcing Update</p>
+          <div className="bg-[#0a0a0a] border border-emerald-500/30 p-6 rounded-2xl mt-6 shadow-inner transition-colors">
+            <p className="text-emerald-400 text-xs font-bold mb-3 uppercase tracking-widest">Hardware Sourcing Resolved</p>
             <p className="text-gray-400 text-xs font-mono leading-relaxed">
-              As the original high-torque motor fried under thermal stress, a temporary high-RPM substitute was acquired to empirically validate the system architecture. While this motor successfully demonstrates the logic responding to FSR/MPU triggers, we are actively hunting for the perfect replacement high-torque motor up until the final presentation day to fully validate the physical lift.
+              Following the thermal failure of our initial prototypes, a 12V DC Sliding Gate Worm Gear Motor was successfully procured and integrated just in time for the demonstration. Paired with the heavy-duty IBT-2 driver, this final hardware swap provided the immense, non-backdrivable torque required to fully validate the physical sit-to-stand lift.
             </p>
           </div>
         </div>
@@ -140,8 +140,8 @@ const FinalReadinessBoard = () => {
             <span className="text-gray-200 font-bold text-sm">Final Report & Appendices</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-6 h-6 rounded-full bg-yellow-500 text-black flex items-center justify-center font-bold text-xs shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-pulse">!</div>
-            <span className="text-gray-200 font-bold text-sm">Final Motor Swap (Pending Arrival)</span>
+            <div className="w-6 h-6 rounded-full bg-emerald-500 text-black flex items-center justify-center font-bold text-xs shadow-[0_0_10px_rgba(16,185,129,0.5)]">✓</div>
+            <span className="text-gray-200 font-bold text-sm">Final Motor Swap (Worm Gear Integrated)</span>
           </div>
         </div>
       </div>
@@ -242,8 +242,8 @@ const GratitudeBoard = () => {
       {/* ROW 3: ANNA & SAFWAN */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         
-        {/* Anna */}
-        <div className="bg-[#050505] border-t-4 border-rose-600 p-10 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(225,29,72,0.2)] relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+        {/* Anna - SLIGHTLY ENLARGED VIA SCALE AND Z-INDEX */}
+        <div className="bg-[#050505] border-t-4 border-rose-600 p-10 rounded-3xl flex flex-col items-center text-center shadow-[0_15px_40px_rgba(225,29,72,0.2)] relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300 md:scale-105 z-10">
           <div className="absolute inset-0 bg-gradient-to-b from-rose-600/10 to-transparent pointer-events-none" />
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             {annaPetals.map((petal, i) => (
